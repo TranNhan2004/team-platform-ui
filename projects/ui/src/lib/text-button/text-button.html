@@ -1,0 +1,12 @@
+<button
+  mat-button
+  type="button"
+  class="tp-text-button"
+  [disabled]="disabled()"
+  [matTooltip]="tooltipTitle() || ''"
+  [matTooltipDisabled]="!tooltipTitle()"
+  [ngClass]="textButtonClass()"
+  [ngStyle]="textButtonStyle()"
+>
+  <ng-content></ng-content>
+</button>

@@ -1,0 +1,212 @@
+<main class="playground">
+  <header class="playground__header">
+    <p class="playground__eyebrow">Team Platform</p>
+    <h1>UI component playground</h1>
+    <p>All components exported by <code>public-api.ts</code>, including their variants.</p>
+  </header>
+
+  <section class="component-section" aria-labelledby="buttons-title">
+    <div class="component-section__heading">
+      <h2 id="buttons-title">Button</h2>
+      <code>&lt;tp-button&gt;</code>
+    </div>
+
+    @for (variant of buttonVariants; track variant) {
+      <div class="example-group">
+        <h3>{{ variant }}</h3>
+        <div class="example-row">
+          @for (color of colors; track color) {
+            <tp-button [variant]="variant" [color]="color" [tooltipTitle]="color">
+              {{ color }}
+            </tp-button>
+          }
+        </div>
+      </div>
+    }
+
+    <div class="example-group">
+      <h3>Sizes and states</h3>
+      <div class="example-row">
+        @for (size of sizes; track size) {
+          <tp-button [size]="size">{{ size }}</tp-button>
+        }
+        <tp-button [disabled]="true">Disabled</tp-button>
+      </div>
+      <tp-button [fullWidth]="true">Full-width button</tp-button>
+    </div>
+  </section>
+
+  <section class="component-section" aria-labelledby="text-buttons-title">
+    <div class="component-section__heading">
+      <h2 id="text-buttons-title">Text button</h2>
+      <code>&lt;tp-text-button&gt;</code>
+    </div>
+
+    <div class="example-group">
+      <h3>Colors</h3>
+      <div class="example-row">
+        <tp-text-button color="gray">Gray</tp-text-button>
+        <tp-text-button color="black">Black</tp-text-button>
+        <span class="dark-example">
+          <tp-text-button color="white">White</tp-text-button>
+        </span>
+      </div>
+    </div>
+
+    <div class="example-group">
+      <h3>Sizes and states</h3>
+      <div class="example-row">
+        @for (size of sizes; track size) {
+          <tp-text-button [size]="size">{{ size }}</tp-text-button>
+        }
+        <tp-text-button afterPressEffect="underline">Pressed underline</tp-text-button>
+        <tp-text-button [disabled]="true">Disabled</tp-text-button>
+      </div>
+      <tp-text-button [fullWidth]="true">Full-width text button</tp-text-button>
+    </div>
+  </section>
+
+  <section class="component-section" aria-labelledby="chips-title">
+    <div class="component-section__heading">
+      <h2 id="chips-title">Chip</h2>
+      <code>&lt;tp-chip&gt;</code>
+    </div>
+
+    @for (variant of chipVariants; track variant) {
+      <div class="example-group">
+        <h3>{{ variant }}</h3>
+        <div class="example-row">
+          @for (color of colors; track color) {
+            <tp-chip [variant]="variant" [color]="color" [tooltipTitle]="color">
+              {{ color }}
+            </tp-chip>
+          }
+        </div>
+      </div>
+    }
+
+    <div class="example-group">
+      <h3>Sizes</h3>
+      <div class="example-row">
+        @for (size of sizes; track size) {
+          <tp-chip [size]="size">{{ size }}</tp-chip>
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="component-section" aria-labelledby="avatars-title">
+    <div class="component-section__heading">
+      <h2 id="avatars-title">Avatar</h2>
+      <code>&lt;tp-avatar&gt;</code>
+    </div>
+    <div class="example-row">
+      <tp-avatar tooltipTitle="Default fallback"></tp-avatar>
+      <tp-avatar [size]="32" tooltipTitle="Small fallback"></tp-avatar>
+      <tp-avatar [size]="56" tooltipTitle="Large fallback"></tp-avatar>
+      <tp-avatar
+        src="/favicon.ico"
+        alt="Angular logo avatar"
+        tooltipTitle="Image avatar"
+      ></tp-avatar>
+      <tp-avatar [disabled]="true" tooltipTitle="Disabled avatar"></tp-avatar>
+    </div>
+  </section>
+
+  <section class="component-section" aria-labelledby="notifications-title">
+    <div class="component-section__heading">
+      <h2 id="notifications-title">Bell notification</h2>
+      <code>&lt;tp-bell-notification&gt;</code>
+    </div>
+    <div class="example-row">
+      <tp-bell-notification [count]="0"></tp-bell-notification>
+      <tp-bell-notification [count]="5"></tp-bell-notification>
+      <tp-bell-notification [count]="100"></tp-bell-notification>
+      <tp-bell-notification [count]="5" [disabled]="true"></tp-bell-notification>
+    </div>
+  </section>
+
+  <section class="component-section" aria-labelledby="cards-title">
+    <div class="component-section__heading">
+      <h2 id="cards-title">Card</h2>
+      <code>&lt;tp-card&gt;</code>
+    </div>
+    <div class="card-grid">
+      <tp-card>
+        <div class="card-content">
+          <h3>Default card</h3>
+          <p>Uses the shared surface, text, border, radius, and shadow tokens.</p>
+        </div>
+      </tp-card>
+      <tp-card
+        color="var(--tp-color-blue-50)"
+        textColor="var(--tp-color-blue-900)"
+        borderColor="var(--tp-color-blue-200)"
+      >
+        <div class="card-content">
+          <h3>Customized card</h3>
+          <p>Color inputs can reference any predefined palette token.</p>
+        </div>
+      </tp-card>
+    </div>
+  </section>
+
+  <section class="component-section" aria-labelledby="search-title">
+    <div class="component-section__heading">
+      <h2 id="search-title">Search bar</h2>
+      <code>&lt;tp-search-bar&gt;</code>
+    </div>
+    <div class="example-stack">
+      <tp-search-bar (onSearch)="searchValue.set($event)"></tp-search-bar>
+      <tp-search-bar
+        maxWidth="360px"
+        placeholder="Search projects"
+        ariaLabel="Search projects"
+        (onSearch)="searchValue.set($event)"
+      ></tp-search-bar>
+      <p>
+        Debounced value: <strong>{{ searchValue() || 'Start typing…' }}</strong>
+      </p>
+    </div>
+  </section>
+
+  <section class="component-section" aria-labelledby="skeletons-title">
+    <div class="component-section__heading">
+      <h2 id="skeletons-title">Skeleton</h2>
+      <code>&lt;tp-skeleton&gt;</code>
+    </div>
+    <div class="skeleton-grid">
+      <div class="example-stack">
+        <h3>Text</h3>
+        <tp-skeleton variant="text"></tp-skeleton>
+        <tp-skeleton variant="text" width="75%"></tp-skeleton>
+        <tp-skeleton variant="text" width="45%"></tp-skeleton>
+      </div>
+      <div class="example-stack">
+        <h3>Circle</h3>
+        <tp-skeleton variant="circle"></tp-skeleton>
+      </div>
+      <div class="example-stack">
+        <h3>Rectangle</h3>
+        <tp-skeleton variant="rectangle" height="140px"></tp-skeleton>
+      </div>
+    </div>
+  </section>
+
+  <section class="component-section" aria-labelledby="dialog-title">
+    <div class="component-section__heading">
+      <h2 id="dialog-title">Dialog</h2>
+      <code>&lt;tp-dialog&gt;</code>
+    </div>
+    <tp-button (click)="demoDialog.openDialog()">Open dialog</tp-button>
+    <tp-dialog #demoDialog title="Example dialog">
+      <p>
+        This dialog demonstrates projected content, actions, backdrop closing, and Escape closing.
+      </p>
+      <div dialog-actions>
+        <tp-text-button (click)="demoDialog.closeDialog()">Cancel</tp-text-button>
+        <tp-button (click)="demoDialog.closeDialog()">Confirm</tp-button>
+      </div>
+    </tp-dialog>
+  </section>
+</main>
