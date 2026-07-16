@@ -45,6 +45,8 @@
    * Generic interaction state.
    */
   --tp-color-hover: color-mix(in srgb, var(--mat-sys-on-surface) 8%, transparent);
-  --tp-color-focus-ring: color-mix(in srgb, var(--mat-sys-primary) 16%, transparent);
+  --tp-color-focus: var(--tp-color-blue-600);
   --tp-color-overlay: color-mix(in srgb, var(--tp-color-gray-950) 48%, transparent);
+  --tp-color-press: var(--tp-color-gray-300);
+  --tp-color-press-ripple: color-mix(in srgb, var(--tp-color-gray-300) 20%, transparent);
 }

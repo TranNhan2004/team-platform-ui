@@ -5,10 +5,12 @@
   --tp-button-disabled-border-color: var(--tp-color-gray-300);
   --mat-button-filled-container-color: var(--tp-button-color);
   --mat-button-filled-label-text-color: var(--tp-button-contrast-color);
-  --mat-button-filled-state-layer-color: var(--tp-button-contrast-color);
+  --mat-button-filled-state-layer-color: var(--tp-color-press);
+  --mat-button-filled-ripple-color: var(--tp-color-press-ripple);
   --mat-button-outlined-label-text-color: var(--tp-button-color);
   --mat-button-outlined-outline-color: var(--tp-button-color);
-  --mat-button-outlined-state-layer-color: var(--tp-button-color);
+  --mat-button-outlined-state-layer-color: var(--tp-color-press);
+  --mat-button-outlined-ripple-color: var(--tp-color-press-ripple);
 
   border-radius: var(--tp-radius-md);
   font-weight: 500;

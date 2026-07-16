@@ -6,7 +6,10 @@ import {
   Button,
   Card,
   Chip,
+  DatePicker,
   Dialog,
+  Input,
+  InputDatePicker,
   SearchBar,
   Skeleton,
   TextButton,
@@ -14,7 +17,20 @@ import {
 
 @Component({
   selector: 'app-root',
-  imports: [Avatar, BellNotification, Button, Card, Chip, Dialog, SearchBar, Skeleton, TextButton],
+  imports: [
+    Avatar,
+    BellNotification,
+    Button,
+    Card,
+    Chip,
+    DatePicker,
+    Dialog,
+    Input,
+    InputDatePicker,
+    SearchBar,
+    Skeleton,
+    TextButton,
+  ],
   templateUrl: './app.html',
   styleUrl: './app.scss',
 })
@@ -39,6 +55,10 @@ export class App {
   protected readonly chipVariants = ['filled', 'outlined', 'tonal', 'text'] as const;
   protected readonly sizes = ['sm', 'md', 'lg'] as const;
   protected readonly searchValue = signal('');
+  protected readonly selectedDate = signal<Date | null>(new Date(2032, 5, 15));
+  protected readonly calendarDate = signal<Date | null>(null);
+  protected readonly minPlaygroundDate = new Date(2025, 0, 1);
+  protected readonly maxPlaygroundDate = new Date(2030, 11, 31);
 
   constructor(iconRegistry: MatIconRegistry) {
     iconRegistry.setDefaultFontSetClass('material-symbols-outlined');

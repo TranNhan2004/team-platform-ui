@@ -1,1 +1,46 @@
-<p>input works!</p>
+<mat-form-field
+  class="tp-input"
+  [class.tp-input--invalid]="showError()"
+  appearance="outline"
+  [hideRequiredMarker]="true"
+  subscriptSizing="dynamic"
+  [style.width]="width()"
+  [style.max-width]="maxWidth()"
+  [style.--tp-input-height]="height()"
+  [style.--tp-input-max-height]="maxHeight()"
+  [style.--tp-input-content-size]="contentFontSize()"
+>
+  @if (title()) {
+    <mat-label>
+      {{ title() }}
+      @if (required() && title()) {
+        <span class="tp-input__required-marker" aria-hidden="true">*</span>
+      }
+    </mat-label>
+  }
+  <input
+    matInput
+    class="tp-input__control"
+    [type]="inputType()"
+    [value]="inputValue()"
+    [required]="required()"
+    [disabled]="disabled()"
+    [readonly]="readonly()"
+    [attr.name]="name() || null"
+    [attr.autocomplete]="autocomplete()"
+    [attr.min]="variant() === 'number' ? min() : null"
+    [attr.max]="variant() === 'number' ? max() : null"
+    [attr.step]="variant() === 'number' ? step() : null"
+    [attr.aria-invalid]="showError()"
+    (blur)="markAsTouched()"
+    (input)="updateValue($event)"
+  />
+
+  @if (hint()) {
+    <mat-hint>{{ hint() }}</mat-hint>
+  }
+</mat-form-field>
+
+@if (showError()) {
+  <div class="tp-input__error" role="alert">{{ displayedError() }}</div>
+}

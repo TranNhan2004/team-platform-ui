@@ -1,0 +1,64 @@
+:host {
+  position: relative;
+  display: block;
+}
+
+.tp-input-date-picker {
+  --tp-input-date-picker-height: var(--tp-control-height-md);
+  --tp-input-date-picker-max-height: var(--tp-control-height-lg);
+  --mat-form-field-outlined-focus-outline-color: var(--tp-color-focus);
+  --mat-form-field-outlined-focus-label-text-color: var(--tp-color-focus);
+  --mat-form-field-outlined-caret-color: var(--tp-color-focus);
+  --mat-form-field-outlined-focus-outline-width: 3px;
+  --mat-form-field-outlined-container-shape: var(--tp-radius-md);
+  --mat-form-field-outlined-outline-color: var(--tp-color-border-strong);
+  --mat-form-field-outlined-input-text-color: var(--tp-color-text-primary);
+  --mat-form-field-outlined-label-text-color: var(--tp-color-text-secondary);
+  --mat-form-field-container-height: min(
+    var(--tp-input-date-picker-height),
+    var(--tp-input-date-picker-max-height)
+  );
+  --mat-form-field-container-vertical-padding: var(--tp-space-2);
+  --mat-form-field-container-text-size: var(--tp-text-md);
+}
+
+.tp-input-date-picker__control {
+  height: auto;
+  max-height: 100%;
+  line-height: normal;
+  margin: 0;
+}
+
+:host ::ng-deep .tp-input-date-picker {
+  .mat-mdc-text-field-wrapper.mdc-text-field--outlined,
+  .mat-mdc-form-field-flex,
+  .mat-mdc-form-field-infix {
+    height: min(var(--tp-input-date-picker-height), var(--tp-input-date-picker-max-height));
+    max-height: var(--tp-input-date-picker-max-height);
+  }
+
+  .mat-mdc-form-field-flex,
+  .mat-mdc-form-field-infix {
+    align-items: center;
+  }
+
+  .mat-mdc-form-field-infix {
+    display: flex;
+    min-height: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+}
+
+.tp-input-date-picker__required-marker {
+  color: var(--tp-color-red-600);
+}
+
+.tp-input-date-picker__required-marker--standalone {
+  position: absolute;
+  z-index: 1;
+  top: calc(min(var(--tp-input-date-picker-height), var(--tp-input-date-picker-max-height)) / 2);
+  left: var(--tp-space-4);
+  transform: translateY(-50%);
+  pointer-events: none;
+}
