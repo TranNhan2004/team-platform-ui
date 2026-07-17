@@ -1,0 +1,21 @@
+:host {
+  display: inline-flex;
+}
+
+.tp-radio {
+  --mat-radio-label-text-color: var(--tp-color-text-primary);
+  --mat-radio-label-text-size: var(--tp-text-md);
+  --mat-radio-label-text-line-height: 20px;
+  --mat-radio-unselected-icon-color: var(--tp-color-border-strong);
+  --mat-radio-unselected-hover-icon-color: var(--tp-color-text-primary);
+  --mat-radio-unselected-focus-icon-color: var(--tp-color-focus);
+  --mat-radio-unselected-pressed-icon-color: var(--tp-color-focus);
+  --mat-radio-selected-icon-color: var(--tp-color-blue-600);
+  --mat-radio-selected-hover-icon-color: var(--tp-color-blue-600);
+  --mat-radio-selected-focus-icon-color: var(--tp-color-blue-600);
+  --mat-radio-selected-pressed-icon-color: var(--tp-color-blue-700);
+  --mat-radio-checked-ripple-color: var(--tp-color-blue-600);
+  --mat-radio-disabled-label-color: var(--tp-color-text-secondary);
+  --mat-radio-disabled-selected-icon-color: var(--tp-color-gray-400);
+  --mat-radio-disabled-unselected-icon-color: var(--tp-color-gray-400);
+}

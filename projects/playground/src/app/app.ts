@@ -5,13 +5,18 @@ import {
   BellNotification,
   Button,
   Card,
+  Checkbox,
   Chip,
   DatePicker,
   Dialog,
   Input,
+  InputAutocomplete,
   InputDatePicker,
+  Radio,
   SearchBar,
   Skeleton,
+  Spinner,
+  TextArea,
   TextButton,
 } from 'ui';
 
@@ -23,13 +28,18 @@ import {
     Button,
     Card,
     Chip,
+    Checkbox,
     DatePicker,
     Dialog,
     Input,
+    InputAutocomplete,
     InputDatePicker,
+    Radio,
     SearchBar,
     Skeleton,
+    Spinner,
     TextButton,
+    TextArea,
   ],
   templateUrl: './app.html',
   styleUrl: './app.scss',
@@ -55,10 +65,28 @@ export class App {
   protected readonly chipVariants = ['filled', 'outlined', 'tonal', 'text'] as const;
   protected readonly sizes = ['sm', 'md', 'lg'] as const;
   protected readonly searchValue = signal('');
+  protected readonly projectOptions = [
+    'Platform API',
+    'Platform UI',
+    'Project Atlas',
+    'Project Nova',
+    'Platform API 1',
+    'Platform UI 1',
+    'Project Atlas 1',
+    'Project Nova 1',
+  ];
+  protected readonly notificationsEnabled = signal(false);
+  protected readonly selectedPlan = signal('starter');
   protected readonly selectedDate = signal<Date | null>(new Date(2032, 5, 15));
   protected readonly calendarDate = signal<Date | null>(null);
   protected readonly minPlaygroundDate = new Date(2025, 0, 1);
   protected readonly maxPlaygroundDate = new Date(2030, 11, 31);
+
+  protected selectPlan(plan: string, checked: boolean): void {
+    if (checked) {
+      this.selectedPlan.set(plan);
+    }
+  }
 
   constructor(iconRegistry: MatIconRegistry) {
     iconRegistry.setDefaultFontSetClass('material-symbols-outlined');

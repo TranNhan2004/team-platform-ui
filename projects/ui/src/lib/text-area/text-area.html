@@ -1,1 +1,45 @@
-<p>text-area works!</p>
+<mat-form-field
+  class="tp-text-area"
+  [class.tp-text-area--invalid]="showError()"
+  appearance="outline"
+  [hideRequiredMarker]="true"
+  subscriptSizing="dynamic"
+  [style.width]="width()"
+  [style.max-width]="maxWidth()"
+>
+  @if (title()) {
+    <mat-label>
+      {{ title() }}
+      @if (required()) {
+        <span class="tp-text-area__required-marker" aria-hidden="true">*</span>
+      }
+    </mat-label>
+  }
+
+  <textarea
+    matInput
+    class="tp-text-area__control"
+    [rows]="rows()"
+    [value]="value()"
+    [placeholder]="placeholder()"
+    [required]="required()"
+    [disabled]="disabled()"
+    [readonly]="readonly()"
+    [attr.name]="name() || null"
+    [attr.maxlength]="maxLength()"
+    [attr.aria-invalid]="showError()"
+    (blur)="markAsTouched()"
+    (input)="updateValue($event)"
+  ></textarea>
+
+  @if (hint()) {
+    <mat-hint>{{ hint() }}</mat-hint>
+  }
+  @if (hasCharacterLimit()) {
+    <mat-hint align="end">{{ characterCount() }}/{{ maxLength() }}</mat-hint>
+  }
+</mat-form-field>
+
+@if (showError()) {
+  <div class="tp-text-area__error" role="alert">{{ displayedError() }}</div>
+}

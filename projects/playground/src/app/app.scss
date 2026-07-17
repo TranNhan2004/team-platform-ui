@@ -77,7 +77,8 @@
 
 .card-grid,
 .skeleton-grid,
-.input-grid {
+.input-grid,
+.choice-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: var(--tp-space-4);

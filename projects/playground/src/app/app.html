@@ -95,6 +95,23 @@
     </div>
   </section>
 
+  <section class="component-section" aria-labelledby="spinners-title">
+    <div class="component-section__heading">
+      <h2 id="spinners-title">Spinner</h2>
+      <code>&lt;tp-spinner&gt;</code>
+    </div>
+    <div class="example-row">
+      @for (color of colors; track color) {
+        <tp-spinner [color]="color" [ariaLabel]="color + ' loading'"></tp-spinner>
+      }
+    </div>
+    <div class="example-row">
+      <tp-spinner [diameter]="24" [strokeWidth]="3"></tp-spinner>
+      <tp-spinner [diameter]="48"></tp-spinner>
+      <tp-spinner [diameter]="64" [strokeWidth]="5"></tp-spinner>
+    </div>
+  </section>
+
   <section class="component-section" aria-labelledby="avatars-title">
     <div class="component-section__heading">
       <h2 id="avatars-title">Avatar</h2>
@@ -194,6 +211,118 @@
         height="var(--tp-control-height-lg)"
         maxHeight="var(--tp-control-height-lg)"
       ></tp-input>
+    </div>
+  </section>
+
+  <section class="component-section" aria-labelledby="checkboxes-title">
+    <div class="component-section__heading">
+      <h2 id="checkboxes-title">Checkbox</h2>
+      <code>&lt;tp-checkbox&gt;</code>
+    </div>
+    <div class="choice-grid">
+      <div class="example-stack">
+        <h3>States</h3>
+        <tp-checkbox label="Unchecked"></tp-checkbox>
+        <tp-checkbox [checked]="true" label="Checked"></tp-checkbox>
+        <tp-checkbox [indeterminate]="true" label="Indeterminate"></tp-checkbox>
+        <tp-checkbox [disabled]="true" label="Disabled"></tp-checkbox>
+      </div>
+      <div class="example-stack">
+        <h3>Interactive</h3>
+        <tp-checkbox [(checked)]="notificationsEnabled" label="Enable notifications"></tp-checkbox>
+        <p>
+          Notifications are <strong>{{ notificationsEnabled() ? 'enabled' : 'disabled' }}</strong
+          >.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="component-section" aria-labelledby="input-autocomplete-title">
+    <div class="component-section__heading">
+      <h2 id="input-autocomplete-title">Input autocomplete</h2>
+      <code>&lt;tp-input-autocomplete&gt;</code>
+    </div>
+    <div class="input-grid">
+      <tp-input-autocomplete
+        title="Project"
+        placeholder="Start typing a project name"
+        [options]="projectOptions"
+        hint="You can enter a new project name"
+      ></tp-input-autocomplete>
+      <tp-input-autocomplete
+        title="Loading projects"
+        value="pro"
+        [loading]="true"
+      ></tp-input-autocomplete>
+      <tp-input-autocomplete
+        title="Required project"
+        [options]="projectOptions"
+        [required]="true"
+      ></tp-input-autocomplete>
+    </div>
+  </section>
+
+  <section class="component-section" aria-labelledby="text-areas-title">
+    <div class="component-section__heading">
+      <h2 id="text-areas-title">Text area</h2>
+      <code>&lt;tp-text-area&gt;</code>
+    </div>
+    <div class="input-grid">
+      <div>
+        <p>Required:</p>
+        <tp-text-area [required]="true"></tp-text-area>
+      </div>
+      <tp-text-area title="Description" placeholder="Add a description"></tp-text-area>
+      <tp-text-area title="Three rows minimum" [rows]="1"></tp-text-area>
+      <tp-text-area title="Character limit" [rows]="5" [maxLength]="120"></tp-text-area>
+      <tp-text-area title="Required" [required]="true"></tp-text-area>
+      <tp-text-area title="Sized" width="320px" maxWidth="100%"></tp-text-area>
+      <tp-text-area
+        title="Disabled"
+        value="This content cannot be changed"
+        [disabled]="true"
+      ></tp-text-area>
+    </div>
+  </section>
+
+  <section class="component-section" aria-labelledby="radios-title">
+    <div class="component-section__heading">
+      <h2 id="radios-title">Radio</h2>
+      <code>&lt;tp-radio&gt;</code>
+    </div>
+    <div class="choice-grid">
+      <div class="example-stack">
+        <h3>Plan</h3>
+        <tp-radio
+          name="plan"
+          value="starter"
+          label="Starter"
+          [checked]="selectedPlan() === 'starter'"
+          (checkedChange)="selectPlan('starter', $event)"
+        ></tp-radio>
+        <tp-radio
+          name="plan"
+          value="team"
+          label="Team"
+          [checked]="selectedPlan() === 'team'"
+          (checkedChange)="selectPlan('team', $event)"
+        ></tp-radio>
+        <tp-radio
+          name="plan"
+          value="enterprise"
+          label="Enterprise"
+          [checked]="selectedPlan() === 'enterprise'"
+          (checkedChange)="selectPlan('enterprise', $event)"
+        ></tp-radio>
+      </div>
+      <div class="example-stack">
+        <h3>Selection</h3>
+        <p>
+          Selected plan: <strong>{{ selectedPlan() }}</strong>
+        </p>
+        <tp-radio [disabled]="true" label="Unavailable option"></tp-radio>
+      </div>
     </div>
   </section>
 
