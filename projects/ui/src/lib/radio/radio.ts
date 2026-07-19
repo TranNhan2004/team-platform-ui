@@ -12,7 +12,6 @@ export class Radio {
   checked = model(false);
   touched = model(false);
 
-  label = input('');
   disabled = input(false);
   required = input(false);
   name = input('');

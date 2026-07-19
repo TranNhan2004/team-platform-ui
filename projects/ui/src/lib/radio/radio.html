@@ -8,9 +8,5 @@
   [attr.aria-label]="ariaLabel() || null"
   (change)="updateChecked($event)"
 >
-  @if (label()) {
-    {{ label() }}
-  } @else {
-    <ng-content></ng-content>
-  }
+  <ng-content></ng-content>
 </mat-radio-button>

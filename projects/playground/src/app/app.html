@@ -222,14 +222,14 @@
     <div class="choice-grid">
       <div class="example-stack">
         <h3>States</h3>
-        <tp-checkbox label="Unchecked"></tp-checkbox>
-        <tp-checkbox [checked]="true" label="Checked"></tp-checkbox>
-        <tp-checkbox [indeterminate]="true" label="Indeterminate"></tp-checkbox>
-        <tp-checkbox [disabled]="true" label="Disabled"></tp-checkbox>
+        <tp-checkbox>Unchecked</tp-checkbox>
+        <tp-checkbox [checked]="true">Checked</tp-checkbox>
+        <tp-checkbox [indeterminate]="true">Indeterminate</tp-checkbox>
+        <tp-checkbox [disabled]="true">Disabled</tp-checkbox>
       </div>
       <div class="example-stack">
         <h3>Interactive</h3>
-        <tp-checkbox [(checked)]="notificationsEnabled" label="Enable notifications"></tp-checkbox>
+        <tp-checkbox [(checked)]="notificationsEnabled">Enable notifications</tp-checkbox>
         <p>
           Notifications are <strong>{{ notificationsEnabled() ? 'enabled' : 'disabled' }}</strong
           >.
@@ -260,6 +260,66 @@
         [options]="projectOptions"
         [required]="true"
       ></tp-input-autocomplete>
+    </div>
+  </section>
+
+  <section class="component-section" aria-labelledby="input-singleselect-title">
+    <div class="component-section__heading">
+      <h2 id="input-singleselect-title">Input single select</h2>
+      <code>&lt;tp-input-singleselect&gt;</code>
+    </div>
+    <div class="input-grid">
+      <tp-input-singleselect
+        title="Project"
+        placeholder="Choose a project"
+        [options]="projectOptions"
+        [(value)]="selectedProject"
+        hint="Choose one existing project"
+      ></tp-input-singleselect>
+      <tp-input-singleselect title="Loading projects" [loading]="true"></tp-input-singleselect>
+      <tp-input-singleselect
+        title="Required project"
+        [options]="projectOptions"
+        [required]="true"
+      ></tp-input-singleselect>
+      <tp-input-singleselect
+        title="Required project 2"
+        [options]="projectOptions"
+        [required]="true"
+      ></tp-input-singleselect>
+    </div>
+    <p>
+      Selected project: <strong>{{ selectedProject() || 'None' }}</strong>
+    </p>
+  </section>
+
+  <section class="component-section" aria-labelledby="input-multiselect-title">
+    <div class="component-section__heading">
+      <h2 id="input-multiselect-title">Input multi select</h2>
+      <code>&lt;tp-input-multiselect&gt;</code>
+    </div>
+    <div class="input-grid">
+      <tp-input-multiselect
+        title="Projects"
+        placeholder="Choose projects"
+        [options]="projectOptions"
+        [(value)]="selectedProjects"
+        [maxChipContentLength]="14"
+        [maxChips]="2"
+        hint="Select one or more projects"
+      ></tp-input-multiselect>
+      <tp-input-multiselect
+        title="New-line chips"
+        placeholder="Choose projects"
+        [options]="projectOptions"
+        chipDisplayMode="new-line"
+      ></tp-input-multiselect>
+      <tp-input-multiselect title="Loading projects" [loading]="true"></tp-input-multiselect>
+      <tp-input-multiselect
+        title="Required projects"
+        [options]="projectOptions"
+        [required]="true"
+      ></tp-input-multiselect>
     </div>
   </section>
 
@@ -297,31 +357,31 @@
         <tp-radio
           name="plan"
           value="starter"
-          label="Starter"
           [checked]="selectedPlan() === 'starter'"
           (checkedChange)="selectPlan('starter', $event)"
-        ></tp-radio>
+          >Starter</tp-radio
+        >
         <tp-radio
           name="plan"
           value="team"
-          label="Team"
           [checked]="selectedPlan() === 'team'"
           (checkedChange)="selectPlan('team', $event)"
-        ></tp-radio>
+          >Team</tp-radio
+        >
         <tp-radio
           name="plan"
           value="enterprise"
-          label="Enterprise"
           [checked]="selectedPlan() === 'enterprise'"
           (checkedChange)="selectPlan('enterprise', $event)"
-        ></tp-radio>
+          >Enterprise</tp-radio
+        >
       </div>
       <div class="example-stack">
         <h3>Selection</h3>
         <p>
           Selected plan: <strong>{{ selectedPlan() }}</strong>
         </p>
-        <tp-radio [disabled]="true" label="Unavailable option"></tp-radio>
+        <tp-radio [disabled]="true">Unavailable option</tp-radio>
       </div>
     </div>
   </section>

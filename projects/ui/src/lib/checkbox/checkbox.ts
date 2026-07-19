@@ -13,7 +13,6 @@ export class Checkbox implements FormCheckboxControl {
   checked = model(false);
   touched = model(false);
 
-  label = input('');
   disabled = input(false);
   indeterminate = input(false);
   required = input(false);

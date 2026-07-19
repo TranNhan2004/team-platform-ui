@@ -12,6 +12,8 @@ import {
   Input,
   InputAutocomplete,
   InputDatePicker,
+  InputMultiselect,
+  InputSingleselect,
   Radio,
   SearchBar,
   Skeleton,
@@ -34,6 +36,8 @@ import {
     Input,
     InputAutocomplete,
     InputDatePicker,
+    InputSingleselect,
+    InputMultiselect,
     Radio,
     SearchBar,
     Skeleton,
@@ -74,7 +78,12 @@ export class App {
     'Platform UI 1',
     'Project Atlas 1',
     'Project Nova 1',
+    '1',
+    '2',
+    '3',
   ];
+  protected readonly selectedProject = signal<string | null>(null);
+  protected readonly selectedProjects = signal<string[]>(['Platform API', 'Project Nova']);
   protected readonly notificationsEnabled = signal(false);
   protected readonly selectedPlan = signal('starter');
   protected readonly selectedDate = signal<Date | null>(new Date(2032, 5, 15));
