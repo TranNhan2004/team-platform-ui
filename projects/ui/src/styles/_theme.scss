@@ -1,0 +1,52 @@
+@use '@angular/material' as mat;
+
+@mixin theme(
+  $primary: mat.$azure-palette,
+  $tertiary: mat.$blue-palette,
+  $theme-type: light,
+  $typography: Roboto,
+  $density: 0
+) {
+  /*
+   * Generate the Angular Material theme and its system variables.
+   */
+  @include mat.theme(
+    (
+      color: (
+        primary: $primary,
+        tertiary: $tertiary,
+        theme-type: $theme-type,
+      ),
+      typography: $typography,
+      density: $density,
+    )
+  );
+
+  /*
+   * Team Platform surface tokens.
+   */
+  --tp-color-background: var(--mat-sys-surface-container-low);
+  --tp-color-surface: var(--mat-sys-surface);
+  --tp-color-surface-elevated: var(--mat-sys-surface-container-lowest);
+
+  /*
+   * Team Platform text tokens.
+   */
+  --tp-color-text-primary: var(--mat-sys-on-surface);
+  --tp-color-text-secondary: var(--mat-sys-on-surface-variant);
+
+  /*
+   * Team Platform border tokens.
+   */
+  --tp-color-border: var(--mat-sys-outline-variant);
+  --tp-color-border-strong: var(--mat-sys-outline);
+
+  /*
+   * Generic interaction state.
+   */
+  --tp-color-hover: color-mix(in srgb, var(--mat-sys-on-surface) 8%, transparent);
+  --tp-color-focus: var(--tp-color-blue-600);
+  --tp-color-overlay: color-mix(in srgb, var(--tp-color-gray-950) 48%, transparent);
+  --tp-color-press: var(--tp-color-gray-300);
+  --tp-color-press-ripple: color-mix(in srgb, var(--tp-color-gray-300) 20%, transparent);
+}

@@ -1,0 +1,49 @@
+@mixin tokens() {
+  /* Spacing */
+  --tp-space-1: 4px;
+  --tp-space-2: 8px;
+  --tp-space-3: 12px;
+  --tp-space-4: 16px;
+  --tp-space-6: 24px;
+  --tp-space-8: 32px;
+
+  /* Typography */
+  --tp-text-sm: 12px;
+  --tp-text-md: 14px;
+  --tp-text-lg: 16px;
+  --tp-text-xl: 20px;
+  --tp-text-2xl: 24px;
+  --tp-text-3xl: 30px;
+  --tp-text-4xl: 36px;
+  --tp-text-5xl: 48px;
+  --tp-text-6xl: 60px;
+  --tp-text-7xl: 72px;
+  --tp-text-8xl: 96px;
+  --tp-text-9xl: 128px;
+
+  /* Radius */
+  --tp-radius-sm: 4px;
+  --tp-radius-md: 6px;
+  --tp-radius-lg: 8px;
+  --tp-radius-full: 9999px;
+
+  /* Controls */
+  --tp-control-height-sm: 32px;
+  --tp-control-height-md: 40px;
+  --tp-control-height-lg: 48px;
+
+  /* Motion */
+  --tp-transition-fast: 120ms ease;
+  --tp-transition-normal: 180ms ease;
+
+  /* Shadow */
+  --tp-shadow-sm: 0 1px 2px rgb(15 23 42 / 6%);
+
+  --tp-shadow-md: 0 4px 6px -1px rgb(15 23 42 / 8%), 0 2px 4px -2px rgb(15 23 42 / 6%);
+
+  /* Layer */
+  --tp-z-dropdown: 1000;
+  --tp-z-overlay: 1200;
+  --tp-z-dialog: 1300;
+  --tp-z-tooltip: 1400;
+}

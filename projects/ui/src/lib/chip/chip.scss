@@ -1,0 +1,81 @@
+.tp-chip {
+  --tp-chip-color: var(--tp-color-blue-500);
+  --tp-chip-label-color: var(--tp-color-white);
+  --tp-chip-tonal-bg: var(--tp-color-blue-50);
+  --mat-chip-label-text-color: var(--tp-chip-color);
+  --mat-chip-elevated-container-color: transparent;
+  --mat-chip-outline-width: 0;
+  --mat-chip-outline-color: transparent;
+  --mat-chip-hover-state-layer-opacity: 0;
+  --mat-chip-focus-state-layer-opacity: 0;
+  --mat-chip-selected-hover-state-layer-opacity: 0;
+  --mat-chip-selected-focus-state-layer-opacity: 0;
+  --mat-chip-container-shape-radius: var(--tp-radius-md);
+
+  border: none !important;
+  border-radius: var(--tp-radius-md);
+  cursor: default;
+  user-select: none;
+  box-shadow: none !important;
+  transition:
+    background-color var(--tp-transition-fast),
+    border-color var(--tp-transition-fast),
+    color var(--tp-transition-fast);
+}
+
+.tp-chip--sm {
+  min-height: var(--tp-space-6);
+  font-size: 12px;
+
+  .mdc-evolution-chip__text-label {
+    font-size: 12px;
+  }
+}
+
+.tp-chip--md {
+  min-height: calc(var(--tp-space-6) + var(--tp-space-1));
+  font-size: 13px;
+
+  .mdc-evolution-chip__text-label {
+    font-size: 13px;
+  }
+}
+
+.tp-chip--lg {
+  min-height: var(--tp-control-height-sm);
+  font-size: 14px;
+
+  .mdc-evolution-chip__text-label {
+    font-size: 14px;
+  }
+}
+
+.tp-chip--filled {
+  --mat-chip-elevated-container-color: var(--tp-chip-color);
+  --mat-chip-label-text-color: var(--tp-chip-label-color);
+}
+
+.tp-chip--outlined {
+  --mat-chip-elevated-container-color: transparent;
+  --mat-chip-outline-width: 1px;
+  --mat-chip-outline-color: var(--tp-chip-color);
+}
+
+.tp-chip--tonal {
+  --mat-chip-elevated-container-color: var(--tp-chip-tonal-bg);
+  --mat-chip-outline-width: 1px;
+  --mat-chip-outline-color: var(--tp-chip-color);
+}
+
+.tp-chip--text {
+  --mat-chip-elevated-container-color: transparent;
+  --mat-chip-outline-width: 0;
+  padding-right: 0;
+  padding-left: 0;
+
+  .mdc-evolution-chip__cell,
+  .mdc-evolution-chip__action--primary {
+    padding-right: 0;
+    padding-left: 0;
+  }
+}

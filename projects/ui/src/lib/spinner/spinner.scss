@@ -1,0 +1,8 @@
+:host {
+  display: inline-flex;
+}
+
+.tp-spinner {
+  --tp-spinner-color: var(--tp-color-blue-500);
+  --mat-progress-spinner-active-indicator-color: var(--tp-spinner-color);
+}

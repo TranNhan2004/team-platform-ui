@@ -1,0 +1,23 @@
+:host {
+  display: inline-flex;
+}
+
+.tp-checkbox {
+  --mat-checkbox-label-text-color: var(--tp-color-text-primary);
+  --mat-checkbox-label-text-size: var(--tp-text-md);
+  --mat-checkbox-label-text-line-height: 20px;
+  --mat-checkbox-unselected-icon-color: var(--tp-color-border-strong);
+  --mat-checkbox-unselected-hover-icon-color: var(--tp-color-text-primary);
+  --mat-checkbox-unselected-focus-icon-color: var(--tp-color-focus);
+  --mat-checkbox-unselected-pressed-icon-color: var(--tp-color-focus);
+  --mat-checkbox-selected-icon-color: var(--tp-color-blue-600);
+  --mat-checkbox-selected-hover-icon-color: var(--tp-color-blue-600);
+  --mat-checkbox-selected-focus-icon-color: var(--tp-color-blue-600);
+  --mat-checkbox-selected-pressed-icon-color: var(--tp-color-blue-700);
+  --mat-checkbox-selected-focus-state-layer-color: var(--tp-color-blue-600);
+  --mat-checkbox-selected-hover-state-layer-color: var(--tp-color-blue-600);
+  --mat-checkbox-selected-pressed-state-layer-color: var(--tp-color-blue-600);
+  --mat-checkbox-disabled-label-color: var(--tp-color-text-secondary);
+  --mat-checkbox-disabled-selected-icon-color: var(--tp-color-gray-400);
+  --mat-checkbox-disabled-unselected-icon-color: var(--tp-color-gray-400);
+}

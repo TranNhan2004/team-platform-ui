@@ -1,0 +1,8 @@
+@use '../../ui/src/styles' as tp;
+@use 'material-symbols/outlined.css';
+
+:root {
+  @include tp.tokens;
+  @include tp.theme;
+  @include tp.base;
+}

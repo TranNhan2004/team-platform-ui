@@ -1,0 +1,71 @@
+<mat-form-field
+  class="tp-input-autocomplete"
+  [class.tp-input-autocomplete--invalid]="showError()"
+  appearance="outline"
+  [hideRequiredMarker]="true"
+  subscriptSizing="dynamic"
+  [style.width]="width()"
+  [style.max-width]="maxWidth()"
+  [style.--tp-input-autocomplete-height]="height()"
+  [style.--tp-input-autocomplete-max-height]="maxHeight()"
+  [style.--tp-input-autocomplete-content-size]="contentFontSize()"
+>
+  @if (title()) {
+    <mat-label>
+      {{ title() }}
+      @if (required()) {
+        <span class="tp-input-autocomplete__required-marker" aria-hidden="true">*</span>
+      }
+    </mat-label>
+  }
+
+  <input
+    matInput
+    class="tp-input-autocomplete__control"
+    [matAutocomplete]="suggestions"
+    [value]="value()"
+    [placeholder]="placeholder()"
+    [required]="required()"
+    [disabled]="disabled()"
+    [readonly]="readonly()"
+    [attr.name]="name() || null"
+    [attr.autocomplete]="autocomplete()"
+    [attr.aria-label]="ariaLabel() || null"
+    [attr.aria-invalid]="showError()"
+    (blur)="markAsTouched()"
+    (input)="updateValue($event)"
+  />
+
+  @if (hint()) {
+    <mat-hint>{{ hint() }}</mat-hint>
+  }
+</mat-form-field>
+
+<mat-autocomplete
+  #suggestions="matAutocomplete"
+  class="tp-input-autocomplete__panel"
+  (optionSelected)="selectOption($event)"
+>
+  @if (query()) {
+    @if (loading()) {
+      <mat-option class="tp-input-autocomplete__feedback" [disabled]="true">
+        <span class="tp-input-autocomplete__feedback-content">
+          <span>Loading</span>
+          <tp-spinner [diameter]="16" [strokeWidth]="2" ariaLabel="Loading suggestions"></tp-spinner>
+        </span>
+      </mat-option>
+    } @else if (filteredOptions().length) {
+      @for (option of filteredOptions(); track option) {
+        <mat-option [value]="option">{{ option }}</mat-option>
+      }
+    } @else {
+      <mat-option class="tp-input-autocomplete__feedback" [disabled]="true">
+        No matching result
+      </mat-option>
+    }
+  }
+</mat-autocomplete>
+
+@if (showError()) {
+  <div class="tp-input-autocomplete__error" role="alert">{{ displayedError() }}</div>
+}

@@ -1,0 +1,467 @@
+<main class="playground">
+  <header class="playground__header">
+    <p class="playground__eyebrow">Team Platform</p>
+    <h1>UI component playground</h1>
+    <p>All components exported by <code>public-api.ts</code>, including their variants.</p>
+  </header>
+
+  <section class="component-section" aria-labelledby="buttons-title">
+    <div class="component-section__heading">
+      <h2 id="buttons-title">Button</h2>
+      <code>&lt;tp-button&gt;</code>
+    </div>
+
+    @for (variant of buttonVariants; track variant) {
+      <div class="example-group">
+        <h3>{{ variant }}</h3>
+        <div class="example-row">
+          @for (color of colors; track color) {
+            <tp-button [variant]="variant" [color]="color" [tooltipTitle]="color">
+              {{ color }}
+            </tp-button>
+          }
+        </div>
+      </div>
+    }
+
+    <div class="example-group">
+      <h3>Sizes and states</h3>
+      <div class="example-row">
+        @for (size of sizes; track size) {
+          <tp-button [size]="size">{{ size }}</tp-button>
+        }
+        <tp-button [disabled]="true">Disabled</tp-button>
+      </div>
+      <tp-button [fullWidth]="true">Full-width button</tp-button>
+    </div>
+  </section>
+
+  <section class="component-section" aria-labelledby="text-buttons-title">
+    <div class="component-section__heading">
+      <h2 id="text-buttons-title">Text button</h2>
+      <code>&lt;tp-text-button&gt;</code>
+    </div>
+
+    <div class="example-group">
+      <h3>Colors</h3>
+      <div class="example-row">
+        <tp-text-button color="gray">Gray</tp-text-button>
+        <tp-text-button color="black">Black</tp-text-button>
+        <span class="dark-example">
+          <tp-text-button color="white">White</tp-text-button>
+        </span>
+      </div>
+    </div>
+
+    <div class="example-group">
+      <h3>Sizes and states</h3>
+      <div class="example-row">
+        @for (size of sizes; track size) {
+          <tp-text-button [size]="size">{{ size }}</tp-text-button>
+        }
+        <tp-text-button afterPressEffect="underline">Pressed underline</tp-text-button>
+        <tp-text-button [disabled]="true">Disabled</tp-text-button>
+      </div>
+      <tp-text-button [fullWidth]="true">Full-width text button</tp-text-button>
+    </div>
+  </section>
+
+  <section class="component-section" aria-labelledby="chips-title">
+    <div class="component-section__heading">
+      <h2 id="chips-title">Chip</h2>
+      <code>&lt;tp-chip&gt;</code>
+    </div>
+
+    @for (variant of chipVariants; track variant) {
+      <div class="example-group">
+        <h3>{{ variant }}</h3>
+        <div class="example-row">
+          @for (color of colors; track color) {
+            <tp-chip [variant]="variant" [color]="color" [tooltipTitle]="color">
+              {{ color }}
+            </tp-chip>
+          }
+        </div>
+      </div>
+    }
+
+    <div class="example-group">
+      <h3>Sizes</h3>
+      <div class="example-row">
+        @for (size of sizes; track size) {
+          <tp-chip [size]="size">{{ size }}</tp-chip>
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="component-section" aria-labelledby="spinners-title">
+    <div class="component-section__heading">
+      <h2 id="spinners-title">Spinner</h2>
+      <code>&lt;tp-spinner&gt;</code>
+    </div>
+    <div class="example-row">
+      @for (color of colors; track color) {
+        <tp-spinner [color]="color" [ariaLabel]="color + ' loading'"></tp-spinner>
+      }
+    </div>
+    <div class="example-row">
+      <tp-spinner [diameter]="24" [strokeWidth]="3"></tp-spinner>
+      <tp-spinner [diameter]="48"></tp-spinner>
+      <tp-spinner [diameter]="64" [strokeWidth]="5"></tp-spinner>
+    </div>
+  </section>
+
+  <section class="component-section" aria-labelledby="avatars-title">
+    <div class="component-section__heading">
+      <h2 id="avatars-title">Avatar</h2>
+      <code>&lt;tp-avatar&gt;</code>
+    </div>
+    <div class="example-row">
+      <tp-avatar tooltipTitle="Default fallback"></tp-avatar>
+      <tp-avatar [size]="32" tooltipTitle="Small fallback"></tp-avatar>
+      <tp-avatar [size]="56" tooltipTitle="Large fallback"></tp-avatar>
+      <tp-avatar
+        src="/favicon.ico"
+        alt="Angular logo avatar"
+        tooltipTitle="Image avatar"
+      ></tp-avatar>
+      <tp-avatar [disabled]="true" tooltipTitle="Disabled avatar"></tp-avatar>
+    </div>
+  </section>
+
+  <section class="component-section" aria-labelledby="notifications-title">
+    <div class="component-section__heading">
+      <h2 id="notifications-title">Bell notification</h2>
+      <code>&lt;tp-bell-notification&gt;</code>
+    </div>
+    <div class="example-row">
+      <tp-bell-notification [count]="0"></tp-bell-notification>
+      <tp-bell-notification [count]="5"></tp-bell-notification>
+      <tp-bell-notification [count]="100"></tp-bell-notification>
+      <tp-bell-notification [count]="5" [disabled]="true"></tp-bell-notification>
+    </div>
+  </section>
+
+  <section class="component-section" aria-labelledby="cards-title">
+    <div class="component-section__heading">
+      <h2 id="cards-title">Card</h2>
+      <code>&lt;tp-card&gt;</code>
+    </div>
+    <div class="card-grid">
+      <tp-card>
+        <div class="card-content">
+          <h3>Default card</h3>
+          <p>Uses the shared surface, text, border, radius, and shadow tokens.</p>
+        </div>
+      </tp-card>
+      <tp-card
+        color="var(--tp-color-blue-50)"
+        textColor="var(--tp-color-blue-900)"
+        borderColor="var(--tp-color-blue-200)"
+      >
+        <div class="card-content">
+          <h3>Customized card</h3>
+          <p>Color inputs can reference any predefined palette token.</p>
+        </div>
+      </tp-card>
+    </div>
+  </section>
+
+  <section class="component-section" aria-labelledby="search-title">
+    <div class="component-section__heading">
+      <h2 id="search-title">Search bar</h2>
+      <code>&lt;tp-search-bar&gt;</code>
+    </div>
+    <div class="example-stack">
+      <tp-search-bar (onSearch)="searchValue.set($event)"></tp-search-bar>
+      <tp-search-bar
+        maxWidth="360px"
+        placeholder="Search projects"
+        ariaLabel="Search projects"
+        (onSearch)="searchValue.set($event)"
+      ></tp-search-bar>
+      <p>
+        Debounced value: <strong>{{ searchValue() || 'Start typing…' }}</strong>
+      </p>
+    </div>
+  </section>
+
+  <section class="component-section" aria-labelledby="inputs-title">
+    <div class="component-section__heading">
+      <h2 id="inputs-title">Input</h2>
+      <code>&lt;tp-input&gt;</code>
+    </div>
+    <div class="input-grid">
+      <tp-input title="Free text"></tp-input>
+
+      <tp-input title="Compact text" contentSize="sm" height="80px" maxHeight="100px"></tp-input>
+      <tp-input title="Required title" [required]="true"></tp-input>
+      <div>
+        <p>ABC:</p>
+        <tp-input [required]="true"></tp-input>
+      </div>
+      <tp-input title="Populated title" value="Existing value"></tp-input>
+      <tp-input title="Number" variant="number" [min]="0" [max]="100" [step]="1"></tp-input>
+      <tp-input title="Disabled" value="Unavailable" [disabled]="true"></tp-input>
+      <tp-input title="With hint" hint="Enter a clear, descriptive name"></tp-input>
+      <tp-input
+        title="Large content"
+        contentSize="lg"
+        height="var(--tp-control-height-lg)"
+        maxHeight="var(--tp-control-height-lg)"
+      ></tp-input>
+    </div>
+  </section>
+
+  <section class="component-section" aria-labelledby="checkboxes-title">
+    <div class="component-section__heading">
+      <h2 id="checkboxes-title">Checkbox</h2>
+      <code>&lt;tp-checkbox&gt;</code>
+    </div>
+    <div class="choice-grid">
+      <div class="example-stack">
+        <h3>States</h3>
+        <tp-checkbox>Unchecked</tp-checkbox>
+        <tp-checkbox [checked]="true">Checked</tp-checkbox>
+        <tp-checkbox [indeterminate]="true">Indeterminate</tp-checkbox>
+        <tp-checkbox [disabled]="true">Disabled</tp-checkbox>
+      </div>
+      <div class="example-stack">
+        <h3>Interactive</h3>
+        <tp-checkbox [(checked)]="notificationsEnabled">Enable notifications</tp-checkbox>
+        <p>
+          Notifications are <strong>{{ notificationsEnabled() ? 'enabled' : 'disabled' }}</strong
+          >.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="component-section" aria-labelledby="input-autocomplete-title">
+    <div class="component-section__heading">
+      <h2 id="input-autocomplete-title">Input autocomplete</h2>
+      <code>&lt;tp-input-autocomplete&gt;</code>
+    </div>
+    <div class="input-grid">
+      <tp-input-autocomplete
+        title="Project"
+        placeholder="Start typing a project name"
+        [options]="projectOptions"
+        hint="You can enter a new project name"
+      ></tp-input-autocomplete>
+      <tp-input-autocomplete
+        title="Loading projects"
+        value="pro"
+        [loading]="true"
+      ></tp-input-autocomplete>
+      <tp-input-autocomplete
+        title="Required project"
+        [options]="projectOptions"
+        [required]="true"
+      ></tp-input-autocomplete>
+    </div>
+  </section>
+
+  <section class="component-section" aria-labelledby="input-singleselect-title">
+    <div class="component-section__heading">
+      <h2 id="input-singleselect-title">Input single select</h2>
+      <code>&lt;tp-input-singleselect&gt;</code>
+    </div>
+    <div class="input-grid">
+      <tp-input-singleselect
+        title="Project"
+        placeholder="Choose a project"
+        [options]="projectOptions"
+        [(value)]="selectedProject"
+        hint="Choose one existing project"
+      ></tp-input-singleselect>
+      <tp-input-singleselect title="Loading projects" [loading]="true"></tp-input-singleselect>
+      <tp-input-singleselect
+        title="Required project"
+        [options]="projectOptions"
+        [required]="true"
+      ></tp-input-singleselect>
+      <tp-input-singleselect
+        title="Required project 2"
+        [options]="projectOptions"
+        [required]="true"
+      ></tp-input-singleselect>
+    </div>
+    <p>
+      Selected project: <strong>{{ selectedProject() || 'None' }}</strong>
+    </p>
+  </section>
+
+  <section class="component-section" aria-labelledby="input-multiselect-title">
+    <div class="component-section__heading">
+      <h2 id="input-multiselect-title">Input multi select</h2>
+      <code>&lt;tp-input-multiselect&gt;</code>
+    </div>
+    <div class="input-grid">
+      <tp-input-multiselect
+        title="Projects"
+        placeholder="Choose projects"
+        [options]="projectOptions"
+        [(value)]="selectedProjects"
+        [maxChipContentLength]="14"
+        [maxChips]="2"
+        hint="Select one or more projects"
+      ></tp-input-multiselect>
+      <tp-input-multiselect
+        title="New-line chips"
+        placeholder="Choose projects"
+        [options]="projectOptions"
+        chipDisplayMode="new-line"
+      ></tp-input-multiselect>
+      <tp-input-multiselect title="Loading projects" [loading]="true"></tp-input-multiselect>
+      <tp-input-multiselect
+        title="Required projects"
+        [options]="projectOptions"
+        [required]="true"
+      ></tp-input-multiselect>
+    </div>
+  </section>
+
+  <section class="component-section" aria-labelledby="text-areas-title">
+    <div class="component-section__heading">
+      <h2 id="text-areas-title">Text area</h2>
+      <code>&lt;tp-text-area&gt;</code>
+    </div>
+    <div class="input-grid">
+      <div>
+        <p>Required:</p>
+        <tp-text-area [required]="true"></tp-text-area>
+      </div>
+      <tp-text-area title="Description" placeholder="Add a description"></tp-text-area>
+      <tp-text-area title="Three rows minimum" [rows]="1"></tp-text-area>
+      <tp-text-area title="Character limit" [rows]="5" [maxLength]="120"></tp-text-area>
+      <tp-text-area title="Required" [required]="true"></tp-text-area>
+      <tp-text-area title="Sized" width="320px" maxWidth="100%"></tp-text-area>
+      <tp-text-area
+        title="Disabled"
+        value="This content cannot be changed"
+        [disabled]="true"
+      ></tp-text-area>
+    </div>
+  </section>
+
+  <section class="component-section" aria-labelledby="radios-title">
+    <div class="component-section__heading">
+      <h2 id="radios-title">Radio</h2>
+      <code>&lt;tp-radio&gt;</code>
+    </div>
+    <div class="choice-grid">
+      <div class="example-stack">
+        <h3>Plan</h3>
+        <tp-radio
+          name="plan"
+          value="starter"
+          [checked]="selectedPlan() === 'starter'"
+          (checkedChange)="selectPlan('starter', $event)"
+          >Starter</tp-radio
+        >
+        <tp-radio
+          name="plan"
+          value="team"
+          [checked]="selectedPlan() === 'team'"
+          (checkedChange)="selectPlan('team', $event)"
+          >Team</tp-radio
+        >
+        <tp-radio
+          name="plan"
+          value="enterprise"
+          [checked]="selectedPlan() === 'enterprise'"
+          (checkedChange)="selectPlan('enterprise', $event)"
+          >Enterprise</tp-radio
+        >
+      </div>
+      <div class="example-stack">
+        <h3>Selection</h3>
+        <p>
+          Selected plan: <strong>{{ selectedPlan() }}</strong>
+        </p>
+        <tp-radio [disabled]="true">Unavailable option</tp-radio>
+      </div>
+    </div>
+  </section>
+
+  <section class="component-section" aria-labelledby="date-pickers-title">
+    <div class="component-section__heading">
+      <h2 id="date-pickers-title">Date picker</h2>
+      <code>&lt;tp-input-date-picker&gt;</code>
+    </div>
+    <div class="input-grid">
+      <div class="example-row">
+        <span>Icon-only:</span>
+        <tp-date-picker
+          [value]="calendarDate()"
+          (valueChange)="calendarDate.set($event)"
+        ></tp-date-picker>
+      </div>
+      <tp-input-date-picker title="Choose a date"></tp-input-date-picker>
+      <tp-input-date-picker
+        title="Compact date"
+        height="60px"
+        maxHeight="100px"
+      ></tp-input-date-picker>
+      <tp-input-date-picker
+        title="Preselected date"
+        dateFormat="DD-MMM-YYYY"
+        [value]="selectedDate()"
+        (valueChange)="selectedDate.set($event)"
+      ></tp-input-date-picker>
+      <tp-input-date-picker
+        title="ISO display"
+        dateFormat="YYYY-MM-DD"
+        [value]="selectedDate()"
+      ></tp-input-date-picker>
+      <tp-input-date-picker
+        title="Restricted range"
+        [minDate]="minPlaygroundDate"
+        [maxDate]="maxPlaygroundDate"
+      ></tp-input-date-picker>
+      <tp-input-date-picker title="Disabled" [disabled]="true"></tp-input-date-picker>
+    </div>
+  </section>
+
+  <section class="component-section" aria-labelledby="skeletons-title">
+    <div class="component-section__heading">
+      <h2 id="skeletons-title">Skeleton</h2>
+      <code>&lt;tp-skeleton&gt;</code>
+    </div>
+    <div class="skeleton-grid">
+      <div class="example-stack">
+        <h3>Text</h3>
+        <tp-skeleton variant="text"></tp-skeleton>
+        <tp-skeleton variant="text" width="75%"></tp-skeleton>
+        <tp-skeleton variant="text" width="45%"></tp-skeleton>
+      </div>
+      <div class="example-stack">
+        <h3>Circle</h3>
+        <tp-skeleton variant="circle"></tp-skeleton>
+      </div>
+      <div class="example-stack">
+        <h3>Rectangle</h3>
+        <tp-skeleton variant="rectangle" height="140px"></tp-skeleton>
+      </div>
+    </div>
+  </section>
+
+  <section class="component-section" aria-labelledby="dialog-title">
+    <div class="component-section__heading">
+      <h2 id="dialog-title">Dialog</h2>
+      <code>&lt;tp-dialog&gt;</code>
+    </div>
+    <tp-button (click)="demoDialog.openDialog()">Open dialog</tp-button>
+    <tp-dialog #demoDialog title="Example dialog">
+      <p>
+        This dialog demonstrates projected content, actions, backdrop closing, and Escape closing.
+      </p>
+      <div dialog-actions>
+        <tp-text-button (click)="demoDialog.closeDialog()">Cancel</tp-text-button>
+        <tp-button (click)="demoDialog.closeDialog()">Confirm</tp-button>
+      </div>
+    </tp-dialog>
+  </section>
+</main>

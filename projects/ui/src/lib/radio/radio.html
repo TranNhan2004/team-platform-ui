@@ -1,0 +1,12 @@
+<mat-radio-button
+  class="tp-radio"
+  [checked]="checked()"
+  [disabled]="disabled()"
+  [required]="required()"
+  [name]="name()"
+  [value]="value()"
+  [attr.aria-label]="ariaLabel() || null"
+  (change)="updateChecked($event)"
+>
+  <ng-content></ng-content>
+</mat-radio-button>
