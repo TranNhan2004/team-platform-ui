@@ -1,0 +1,13 @@
+<mat-checkbox
+  class="tp-checkbox"
+  [checked]="checked()"
+  [disabled]="disabled()"
+  [indeterminate]="indeterminate()"
+  [required]="required()"
+  [attr.name]="name() || null"
+  [value]="nativeValue()"
+  [attr.aria-label]="ariaLabel() || null"
+  (change)="updateChecked($event)"
+>
+  <ng-content></ng-content>
+</mat-checkbox>

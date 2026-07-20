@@ -1,0 +1,46 @@
+<mat-form-field
+  class="tp-input-date-picker"
+  appearance="outline"
+  [hideRequiredMarker]="true"
+  subscriptSizing="dynamic"
+  [style.width]="width()"
+  [style.max-width]="maxWidth()"
+  [style.--tp-input-date-picker-height]="height()"
+  [style.--tp-input-date-picker-max-height]="maxHeight()"
+>
+  @if (title()) {
+    <mat-label>
+      {{ title() }}
+      @if (required()) {
+        <span class="tp-input-date-picker__required-marker" aria-hidden="true">*</span>
+      }
+    </mat-label>
+  }
+  <input
+    matInput
+    class="tp-input-date-picker__control"
+    [value]="formattedValue()"
+    [disabled]="disabled()"
+    [readonly]="true"
+    [required]="required()"
+    [attr.name]="name() || null"
+    (click)="calendar.open()"
+  />
+  <tp-date-picker
+    #calendar
+    matIconSuffix
+    [value]="value()"
+    [minDate]="minDate()"
+    [maxDate]="maxDate()"
+    [disabled]="disabled() || readonly()"
+    (valueChange)="selectDate($event)"
+  ></tp-date-picker>
+</mat-form-field>
+
+@if (required() && !title()) {
+  <span
+    class="tp-input-date-picker__required-marker tp-input-date-picker__required-marker--standalone"
+    aria-hidden="true"
+    >*</span
+  >
+}

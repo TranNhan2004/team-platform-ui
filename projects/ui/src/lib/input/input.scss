@@ -1,0 +1,95 @@
+:host {
+  position: relative;
+  display: block;
+}
+
+.tp-input {
+  --tp-input-height: var(--tp-control-height-md);
+  --tp-input-max-height: var(--tp-control-height-lg);
+  --tp-input-content-size: var(--tp-text-md);
+  --mat-form-field-outlined-focus-outline-color: var(--tp-color-focus);
+  --mat-form-field-outlined-focus-label-text-color: var(--tp-color-focus);
+  --mat-form-field-outlined-caret-color: var(--tp-color-focus);
+  --mat-form-field-outlined-focus-outline-width: 3px;
+  --mat-form-field-outlined-container-shape: var(--tp-radius-md);
+  --mat-form-field-outlined-outline-color: var(--tp-color-border-strong);
+  --mat-form-field-outlined-input-text-color: var(--tp-color-text-primary);
+  --mat-form-field-outlined-label-text-color: var(--tp-color-text-secondary);
+  --mat-form-field-error-text-color: var(--tp-color-red-600);
+  --mat-form-field-container-height: min(var(--tp-input-height), var(--tp-input-max-height));
+  --mat-form-field-container-vertical-padding: var(--tp-space-2);
+  --mat-form-field-container-text-size: var(--tp-input-content-size);
+  --mat-form-field-outlined-label-text-size: var(--tp-input-content-size);
+  --mat-form-field-outlined-label-text-populated-size: var(--tp-input-content-size);
+}
+
+.tp-input__control {
+  height: auto;
+  max-height: 100%;
+  font-size: var(--tp-input-content-size);
+  line-height: normal;
+  margin: 0;
+}
+
+:host ::ng-deep .tp-input {
+  .mat-mdc-text-field-wrapper.mdc-text-field--outlined,
+  .mat-mdc-form-field-flex,
+  .mat-mdc-form-field-infix {
+    height: min(var(--tp-input-height), var(--tp-input-max-height));
+    max-height: var(--tp-input-max-height);
+  }
+
+  .mat-mdc-form-field-flex,
+  .mat-mdc-form-field-infix {
+    align-items: center;
+  }
+
+  .mat-mdc-form-field-infix {
+    display: flex;
+    min-height: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+}
+
+.tp-input__error {
+  margin-top: var(--tp-space-1);
+  padding: 0 var(--tp-space-4);
+  color: var(--tp-color-red-600);
+  font-size: var(--tp-text-sm);
+}
+
+:host ::ng-deep .tp-input--invalid {
+  --mat-form-field-outlined-focus-outline-width: 2px;
+
+  .mat-mdc-notch-piece {
+    border-color: var(--tp-color-red-600) !important;
+    border-width: 2px !important;
+  }
+
+  .mdc-notched-outline__notch {
+    border-right-color: transparent !important;
+    border-left-color: transparent !important;
+  }
+
+  .mat-mdc-floating-label {
+    color: var(--tp-color-red-600);
+  }
+
+  .tp-input__control {
+    caret-color: var(--tp-color-red-600);
+  }
+}
+
+.tp-input__required-marker {
+  color: var(--tp-color-red-600);
+}
+
+.tp-input__required-marker--standalone {
+  position: absolute;
+  z-index: 1;
+  top: calc(min(var(--tp-input-height), var(--tp-input-max-height)) / 2);
+  left: var(--tp-space-4);
+  transform: translateY(-50%);
+  pointer-events: none;
+}

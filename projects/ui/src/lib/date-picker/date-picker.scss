@@ -1,0 +1,47 @@
+:host {
+  position: relative;
+  display: inline-flex;
+}
+
+.tp-date-picker__input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.tp-date-picker__trigger {
+  --mat-icon-button-icon-color: var(--tp-color-gray-700);
+  --mat-icon-button-state-layer-color: var(--tp-color-press);
+  --mat-icon-button-ripple-color: var(--tp-color-press-ripple);
+}
+
+::ng-deep .tp-date-picker-calendar {
+  width: 360px !important;
+  height: auto !important;
+  --mat-datepicker-calendar-date-today-outline-color: var(--tp-color-blue-600);
+  --mat-datepicker-calendar-date-focus-state-background-color: transparent;
+  --mat-datepicker-calendar-date-hover-state-background-color: transparent;
+  --mat-datepicker-calendar-date-selected-state-background-color: var(--tp-color-blue-600);
+  --mat-datepicker-calendar-date-selected-state-text-color: var(--tp-color-white);
+  --mat-datepicker-calendar-date-today-selected-state-outline-color: var(--tp-color-blue-600);
+}
+
+::ng-deep .tp-date-picker-calendar .mat-calendar-body-label {
+  color: transparent;
+}
+
+::ng-deep
+  .tp-date-picker-calendar
+  .mat-calendar-body
+  tr:has(> .mat-calendar-body-label:only-child) {
+  display: none;
+}
+
+::ng-deep .mat-datepicker-content:has(.tp-date-picker-calendar) {
+  --mat-datepicker-calendar-container-shape: var(--tp-radius-sm);
+  border-radius: var(--tp-radius-sm);
+}

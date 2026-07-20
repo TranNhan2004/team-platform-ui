@@ -1,0 +1,11 @@
+<div class="tp-search-bar" [style.width]="width()" [style.max-width]="maxWidth()">
+  <mat-icon class="tp-search-bar__icon" aria-hidden="true">search</mat-icon>
+  <input
+    matInput
+    class="tp-search-bar__input"
+    type="search"
+    [formField]="searchField"
+    [placeholder]="placeholder()"
+    [attr.aria-label]="ariaLabel()"
+  />
+</div>

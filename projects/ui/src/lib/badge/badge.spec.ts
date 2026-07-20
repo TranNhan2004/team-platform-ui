@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { Ui } from './ui';
+import { TpBadge } from './badge';
 
-describe('Ui', () => {
-  let component: Ui;
-  let fixture: ComponentFixture<Ui>;
+describe('Badge', () => {
+  let component: TpBadge;
+  let fixture: ComponentFixture<TpBadge>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [Ui],
+      imports: [TpBadge],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(Ui);
+    fixture = TestBed.createComponent(TpBadge);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

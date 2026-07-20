@@ -2,6 +2,10 @@
 
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.0.
 
+## Compatibility
+
+`@team-platform/ui` supports Angular 21.0.0 and later 21.x releases. Keep all Angular framework, CDK, and Material packages on the same Angular 21 minor/patch version in consuming applications.
+
 ## Code scaffolding
 
 Angular CLI includes powerful code scaffolding tools. To generate a new component, run:

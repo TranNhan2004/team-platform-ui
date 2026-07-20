@@ -1,1 +1,45 @@
-<p>button works!</p>
+<ng-template #buttonContent>
+  <ng-content></ng-content>
+</ng-template>
+
+@switch (variant()) {
+  @case ('outlined') {
+    <button
+      mat-stroked-button
+      [matTooltip]="tooltipTitle() || ''"
+      [matTooltipDisabled]="!tooltipTitle()"
+      class="tp-button"
+      [disabled]="disabled()"
+      [ngClass]="buttonClass()"
+      [ngStyle]="buttonStyle()"
+    >
+      <ng-container [ngTemplateOutlet]="buttonContent"></ng-container>
+    </button>
+  }
+  @case ('tonal') {
+    <button
+      mat-stroked-button
+      [matTooltip]="tooltipTitle() || ''"
+      [matTooltipDisabled]="!tooltipTitle()"
+      class="tp-button"
+      [disabled]="disabled()"
+      [ngClass]="buttonClass()"
+      [ngStyle]="buttonStyle()"
+    >
+      <ng-container [ngTemplateOutlet]="buttonContent"></ng-container>
+    </button>
+  }
+  @default {
+    <button
+      mat-flat-button
+      [matTooltip]="tooltipTitle() || ''"
+      [matTooltipDisabled]="!tooltipTitle()"
+      class="tp-button"
+      [disabled]="disabled()"
+      [ngClass]="buttonClass()"
+      [ngStyle]="buttonStyle()"
+    >
+      <ng-container [ngTemplateOutlet]="buttonContent"></ng-container>
+    </button>
+  }
+}
