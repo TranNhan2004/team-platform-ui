@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { vi } from 'vitest';
 
-import { SearchBar } from './search-bar';
+import { TpSearchBar } from './search-bar';
 
 describe('SearchBar', () => {
-  let component: SearchBar;
-  let fixture: ComponentFixture<SearchBar>;
+  let component: TpSearchBar;
+  let fixture: ComponentFixture<TpSearchBar>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SearchBar],
+      imports: [TpSearchBar],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(SearchBar);
+    fixture = TestBed.createComponent(TpSearchBar);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

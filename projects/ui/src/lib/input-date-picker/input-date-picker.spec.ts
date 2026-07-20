@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { DatePicker, TP_DEFAULT_MAX_DATE, TP_DEFAULT_MIN_DATE } from '../date-picker/date-picker';
+import { TP_DEFAULT_MAX_DATE, TP_DEFAULT_MIN_DATE, TpDatePicker } from '../date-picker/date-picker';
 
-import { InputDatePicker } from './input-date-picker';
+import { TpInputDatePicker } from './input-date-picker';
 
 describe('InputDatePicker', () => {
-  let component: InputDatePicker;
-  let fixture: ComponentFixture<InputDatePicker>;
+  let component: TpInputDatePicker;
+  let fixture: ComponentFixture<TpInputDatePicker>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [InputDatePicker],
+      imports: [TpInputDatePicker],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(InputDatePicker);
+    fixture = TestBed.createComponent(TpInputDatePicker);
     component = fixture.componentInstance;
     fixture.detectChanges();
     await fixture.whenStable();
@@ -37,8 +37,8 @@ describe('InputDatePicker', () => {
   });
 
   it('should default its allowed range to 1 January 1900 through 1 January 2100', () => {
-    const datePicker = fixture.debugElement.query(By.directive(DatePicker))
-      .componentInstance as DatePicker;
+    const datePicker = fixture.debugElement.query(By.directive(TpDatePicker))
+      .componentInstance as TpDatePicker;
 
     expect(datePicker.minDate()).toEqual(TP_DEFAULT_MIN_DATE);
     expect(datePicker.maxDate()).toEqual(TP_DEFAULT_MAX_DATE);
@@ -46,8 +46,8 @@ describe('InputDatePicker', () => {
 
   it('should update its signal value when the reused date picker selects a date', () => {
     const selectedDate = new Date(2030, 3, 12);
-    const datePicker = fixture.debugElement.query(By.directive(DatePicker))
-      .componentInstance as DatePicker;
+    const datePicker = fixture.debugElement.query(By.directive(TpDatePicker))
+      .componentInstance as TpDatePicker;
 
     datePicker.value.set(selectedDate);
 

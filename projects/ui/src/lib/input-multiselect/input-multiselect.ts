@@ -21,8 +21,8 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { Checkbox } from '../checkbox/checkbox';
-import { Spinner } from '../spinner/spinner';
+import { TpCheckbox } from '../checkbox/checkbox';
+import { TpSpinner } from '../spinner/spinner';
 import { truncateText } from '../utils/text-wrapping';
 
 export type TpMultiselectOption = string;
@@ -38,20 +38,20 @@ const CONTENT_SIZE_MAP: Record<TpInputMultiselectContentSize, string> = {
 @Component({
   selector: 'tp-input-multiselect',
   imports: [
-    Checkbox,
+    TpCheckbox,
     MatAutocompleteModule,
     MatButtonModule,
     MatDividerModule,
     MatFormFieldModule,
     MatIconModule,
     MatInputModule,
-    Spinner,
+    TpSpinner,
   ],
   templateUrl: './input-multiselect.html',
   styleUrl: './input-multiselect.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class InputMultiselect implements FormValueControl<string[]> {
+export class TpInputMultiselect implements FormValueControl<string[]> {
   value = model<string[]>([]);
   touched = model(false);
 

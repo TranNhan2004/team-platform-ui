@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { BellNotification } from './bell-notification';
+import { TpBellNotification } from './bell-notification';
 
 describe('BellNotification', () => {
-  let component: BellNotification;
-  let fixture: ComponentFixture<BellNotification>;
+  let component: TpBellNotification;
+  let fixture: ComponentFixture<TpBellNotification>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [BellNotification],
+      imports: [TpBellNotification],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(BellNotification);
+    fixture = TestBed.createComponent(TpBellNotification);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

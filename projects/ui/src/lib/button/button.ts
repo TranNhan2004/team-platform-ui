@@ -15,7 +15,7 @@ type TpButtonVariant = 'filled' | 'outlined' | 'tonal';
   styleUrl: './button.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class Button {
+export class TpButton {
   color = input<TpButtonColor>('blue');
   size = input<TpButtonSize>('md');
   variant = input<TpButtonVariant>('filled');

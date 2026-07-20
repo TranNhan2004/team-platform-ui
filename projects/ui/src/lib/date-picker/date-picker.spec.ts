@@ -3,15 +3,15 @@ import { By } from '@angular/platform-browser';
 import { DateAdapter } from '@angular/material/core';
 import { MatDatepicker, MatDatepickerInput } from '@angular/material/datepicker';
 
-import { DatePicker, TP_DEFAULT_MAX_DATE, TP_DEFAULT_MIN_DATE } from './date-picker';
+import { TP_DEFAULT_MAX_DATE, TP_DEFAULT_MIN_DATE, TpDatePicker } from './date-picker';
 
 describe('DatePicker', () => {
-  let component: DatePicker;
-  let fixture: ComponentFixture<DatePicker>;
+  let component: TpDatePicker;
+  let fixture: ComponentFixture<TpDatePicker>;
 
   beforeEach(async () => {
-    await TestBed.configureTestingModule({ imports: [DatePicker] }).compileComponents();
-    fixture = TestBed.createComponent(DatePicker);
+    await TestBed.configureTestingModule({ imports: [TpDatePicker] }).compileComponents();
+    fixture = TestBed.createComponent(TpDatePicker);
     component = fixture.componentInstance;
     fixture.detectChanges();
     await fixture.whenStable();

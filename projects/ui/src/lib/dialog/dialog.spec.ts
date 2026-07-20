@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { Dialog } from './dialog';
+import { TpDialog } from './dialog';
 
 describe('Dialog', () => {
-  let component: Dialog;
-  let fixture: ComponentFixture<Dialog>;
+  let component: TpDialog;
+  let fixture: ComponentFixture<TpDialog>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [Dialog],
+      imports: [TpDialog],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(Dialog);
+    fixture = TestBed.createComponent(TpDialog);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

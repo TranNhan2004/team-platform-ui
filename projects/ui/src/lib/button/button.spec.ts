@@ -1,26 +1,26 @@
 import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { Button } from './button';
+import { TpButton } from './button';
 
 @Component({
-  imports: [Button],
+  imports: [TpButton],
   template: '<tp-button [variant]="variant">Visible label</tp-button>',
 })
-class ButtonTestHost {
+class TpButtonTestHost {
   variant: 'filled' | 'outlined' | 'tonal' = 'filled';
 }
 
 describe('Button', () => {
-  let component: Button;
-  let fixture: ComponentFixture<Button>;
+  let component: TpButton;
+  let fixture: ComponentFixture<TpButton>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [Button],
+      imports: [TpButton],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(Button);
+    fixture = TestBed.createComponent(TpButton);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });
@@ -32,7 +32,7 @@ describe('Button', () => {
   it.each(['filled', 'outlined', 'tonal'] as const)(
     'should project its label for the %s variant',
     (variant) => {
-      const hostFixture = TestBed.createComponent(ButtonTestHost);
+      const hostFixture = TestBed.createComponent(TpButtonTestHost);
       hostFixture.componentInstance.variant = variant;
       hostFixture.detectChanges();
 

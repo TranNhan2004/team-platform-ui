@@ -10,7 +10,7 @@ export type TpSkeletonVariant = 'text' | 'circle' | 'rectangle';
   styleUrl: './skeleton.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class Skeleton {
+export class TpSkeleton {
   variant = input<TpSkeletonVariant>('text');
   width = input<string | null>(null);
   height = input<string | null>(null);

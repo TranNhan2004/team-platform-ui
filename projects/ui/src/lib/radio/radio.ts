@@ -8,7 +8,7 @@ import { MatRadioChange, MatRadioModule } from '@angular/material/radio';
   styleUrl: './radio.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class Radio {
+export class TpRadio {
   checked = model(false);
   touched = model(false);
 

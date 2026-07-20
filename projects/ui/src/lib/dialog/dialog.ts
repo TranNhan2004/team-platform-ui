@@ -19,7 +19,7 @@ import { MatIconModule } from '@angular/material/icon';
   styleUrl: './dialog.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class Dialog {
+export class TpDialog {
   open = input(false);
   title = input('Dialog');
   ariaLabel = input<string | null>(null);

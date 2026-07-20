@@ -15,7 +15,7 @@ export type TpChipVariant = 'filled' | 'outlined' | 'tonal' | 'text';
   styleUrl: './chip.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class Chip {
+export class TpChip {
   color = input<TpChipColor>('blue');
   size = input<TpChipSize>('md');
   variant = input<TpChipVariant>('filled');

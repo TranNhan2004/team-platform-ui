@@ -9,7 +9,7 @@ import { MatCheckboxChange, MatCheckboxModule } from '@angular/material/checkbox
   styleUrl: './checkbox.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class Checkbox implements FormCheckboxControl {
+export class TpCheckbox implements FormCheckboxControl {
   checked = model(false);
   touched = model(false);
 

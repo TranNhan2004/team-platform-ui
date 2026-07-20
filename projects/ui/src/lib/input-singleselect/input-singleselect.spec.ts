@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { InputSingleselect } from './input-singleselect';
+import { TpInputSingleselect } from './input-singleselect';
 
 describe('InputSingleselect', () => {
-  let component: InputSingleselect;
-  let fixture: ComponentFixture<InputSingleselect>;
+  let component: TpInputSingleselect;
+  let fixture: ComponentFixture<TpInputSingleselect>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [InputSingleselect],
+      imports: [TpInputSingleselect],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(InputSingleselect);
+    fixture = TestBed.createComponent(TpInputSingleselect);
     component = fixture.componentInstance;
     fixture.detectChanges();
     await fixture.whenStable();

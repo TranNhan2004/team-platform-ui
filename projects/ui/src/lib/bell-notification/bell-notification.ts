@@ -18,7 +18,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
   styleUrl: './bell-notification.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BellNotification {
+export class TpBellNotification {
   count = input(0, { transform: numberAttribute });
   ariaLabel = input('Notifications');
   tooltipTitle = input<string | null>('Notifications');

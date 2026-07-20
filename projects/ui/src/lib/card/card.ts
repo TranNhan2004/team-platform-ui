@@ -9,7 +9,7 @@ import { MatCardModule } from '@angular/material/card';
   styleUrl: './card.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class Card {
+export class TpCard {
   color = input('var(--tp-color-surface)');
   textColor = input('var(--tp-color-text-primary)');
   borderColor = input('var(--tp-color-border)');

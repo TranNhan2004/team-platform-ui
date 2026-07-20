@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TextArea } from './text-area';
+import { TpTextArea } from './text-area';
 
 describe('TextArea', () => {
-  let component: TextArea;
-  let fixture: ComponentFixture<TextArea>;
+  let component: TpTextArea;
+  let fixture: ComponentFixture<TpTextArea>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [TextArea],
+      imports: [TpTextArea],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(TextArea);
+    fixture = TestBed.createComponent(TpTextArea);
     component = fixture.componentInstance;
     fixture.detectChanges();
     await fixture.whenStable();

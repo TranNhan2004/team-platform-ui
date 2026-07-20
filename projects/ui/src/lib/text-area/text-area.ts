@@ -10,7 +10,7 @@ import { MatInputModule } from '@angular/material/input';
   styleUrl: './text-area.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TextArea implements FormValueControl<string> {
+export class TpTextArea implements FormValueControl<string> {
   value = model('');
   touched = model(false);
 

@@ -10,7 +10,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
   styleUrl: './avatar.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class Avatar {
+export class TpAvatar {
   src = input<string | null>(null);
   alt = input('User avatar');
   size = input(40);

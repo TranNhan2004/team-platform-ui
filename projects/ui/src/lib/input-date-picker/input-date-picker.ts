@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, computed, input, model } from '@ang
 import { FormValueControl } from '@angular/forms/signals';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { DatePicker, TP_DEFAULT_MAX_DATE, TP_DEFAULT_MIN_DATE } from '../date-picker/date-picker';
+import { TP_DEFAULT_MAX_DATE, TP_DEFAULT_MIN_DATE, TpDatePicker } from '../date-picker/date-picker';
 
 export type TpDateFormat = 'DD-MM-YYYY' | 'DD-MMM-YYYY' | 'MM-DD-YYYY' | 'YYYY-MM-DD';
 
@@ -27,12 +27,12 @@ const MONTH_NAMES = [
     '[style.--tp-input-date-picker-height]': 'height()',
     '[style.--tp-input-date-picker-max-height]': 'maxHeight()',
   },
-  imports: [DatePicker, MatFormFieldModule, MatInputModule],
+  imports: [TpDatePicker, MatFormFieldModule, MatInputModule],
   templateUrl: './input-date-picker.html',
   styleUrl: './input-date-picker.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class InputDatePicker implements FormValueControl<Date | null> {
+export class TpInputDatePicker implements FormValueControl<Date | null> {
   value = model<Date | null>(null);
 
   title = input('Date');

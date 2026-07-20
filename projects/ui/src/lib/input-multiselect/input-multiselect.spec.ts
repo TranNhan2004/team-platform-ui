@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { vi } from 'vitest';
 
-import { InputMultiselect } from './input-multiselect';
+import { TpInputMultiselect } from './input-multiselect';
 
 describe('InputMultiselect', () => {
-  let component: InputMultiselect;
-  let fixture: ComponentFixture<InputMultiselect>;
+  let component: TpInputMultiselect;
+  let fixture: ComponentFixture<TpInputMultiselect>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [InputMultiselect],
+      imports: [TpInputMultiselect],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(InputMultiselect);
+    fixture = TestBed.createComponent(TpInputMultiselect);
     component = fixture.componentInstance;
     fixture.detectChanges();
     await fixture.whenStable();

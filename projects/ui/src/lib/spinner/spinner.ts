@@ -18,7 +18,7 @@ export type TpSpinnerColor = TpComponentColor;
   styleUrl: './spinner.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class Spinner {
+export class TpSpinner {
   color = input<TpSpinnerColor>('blue');
   diameter = input(48, { transform: numberAttribute });
   strokeWidth = input(4, { transform: numberAttribute });

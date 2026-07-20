@@ -24,7 +24,7 @@ const CONTENT_SIZE_MAP: Record<TpInputContentSize, string> = {
   styleUrl: './input.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class Input implements FormValueControl<TpInputValue> {
+export class TpInput implements FormValueControl<TpInputValue> {
   value = model<TpInputValue>('');
   touched = model(false);
 

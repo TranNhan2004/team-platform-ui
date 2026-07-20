@@ -4,7 +4,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSelectChange, MatSelectModule } from '@angular/material/select';
-import { Spinner } from '../spinner/spinner';
+import { TpSpinner } from '../spinner/spinner';
 
 export type TpSingleselectOption = string;
 
@@ -22,12 +22,12 @@ const CONTENT_SIZE_MAP: Record<TpInputSingleselectContentSize, string> = {
     '[style.--tp-input-singleselect-height]': 'height()',
     '[style.--tp-input-singleselect-max-height]': 'maxHeight()',
   },
-  imports: [MatButtonModule, MatFormFieldModule, MatIconModule, MatSelectModule, Spinner],
+  imports: [MatButtonModule, MatFormFieldModule, MatIconModule, MatSelectModule, TpSpinner],
   templateUrl: './input-singleselect.html',
   styleUrl: './input-singleselect.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class InputSingleselect implements FormValueControl<string | null> {
+export class TpInputSingleselect implements FormValueControl<string | null> {
   value = model<string | null>(null);
   touched = model(false);
 

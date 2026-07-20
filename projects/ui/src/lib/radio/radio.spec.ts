@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { Radio } from './radio';
+import { TpRadio } from './radio';
 
 describe('Radio', () => {
-  let component: Radio;
-  let fixture: ComponentFixture<Radio>;
+  let component: TpRadio;
+  let fixture: ComponentFixture<TpRadio>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [Radio],
+      imports: [TpRadio],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(Radio);
+    fixture = TestBed.createComponent(TpRadio);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

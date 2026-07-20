@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { Chip } from './chip';
+import { TpChip } from './chip';
 
 describe('Chip', () => {
-  let component: Chip;
-  let fixture: ComponentFixture<Chip>;
+  let component: TpChip;
+  let fixture: ComponentFixture<TpChip>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [Chip],
+      imports: [TpChip],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(Chip);
+    fixture = TestBed.createComponent(TpChip);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

@@ -43,7 +43,7 @@ class TpDateAdapter extends NativeDateAdapter {
   styleUrl: './date-picker.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DatePicker implements FormValueControl<Date | null> {
+export class TpDatePicker implements FormValueControl<Date | null> {
   value = model<Date | null>(null);
 
   minDate = input<Date>(TP_DEFAULT_MIN_DATE);

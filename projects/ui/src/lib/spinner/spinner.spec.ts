@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { Spinner } from './spinner';
+import { TpSpinner } from './spinner';
 
 describe('Spinner', () => {
-  let component: Spinner;
-  let fixture: ComponentFixture<Spinner>;
+  let component: TpSpinner;
+  let fixture: ComponentFixture<TpSpinner>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [Spinner],
+      imports: [TpSpinner],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(Spinner);
+    fixture = TestBed.createComponent(TpSpinner);
     component = fixture.componentInstance;
     fixture.detectChanges();
     await fixture.whenStable();

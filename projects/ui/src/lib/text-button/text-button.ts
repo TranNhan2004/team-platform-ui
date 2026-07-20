@@ -20,7 +20,7 @@ const TEXT_BUTTON_COLOR_MAP: Record<TpTextButtonColor, string> = {
   styleUrl: './text-button.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TextButton {
+export class TpTextButton {
   color = input<TpTextButtonColor>('gray');
   size = input<TpTextButtonSize>('md');
   afterPressEffect = input<TpTextButtonAfterPressEffect>('none');

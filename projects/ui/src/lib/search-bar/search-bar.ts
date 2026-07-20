@@ -10,7 +10,7 @@ import { MatInputModule } from '@angular/material/input';
   styleUrl: './search-bar.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SearchBar {
+export class TpSearchBar {
   width = input('100%');
   maxWidth = input('640px');
   placeholder = input('Search');

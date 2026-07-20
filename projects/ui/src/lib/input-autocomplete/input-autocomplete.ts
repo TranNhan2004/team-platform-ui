@@ -6,7 +6,7 @@ import {
 } from '@angular/material/autocomplete';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { Spinner } from '../spinner/spinner';
+import { TpSpinner } from '../spinner/spinner';
 
 export type TpAutocompleteOption = string;
 
@@ -20,12 +20,12 @@ const CONTENT_SIZE_MAP: Record<TpInputAutocompleteContentSize, string> = {
 
 @Component({
   selector: 'tp-input-autocomplete',
-  imports: [MatAutocompleteModule, MatFormFieldModule, MatInputModule, Spinner],
+  imports: [MatAutocompleteModule, MatFormFieldModule, MatInputModule, TpSpinner],
   templateUrl: './input-autocomplete.html',
   styleUrl: './input-autocomplete.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class InputAutocomplete implements FormValueControl<string> {
+export class TpInputAutocomplete implements FormValueControl<string> {
   value = model('');
   touched = model(false);
 
