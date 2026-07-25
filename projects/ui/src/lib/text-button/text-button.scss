@@ -1,11 +1,13 @@
 .tp-text-button {
   --tp-text-button-color: var(--tp-color-gray-500);
   --mat-button-text-label-text-color: var(--tp-text-button-color);
-  --mat-button-text-state-layer-color: var(--tp-text-button-color);
+  --mat-button-text-state-layer-color: var(--tp-color-press);
+  --mat-button-text-ripple-color: var(--tp-color-press-ripple);
 
   color: var(--tp-text-button-color) !important;
   background: transparent !important;
   border-radius: var(--tp-radius-full);
+  overflow: hidden;
   font-weight: 500;
   line-height: 1;
   letter-spacing: 0;
@@ -28,25 +30,70 @@
 }
 
 .tp-text-button--sm {
-  height: var(--tp-control-height-sm);
+  --tp-text-button-control-height: var(--tp-control-height-sm);
+
+  height: var(--tp-text-button-control-height);
   padding: 0 var(--tp-space-3);
   font-size: 13px;
 }
 
 .tp-text-button--md {
-  height: var(--tp-control-height-md);
+  --tp-text-button-control-height: var(--tp-control-height-md);
+
+  height: var(--tp-text-button-control-height);
   padding: 0 var(--tp-space-4);
   font-size: 14px;
 }
 
 .tp-text-button--lg {
-  height: var(--tp-control-height-lg);
+  --tp-text-button-control-height: var(--tp-control-height-lg);
+
+  height: var(--tp-text-button-control-height);
   padding: 0 calc(var(--tp-space-4) + var(--tp-space-1));
   font-size: 15px;
 }
 
 .tp-text-button--full {
   width: 100%;
+}
+
+.tp-text-button--shape-circle {
+  min-width: 0;
+  width: var(--tp-text-button-control-height);
+  padding-inline: 0;
+  border-radius: 50%;
+}
+
+.tp-text-button--shape-elip {
+  border-radius: var(--tp-radius-full);
+}
+
+.tp-text-button--shape-rect {
+  border-radius: var(--tp-radius-sm);
+}
+
+.tp-text-button--hover-shape-circle:hover {
+  border-radius: 50%;
+}
+
+.tp-text-button--hover-shape-elip:hover {
+  border-radius: var(--tp-radius-full);
+}
+
+.tp-text-button--hover-shape-rect:hover {
+  border-radius: var(--tp-radius-sm);
+}
+
+.tp-text-button--shape-circle:active {
+  border-radius: 50%;
+}
+
+.tp-text-button--shape-elip:active {
+  border-radius: var(--tp-radius-full);
+}
+
+.tp-text-button--shape-rect:active {
+  border-radius: var(--tp-radius-sm);
 }
 
 .tp-text-button--underline:active .mdc-button__label {

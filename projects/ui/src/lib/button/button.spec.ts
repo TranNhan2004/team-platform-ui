@@ -29,6 +29,17 @@ describe('Button', () => {
     expect(component).toBeTruthy();
   });
 
+  it('should emit the click event', () => {
+    const onClick = vi.fn();
+    component.onClick.subscribe(onClick);
+
+    const button = fixture.nativeElement.querySelector('button') as HTMLButtonElement;
+    button.click();
+
+    expect(onClick).toHaveBeenCalledTimes(1);
+    expect(onClick.mock.calls[0][0]).toBeInstanceOf(MouseEvent);
+  });
+
   it.each(['filled', 'outlined', 'tonal'] as const)(
     'should project its label for the %s variant',
     (variant) => {

@@ -64,6 +64,20 @@
       </div>
       <tp-text-button [fullWidth]="true">Full-width text button</tp-text-button>
     </div>
+
+    <div class="example-group">
+      <h3>Hover and press shapes</h3>
+      <div class="example-row">
+        <tp-text-button pressEffectShape="circle" tooltipTitle="Circle">
+          <span class="material-symbols-outlined" aria-hidden="true">add</span>
+        </tp-text-button>
+        <tp-text-button pressEffectShape="elip">Elip</tp-text-button>
+        <tp-text-button pressEffectShape="rect">Rect</tp-text-button>
+        <tp-text-button pressEffectShape="rect" hoverShape="elip">
+          Hover elip, press rect
+        </tp-text-button>
+      </div>
+    </div>
   </section>
 
   <section class="component-section" aria-labelledby="chips-title">

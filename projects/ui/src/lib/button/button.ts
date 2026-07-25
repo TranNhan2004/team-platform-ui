@@ -1,5 +1,5 @@
 import { NgClass, NgStyle, NgTemplateOutlet } from '@angular/common';
-import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { TP_COMPONENT_COLOR_MAP, TpComponentColor } from '../utils/component-color';
@@ -22,6 +22,7 @@ export class TpButton {
   disabled = input(false);
   fullWidth = input(false);
   tooltipTitle = input<string | null>(null);
+  onClick = output<MouseEvent>();
 
   protected readonly buttonStyle = computed(() => {
     const color = TP_COMPONENT_COLOR_MAP[this.color()];

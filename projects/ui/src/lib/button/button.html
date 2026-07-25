@@ -10,6 +10,7 @@
       [matTooltipDisabled]="!tooltipTitle()"
       class="tp-button"
       [disabled]="disabled()"
+      (click)="onClick.emit($event)"
       [ngClass]="buttonClass()"
       [ngStyle]="buttonStyle()"
     >
@@ -23,6 +24,7 @@
       [matTooltipDisabled]="!tooltipTitle()"
       class="tp-button"
       [disabled]="disabled()"
+      (click)="onClick.emit($event)"
       [ngClass]="buttonClass()"
       [ngStyle]="buttonStyle()"
     >
@@ -36,6 +38,7 @@
       [matTooltipDisabled]="!tooltipTitle()"
       class="tp-button"
       [disabled]="disabled()"
+      (click)="onClick.emit($event)"
       [ngClass]="buttonClass()"
       [ngStyle]="buttonStyle()"
     >
