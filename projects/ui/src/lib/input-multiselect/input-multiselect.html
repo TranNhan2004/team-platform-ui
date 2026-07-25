@@ -34,7 +34,7 @@
             [attr.aria-label]="'Remove ' + selectedValue"
             (click)="removeOption(selectedValue, $event)"
           >
-            <mat-icon aria-hidden="true">close</mat-icon>
+            <span class="tp-icon material-symbols-outlined" aria-hidden="true">close</span>
           </button>
         }
       </span>
@@ -74,7 +74,7 @@
       aria-label="Clear all selected values"
       (click)="clearAll($event)"
     >
-      <mat-icon aria-hidden="true">close</mat-icon>
+      <span class="tp-icon material-symbols-outlined" aria-hidden="true">close</span>
     </button>
   } @else {
     <button
@@ -86,7 +86,7 @@
       [disabled]="disabled() || readonly()"
       (click)="openOptions($event)"
     >
-      <mat-icon aria-hidden="true">arrow_drop_down</mat-icon>
+      <span class="tp-icon material-symbols-outlined" aria-hidden="true">arrow_drop_down</span>
     </button>
   }
 

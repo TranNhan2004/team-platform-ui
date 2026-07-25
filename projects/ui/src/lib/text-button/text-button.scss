@@ -8,7 +8,9 @@
   background: transparent !important;
   border-radius: var(--tp-radius-full);
   overflow: hidden;
+  padding: 0 var(--tp-space-4);
   font-weight: 500;
+  font-size: 14px;
   line-height: 1;
   letter-spacing: 0;
   transition: color var(--tp-transition-fast);
@@ -29,37 +31,8 @@
   }
 }
 
-.tp-text-button--sm {
-  --tp-text-button-control-height: var(--tp-control-height-sm);
-
-  height: var(--tp-text-button-control-height);
-  padding: 0 var(--tp-space-3);
-  font-size: 13px;
-}
-
-.tp-text-button--md {
-  --tp-text-button-control-height: var(--tp-control-height-md);
-
-  height: var(--tp-text-button-control-height);
-  padding: 0 var(--tp-space-4);
-  font-size: 14px;
-}
-
-.tp-text-button--lg {
-  --tp-text-button-control-height: var(--tp-control-height-lg);
-
-  height: var(--tp-text-button-control-height);
-  padding: 0 calc(var(--tp-space-4) + var(--tp-space-1));
-  font-size: 15px;
-}
-
-.tp-text-button--full {
-  width: 100%;
-}
-
 .tp-text-button--shape-circle {
   min-width: 0;
-  width: var(--tp-text-button-control-height);
   padding-inline: 0;
   border-radius: 50%;
 }

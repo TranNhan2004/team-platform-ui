@@ -85,11 +85,8 @@
     background: color-mix(in srgb, currentcolor 12%, transparent);
   }
 
-  .mat-icon {
-    width: 14px;
-    height: 14px;
-    font-size: 14px;
-    line-height: 14px;
+  .tp-icon {
+    --tp-icon-size: 14px;
   }
 }
 
@@ -126,6 +123,7 @@
 }
 
 .tp-input-multiselect__trailing-action {
+  --tp-icon-size: 18px;
   --mat-icon-button-icon-color: var(--tp-color-text-secondary);
   --mat-icon-button-state-layer-color: var(--tp-color-text-secondary);
   --mat-icon-button-state-layer-size: 32px;

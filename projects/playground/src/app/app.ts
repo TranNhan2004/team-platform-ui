@@ -1,5 +1,4 @@
 import { Component, signal } from '@angular/core';
-import { MatIconRegistry } from '@angular/material/icon';
 import {
   TpAvatar,
   TpBellNotification,
@@ -95,9 +94,5 @@ export class App {
     if (checked) {
       this.selectedPlan.set(plan);
     }
-  }
-
-  constructor(iconRegistry: MatIconRegistry) {
-    iconRegistry.setDefaultFontSetClass('material-symbols-outlined');
   }
 }

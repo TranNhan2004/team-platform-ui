@@ -79,4 +79,20 @@ describe('Button', () => {
       'var(--tp-color-white)',
     );
   });
+
+  it('should apply explicit dimension constraints', async () => {
+    fixture.componentRef.setInput('width', '12rem');
+    fixture.componentRef.setInput('maxWidth', '16rem');
+    fixture.componentRef.setInput('height', '40px');
+    fixture.componentRef.setInput('maxHeight', '44px');
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    const button = fixture.nativeElement.querySelector('button') as HTMLButtonElement;
+
+    expect(button.style.width).toBe('12rem');
+    expect(button.style.maxWidth).toBe('16rem');
+    expect(button.style.height).toBe('40px');
+    expect(button.style.maxHeight).toBe('44px');
+  });
 });

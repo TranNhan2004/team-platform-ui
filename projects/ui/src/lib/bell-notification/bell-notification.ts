@@ -8,12 +8,11 @@ import {
 } from '@angular/core';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
   selector: 'tp-bell-notification',
-  imports: [MatBadgeModule, MatButtonModule, MatIconModule, MatTooltipModule],
+  imports: [MatBadgeModule, MatButtonModule, MatTooltipModule],
   templateUrl: './bell-notification.html',
   styleUrl: './bell-notification.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

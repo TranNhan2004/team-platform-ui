@@ -25,14 +25,14 @@
     }
 
     <div class="example-group">
-      <h3>Sizes and states</h3>
+      <h3>Dimensions and states</h3>
       <div class="example-row">
-        @for (size of sizes; track size) {
-          <tp-button [size]="size">{{ size }}</tp-button>
-        }
+        <tp-button height="32px" width="72px">32 px</tp-button>
+        <tp-button height="40px" width="96px">40 px</tp-button>
+        <tp-button height="48px" width="120px">48 px</tp-button>
         <tp-button [disabled]="true">Disabled</tp-button>
       </div>
-      <tp-button [fullWidth]="true">Full-width button</tp-button>
+      <tp-button width="100%">Full-width button</tp-button>
     </div>
   </section>
 
@@ -54,22 +54,26 @@
     </div>
 
     <div class="example-group">
-      <h3>Sizes and states</h3>
+      <h3>Dimensions and states</h3>
       <div class="example-row">
-        @for (size of sizes; track size) {
-          <tp-text-button [size]="size">{{ size }}</tp-text-button>
-        }
+        <tp-text-button height="32px" width="72px">32 px</tp-text-button>
+        <tp-text-button height="40px" width="96px">40 px</tp-text-button>
+        <tp-text-button height="48px" width="120px">48 px</tp-text-button>
         <tp-text-button afterPressEffect="underline">Pressed underline</tp-text-button>
         <tp-text-button [disabled]="true">Disabled</tp-text-button>
       </div>
-      <tp-text-button [fullWidth]="true">Full-width text button</tp-text-button>
+      <tp-text-button width="100%">Full-width text button</tp-text-button>
     </div>
 
     <div class="example-group">
       <h3>Hover and press shapes</h3>
       <div class="example-row">
-        <tp-text-button pressEffectShape="circle" tooltipTitle="Circle">
-          <span class="material-symbols-outlined" aria-hidden="true">add</span>
+        <tp-text-button
+          pressEffectShape="circle"
+          width="var(--tp-control-height-md)"
+          tooltipTitle="Circle"
+        >
+          <span class="tp-icon material-symbols-outlined" aria-hidden="true">add</span>
         </tp-text-button>
         <tp-text-button pressEffectShape="elip">Elip</tp-text-button>
         <tp-text-button pressEffectShape="rect">Rect</tp-text-button>

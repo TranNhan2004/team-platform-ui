@@ -1,11 +1,10 @@
 import { ChangeDetectionStrategy, Component, effect, input, output, signal } from '@angular/core';
 import { form, FormField } from '@angular/forms/signals';
-import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 
 @Component({
   selector: 'tp-search-bar',
-  imports: [MatIconModule, MatInputModule, FormField],
+  imports: [MatInputModule, FormField],
   templateUrl: './search-bar.html',
   styleUrl: './search-bar.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

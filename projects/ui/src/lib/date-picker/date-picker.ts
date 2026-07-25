@@ -15,7 +15,6 @@ import {
   MatDatepicker,
   MatDatepickerModule,
 } from '@angular/material/datepicker';
-import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 
 export const TP_DEFAULT_MIN_DATE = new Date(1900, 0, 1);
@@ -29,7 +28,7 @@ class TpDateAdapter extends NativeDateAdapter {
 
 @Component({
   selector: 'tp-date-picker',
-  imports: [MatButtonModule, MatDatepickerModule, MatIconModule, MatInputModule],
+  imports: [MatButtonModule, MatDatepickerModule, MatInputModule],
   providers: [
     provideNativeDateAdapter(),
     { provide: DateAdapter, useClass: TpDateAdapter },

@@ -2,7 +2,6 @@ import { ChangeDetectionStrategy, Component, computed, input, model } from '@ang
 import { FormValueControl } from '@angular/forms/signals';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatIconModule } from '@angular/material/icon';
 import { MatSelectChange, MatSelectModule } from '@angular/material/select';
 import { TpSpinner } from '../spinner/spinner';
 
@@ -22,7 +21,7 @@ const CONTENT_SIZE_MAP: Record<TpInputSingleselectContentSize, string> = {
     '[style.--tp-input-singleselect-height]': 'height()',
     '[style.--tp-input-singleselect-max-height]': 'maxHeight()',
   },
-  imports: [MatButtonModule, MatFormFieldModule, MatIconModule, MatSelectModule, TpSpinner],
+  imports: [MatButtonModule, MatFormFieldModule, MatSelectModule, TpSpinner],
   templateUrl: './input-singleselect.html',
   styleUrl: './input-singleselect.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

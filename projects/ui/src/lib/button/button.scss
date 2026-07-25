@@ -13,7 +13,9 @@
   --mat-button-outlined-ripple-color: var(--tp-color-press-ripple);
 
   border-radius: var(--tp-radius-md);
+  padding: 0 var(--tp-space-4);
   font-weight: 500;
+  font-size: 14px;
   line-height: 1;
   letter-spacing: 0;
   transition:
@@ -39,28 +41,6 @@
   &:disabled:focus > .mat-mdc-button-persistent-ripple::before {
     opacity: 0 !important;
   }
-}
-
-.tp-button--sm {
-  height: var(--tp-control-height-sm);
-  padding: 0 var(--tp-space-3);
-  font-size: 13px;
-}
-
-.tp-button--md {
-  height: var(--tp-control-height-md);
-  padding: 0 var(--tp-space-4);
-  font-size: 14px;
-}
-
-.tp-button--lg {
-  height: var(--tp-control-height-lg);
-  padding: 0 calc(var(--tp-space-4) + var(--tp-space-1));
-  font-size: 15px;
-}
-
-.tp-button--full {
-  width: 100%;
 }
 
 .tp-button--filled {
