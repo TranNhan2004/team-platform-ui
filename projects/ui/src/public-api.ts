@@ -13,6 +13,7 @@ export * from './lib/input-date-picker/input-date-picker';
 export * from './lib/dialog/dialog';
 export * from './lib/input/input';
 export * from './lib/input-autocomplete/input-autocomplete';
+export * from './lib/input-autocomplete-multiselect/input-autocomplete-multiselect';
 export * from './lib/input-singleselect/input-singleselect';
 export * from './lib/input-multiselect/input-multiselect';
 export * from './lib/radio/radio';

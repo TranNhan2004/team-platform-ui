@@ -10,6 +10,7 @@ import {
   TpDialog,
   TpInput,
   TpInputAutocomplete,
+  TpInputAutocompleteMultiselect,
   TpInputDatePicker,
   TpInputMultiselect,
   TpInputSingleselect,
@@ -34,6 +35,7 @@ import {
     TpDialog,
     TpInput,
     TpInputAutocomplete,
+    TpInputAutocompleteMultiselect,
     TpInputDatePicker,
     TpInputSingleselect,
     TpInputMultiselect,
@@ -83,6 +85,10 @@ export class App {
   ];
   protected readonly selectedProject = signal<string | null>(null);
   protected readonly selectedProjects = signal<string[]>(['Platform API', 'Project Nova']);
+  protected readonly selectedAutocompleteProjects = signal<string[]>([
+    'Platform API',
+    'Project Nova',
+  ]);
   protected readonly notificationsEnabled = signal(false);
   protected readonly selectedPlan = signal('starter');
   protected readonly selectedDate = signal<Date | null>(new Date(2032, 5, 15));

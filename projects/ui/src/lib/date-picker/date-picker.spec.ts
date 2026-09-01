@@ -56,4 +56,12 @@ describe('DatePicker', () => {
 
     expect(picker.startAt).toEqual(selected);
   });
+
+  it('should prefer opening below the trigger', () => {
+    const picker = fixture.debugElement
+      .query(By.directive(MatDatepicker))
+      .injector.get(MatDatepicker<Date>);
+
+    expect(picker.yPosition).toBe('below');
+  });
 });

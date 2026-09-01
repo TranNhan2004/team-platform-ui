@@ -1,8 +1,17 @@
-import { ChangeDetectionStrategy, Component, computed, input, model } from '@angular/core';
+import { ConnectedPosition } from '@angular/cdk/overlay';
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  input,
+  model,
+  viewChild,
+} from '@angular/core';
 import { FormValueControl } from '@angular/forms/signals';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatSelectChange, MatSelectModule } from '@angular/material/select';
+import { MatSelect, MatSelectChange, MatSelectModule } from '@angular/material/select';
 import { TpSpinner } from '../spinner/spinner';
 
 export type TpSingleselectOption = string;
@@ -15,6 +24,11 @@ const CONTENT_SIZE_MAP: Record<TpInputSingleselectContentSize, string> = {
   lg: 'var(--tp-text-lg)',
 };
 
+const BELOW_POSITIONS: ConnectedPosition[] = [
+  { originX: 'start', originY: 'bottom', overlayX: 'start', overlayY: 'top' },
+  { originX: 'end', originY: 'bottom', overlayX: 'end', overlayY: 'top' },
+];
+
 @Component({
   selector: 'tp-input-singleselect',
   host: {
@@ -26,7 +40,7 @@ const CONTENT_SIZE_MAP: Record<TpInputSingleselectContentSize, string> = {
   styleUrl: './input-singleselect.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TpInputSingleselect implements FormValueControl<string | null> {
+export class TpInputSingleselect implements FormValueControl<string | null>, AfterViewInit {
   value = model<string | null>(null);
   touched = model(false);
 
@@ -47,6 +61,15 @@ export class TpInputSingleselect implements FormValueControl<string | null> {
   height = input('var(--tp-control-height-md)');
   maxHeight = input('var(--tp-control-height-lg)');
   contentSize = input<TpInputSingleselectContentSize>('md');
+
+  private readonly select = viewChild(MatSelect);
+
+  ngAfterViewInit(): void {
+    // MatSelect has no public position input. Restrict its overlay strategy to
+    // downward positions so it cannot flip above the control.
+    const select = this.select();
+    if (select) select._positions = BELOW_POSITIONS;
+  }
 
   protected readonly contentFontSize = computed(() => CONTENT_SIZE_MAP[this.contentSize()]);
 

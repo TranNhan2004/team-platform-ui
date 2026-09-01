@@ -1,4 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatSelect } from '@angular/material/select';
+import { By } from '@angular/platform-browser';
 
 import { TpInputSingleselect } from './input-singleselect';
 
@@ -49,6 +51,15 @@ describe('InputSingleselect', () => {
     await fixture.whenStable();
 
     expect(component.options()).toEqual(['Platform API', 'Platform UI']);
+  });
+
+  it('should only use positions below the control', () => {
+    const select = fixture.debugElement.query(By.directive(MatSelect)).injector.get(MatSelect);
+
+    expect(select._positions).toEqual([
+      { originX: 'start', originY: 'bottom', overlayX: 'start', overlayY: 'top' },
+      { originX: 'end', originY: 'bottom', overlayX: 'end', overlayY: 'top' },
+    ]);
   });
 
   it('should show the required error after the select loses focus', async () => {
