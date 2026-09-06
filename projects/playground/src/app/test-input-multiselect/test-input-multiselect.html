@@ -1,0 +1,24 @@
+<section class="component-section" aria-labelledby="input-multiselect-title">
+  <div class="component-section__heading">
+    <h2 id="input-multiselect-title">Input multi select</h2>
+    <code>&lt;tp-input-multiselect&gt;</code>
+  </div>
+  <div class="input-grid">
+    <tp-input-multiselect
+      title="Projects"
+      placeholder="Choose projects"
+      [options]="projectOptions"
+      [(value)]="selectedProjects"
+      [maxChipContentLength]="14"
+      [maxChips]="2"
+      hint="Select one or more projects"
+    ></tp-input-multiselect>
+    <tp-input-multiselect title="Loading projects" [loading]="true"></tp-input-multiselect>
+    <tp-input-multiselect
+      title="Required projects"
+      [options]="projectOptions"
+      [required]="true"
+      [maxChips]="2"
+    ></tp-input-multiselect>
+  </div>
+</section>

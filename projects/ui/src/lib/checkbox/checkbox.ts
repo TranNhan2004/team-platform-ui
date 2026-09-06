@@ -19,6 +19,7 @@ export class TpCheckbox implements FormCheckboxControl {
   name = input('');
   nativeValue = input('on');
   ariaLabel = input<string | null>(null);
+  tabIndex = input(0);
 
   protected updateChecked(event: MatCheckboxChange): void {
     this.checked.set(event.checked);

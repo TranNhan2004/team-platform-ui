@@ -24,6 +24,8 @@ export class TpButton {
   maxWidth = input('none');
   height = input('var(--tp-control-height-md)');
   maxHeight = input('var(--tp-control-height-lg)');
+  fontSize = input('14px');
+  fontWeight = input('500');
   onClick = output<MouseEvent>();
 
   protected readonly buttonStyle = computed(() => {
@@ -37,6 +39,8 @@ export class TpButton {
       maxWidth: this.maxWidth(),
       height: this.height(),
       maxHeight: this.maxHeight(),
+      fontSize: this.fontSize(),
+      fontWeight: this.fontWeight(),
     };
   });
 

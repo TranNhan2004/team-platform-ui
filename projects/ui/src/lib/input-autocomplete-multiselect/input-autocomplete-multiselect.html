@@ -1,9 +1,8 @@
 <mat-form-field
   class="tp-input-autocomplete-multiselect"
   [class.tp-input-autocomplete-multiselect--invalid]="showError()"
+  [class.tp-input-autocomplete-multiselect--disabled]="disabled()"
   [class.tp-input-autocomplete-multiselect--has-values]="selectedValues().length > 0"
-  [class.tp-input-autocomplete-multiselect--inline]="chipDisplayMode() === 'inline'"
-  [class.tp-input-autocomplete-multiselect--new-line]="chipDisplayMode() === 'new-line'"
   appearance="outline"
   [floatLabel]="floatLabel()"
   [hideRequiredMarker]="true"
@@ -63,6 +62,7 @@
       [attr.autocomplete]="autocomplete()"
       [attr.aria-label]="ariaLabel() || null"
       [attr.aria-invalid]="showError()"
+      [attr.aria-describedby]="showError() ? errorId : null"
       (blur)="markAsTouched()"
       (click)="openOptions($event)"
       (focus)="openOptions()"
@@ -87,11 +87,14 @@
       matSuffix
       type="button"
       class="tp-input-autocomplete-multiselect__trailing-action"
-      aria-label="Show options"
+      [attr.aria-label]="optionsOpen() ? 'Hide options' : 'Show options'"
+      [attr.aria-expanded]="optionsOpen()"
       [disabled]="disabled() || readonly()"
-      (click)="openOptions($event)"
+      (click)="toggleOptions($event)"
     >
-      <span class="tp-icon material-symbols-outlined" aria-hidden="true">arrow_drop_down</span>
+      <span class="tp-icon material-symbols-outlined" aria-hidden="true">
+        {{ optionsOpen() ? 'keyboard_arrow_up' : 'keyboard_arrow_down' }}
+      </span>
     </button>
   }
 
@@ -105,6 +108,8 @@
   class="tp-input-autocomplete-multiselect__panel"
   [autoActiveFirstOption]="false"
   [hideSingleSelectionIndicator]="true"
+  (opened)="setOptionsOpen(true)"
+  (closed)="setOptionsOpen(false)"
   (optionSelected)="selectOption($event)"
 >
   @if (loading()) {
@@ -119,25 +124,36 @@
       class="tp-input-autocomplete-multiselect__option tp-input-autocomplete-multiselect__select-all"
       [value]="selectAllOptionValue"
     >
-      <tp-checkbox
-        class="tp-input-autocomplete-multiselect__option-control"
-        [checked]="allFilteredOptionsSelected()"
-        [indeterminate]="someFilteredOptionsSelected() && !allFilteredOptionsSelected()"
+      <span
+        class="tp-input-autocomplete-multiselect__option-content"
         (click)="toggleOptionFromPointer(selectAllOptionValue, $event)"
       >
-        <b>{{ selectAllLabel() }}</b>
-      </tp-checkbox>
+        <tp-checkbox
+          class="tp-input-autocomplete-multiselect__option-control"
+          [checked]="allFilteredOptionsSelected()"
+          [indeterminate]="someFilteredOptionsSelected() && !allFilteredOptionsSelected()"
+          [tabIndex]="-1"
+          aria-hidden="true"
+        ></tp-checkbox>
+        <b class="tp-input-autocomplete-multiselect__option-label">{{ selectAllLabel() }}</b>
+      </span>
     </mat-option>
     <mat-divider></mat-divider>
 
     @for (option of filteredOptions(); track option) {
       <mat-option class="tp-input-autocomplete-multiselect__option" [value]="option">
-        <tp-checkbox
-          class="tp-input-autocomplete-multiselect__option-control"
-          [checked]="isSelected(option)"
+        <span
+          class="tp-input-autocomplete-multiselect__option-content"
           (click)="toggleOptionFromPointer(option, $event)"
-          >{{ option }}</tp-checkbox
         >
+          <tp-checkbox
+            class="tp-input-autocomplete-multiselect__option-control"
+            [checked]="isSelected(option)"
+            [tabIndex]="-1"
+            aria-hidden="true"
+          ></tp-checkbox>
+          <span class="tp-input-autocomplete-multiselect__option-label">{{ option }}</span>
+        </span>
       </mat-option>
     }
   } @else {
@@ -148,5 +164,7 @@
 </mat-autocomplete>
 
 @if (showError()) {
-  <div class="tp-input-autocomplete-multiselect__error" role="alert">{{ displayedError() }}</div>
+  <div [id]="errorId" class="tp-input-autocomplete-multiselect__error" role="alert">
+    {{ displayedError() }}
+  </div>
 }

@@ -1,0 +1,28 @@
+<section class="component-section" aria-labelledby="chips-title">
+  <div class="component-section__heading">
+    <h2 id="chips-title">Chip</h2>
+    <code>&lt;tp-chip&gt;</code>
+  </div>
+
+  @for (variant of chipVariants; track variant) {
+    <div class="example-group">
+      <h3>{{ variant }}</h3>
+      <div class="example-row">
+        @for (color of colors; track color) {
+          <tp-chip [variant]="variant" [color]="color" [tooltipTitle]="color">
+            {{ color }}
+          </tp-chip>
+        }
+      </div>
+    </div>
+  }
+
+  <div class="example-group">
+    <h3>Sizes</h3>
+    <div class="example-row">
+      @for (size of sizes; track size) {
+        <tp-chip [size]="size">{{ size }}</tp-chip>
+      }
+    </div>
+  </div>
+</section>

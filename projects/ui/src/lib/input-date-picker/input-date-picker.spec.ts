@@ -1,5 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
+import { MatDatepicker } from '@angular/material/datepicker';
+
 import { TP_DEFAULT_MAX_DATE, TP_DEFAULT_MIN_DATE, TpDatePicker } from '../date-picker/date-picker';
 
 import { TpInputDatePicker } from './input-date-picker';
@@ -52,6 +54,18 @@ describe('InputDatePicker', () => {
     datePicker.value.set(selectedDate);
 
     expect(component.value()).toEqual(selectedDate);
+  });
+
+  it('should close its calendar when the document is scrolled', async () => {
+    const picker = fixture.debugElement
+      .query(By.directive(MatDatepicker))
+      .injector.get(MatDatepicker<Date>);
+    const close = vi.spyOn(picker, 'close');
+
+    document.dispatchEvent(new Event('scroll'));
+    await new Promise((resolve) => setTimeout(resolve, 30));
+
+    expect(close).toHaveBeenCalled();
   });
 
   it.each([

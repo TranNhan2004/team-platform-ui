@@ -4,13 +4,11 @@
   --mat-button-text-state-layer-color: var(--tp-color-press);
   --mat-button-text-ripple-color: var(--tp-color-press-ripple);
 
-  color: var(--tp-text-button-color) !important;
-  background: transparent !important;
+  color: var(--tp-text-button-color);
+  background: transparent;
   border-radius: var(--tp-radius-full);
   overflow: hidden;
   padding: 0 var(--tp-space-4);
-  font-weight: 500;
-  font-size: 14px;
   line-height: 1;
   letter-spacing: 0;
   transition: color var(--tp-transition-fast);
@@ -25,7 +23,7 @@
     --mat-button-text-hover-state-layer-opacity: 0;
     --mat-button-text-focus-state-layer-opacity: 0;
     --mat-button-text-pressed-state-layer-opacity: 0;
-    color: var(--tp-color-gray-400) !important;
+    color: var(--tp-color-gray-400);
     pointer-events: auto;
     cursor: not-allowed;
   }
@@ -72,4 +70,24 @@
 .tp-text-button--underline:active .mdc-button__label {
   text-decoration: underline;
   text-underline-offset: 0.18em;
+}
+
+.tp-text-button__content {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--tp-space-2);
+}
+
+.tp-text-button__content--align-start,
+.tp-text-button__content--align-end {
+  width: 100%;
+  white-space: nowrap;
+}
+
+.tp-text-button__content--align-start {
+  justify-content: flex-start;
+}
+
+.tp-text-button__content--align-end {
+  justify-content: flex-end;
 }

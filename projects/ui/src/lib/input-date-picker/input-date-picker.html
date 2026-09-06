@@ -1,5 +1,7 @@
 <mat-form-field
   class="tp-input-date-picker"
+  [class.tp-input-date-picker--invalid]="showError()"
+  [class.tp-input-date-picker--disabled]="disabled() || readonly()"
   appearance="outline"
   [hideRequiredMarker]="true"
   subscriptSizing="dynamic"
@@ -20,11 +22,15 @@
     matInput
     class="tp-input-date-picker__control"
     [value]="formattedValue()"
-    [disabled]="disabled()"
+    [placeholder]="placeholder()"
+    [disabled]="disabled() || readonly()"
     [readonly]="true"
     [required]="required()"
     [attr.name]="name() || null"
+    [attr.aria-invalid]="showError()"
+    [attr.aria-describedby]="showError() ? errorId : null"
     (click)="calendar.open()"
+    (blur)="markAsTouched()"
   />
   <tp-date-picker
     #calendar
@@ -43,4 +49,10 @@
     aria-hidden="true"
     >*</span
   >
+}
+
+@if (showError()) {
+  <div [id]="errorId" class="tp-input-date-picker__error" role="alert">
+    {{ displayedError() }}
+  </div>
 }

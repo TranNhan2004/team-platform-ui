@@ -10,9 +10,10 @@ import {
   signal,
   viewChild,
 } from '@angular/core';
+import { ScrollDispatcher } from '@angular/cdk/scrolling';
 import { FormValueControl } from '@angular/forms/signals';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import {
-  MatAutocomplete,
   MatAutocompleteModule,
   MatAutocompleteSelectedEvent,
   MatAutocompleteTrigger,
@@ -24,9 +25,13 @@ import { MatInputModule } from '@angular/material/input';
 import { TpCheckbox } from '../checkbox/checkbox';
 import { TpSpinner } from '../spinner/spinner';
 import { truncateText } from '../utils/text-wrapping';
+import {
+  createValidationErrorId,
+  TpValidationErrors,
+  validationErrorMessage,
+} from '../utils/form-validation';
 
 export type TpAutocompleteMultiselectOption = string;
-export type TpInputAutocompleteMultiselectChipDisplayMode = 'inline' | 'new-line';
 export type TpInputAutocompleteMultiselectContentSize = 'sm' | 'md' | 'lg';
 
 const CONTENT_SIZE_MAP: Record<TpInputAutocompleteMultiselectContentSize, string> = {
@@ -38,12 +43,12 @@ const CONTENT_SIZE_MAP: Record<TpInputAutocompleteMultiselectContentSize, string
 @Component({
   selector: 'tp-input-autocomplete-multiselect',
   imports: [
-    TpCheckbox,
     MatAutocompleteModule,
     MatButtonModule,
     MatDividerModule,
     MatFormFieldModule,
     MatInputModule,
+    TpCheckbox,
     TpSpinner,
   ],
   templateUrl: './input-autocomplete-multiselect.html',
@@ -53,6 +58,8 @@ const CONTENT_SIZE_MAP: Record<TpInputAutocompleteMultiselectContentSize, string
 export class TpInputAutocompleteMultiselect implements FormValueControl<string[]> {
   value = model<string[]>([]);
   touched = model(false);
+  errors = input<TpValidationErrors>([]);
+  invalid = input(false);
 
   options = input<readonly TpAutocompleteMultiselectOption[]>([]);
   loading = input(false);
@@ -74,22 +81,23 @@ export class TpInputAutocompleteMultiselect implements FormValueControl<string[]
   contentSize = input<TpInputAutocompleteMultiselectContentSize>('md');
   maxChipContentLength = input<number | undefined>(undefined);
   maxChips = input<number | undefined>(undefined);
-  chipDisplayMode = input<TpInputAutocompleteMultiselectChipDisplayMode>('inline');
 
   protected readonly selectAllOptionValue = '__tp-input-autocomplete-multiselect-select-all__';
   private readonly destroyRef = inject(DestroyRef);
+  private readonly scrollDispatcher = inject(ScrollDispatcher);
   private readonly optionsTrigger = viewChild(MatAutocompleteTrigger);
-  private readonly optionsPanel = viewChild(MatAutocomplete);
   private readonly triggerInput = viewChild<ElementRef<HTMLInputElement>>('triggerInput');
   private readonly searchQuery = signal('');
-  private panelReopenQueued = false;
+  protected readonly optionsOpen = signal(false);
   private panelPositionUpdateQueued = false;
-  private pendingPanelScrollTop: number | undefined;
-  private panelReopenTimeout: ReturnType<typeof setTimeout> | undefined;
   private panelPositionTimeout: ReturnType<typeof setTimeout> | undefined;
 
   constructor() {
     this.destroyRef.onDestroy(() => this.cancelPendingCallbacks());
+    this.scrollDispatcher
+      .scrolled()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => this.optionsTrigger()?.closePanel());
   }
 
   protected readonly selectedValues = computed(() => [...new Set(this.value())]);
@@ -120,14 +128,21 @@ export class TpInputAutocompleteMultiselect implements FormValueControl<string[]
   );
   protected readonly contentFontSize = computed(() => CONTENT_SIZE_MAP[this.contentSize()]);
   protected readonly floatLabel = computed<'always' | 'auto'>(() =>
-    this.selectedValues().length || this.searchQuery() ? 'always' : 'auto',
+    this.title() || this.selectedValues().length || this.searchQuery() ? 'always' : 'auto',
   );
   protected readonly isEmpty = computed(() => this.selectedValues().length === 0);
   protected readonly hasRequiredError = computed(() => this.required() && this.isEmpty());
+  protected readonly errorId = createValidationErrorId('tp-input-autocomplete-multiselect-error');
   protected readonly showError = computed(
-    () => !!this.error() || (this.touched() && this.hasRequiredError()),
+    () =>
+      !!this.error() ||
+      this.invalid() ||
+      this.errors().length > 0 ||
+      (this.touched() && this.hasRequiredError()),
   );
-  protected readonly displayedError = computed(() => this.error() ?? this.requiredMessage());
+  protected readonly displayedError = computed(() =>
+    this.error() ?? validationErrorMessage(this.errors(), this.requiredMessage()),
+  );
 
   protected updateQuery(event: Event): void {
     this.searchQuery.set((event.target as HTMLInputElement).value);
@@ -135,16 +150,14 @@ export class TpInputAutocompleteMultiselect implements FormValueControl<string[]
 
   protected selectOption(event: MatAutocompleteSelectedEvent): void {
     const option = event.option.value as TpAutocompleteMultiselectOption;
-    const scrollTop = this.optionsPanel()?._getScrollTop() ?? 0;
     if (option === this.selectAllOptionValue) {
       this.toggleAllFilteredOptions();
     } else {
       this.toggleOption(option);
     }
     event.option.deselect(false);
-    event.option.setInactiveStyles();
     this.clearSearch();
-    this.reopenOptions(scrollTop);
+    this.reopenOptions();
   }
 
   protected toggleOptionFromPointer(
@@ -152,12 +165,14 @@ export class TpInputAutocompleteMultiselect implements FormValueControl<string[]
     event: MouseEvent,
   ): void {
     event.stopPropagation();
+
     if (option === this.selectAllOptionValue) {
       this.toggleAllFilteredOptions();
     } else {
       this.toggleOption(option);
     }
-    this.updatePanelPosition();
+
+    this.clearSearch();
   }
 
   protected removeOption(option: TpAutocompleteMultiselectOption, event: MouseEvent): void {
@@ -178,6 +193,25 @@ export class TpInputAutocompleteMultiselect implements FormValueControl<string[]
   protected openOptions(event?: Event): void {
     event?.stopPropagation();
     if (!this.disabled() && !this.readonly()) this.optionsTrigger()?.openPanel();
+  }
+
+  protected toggleOptions(event?: Event): void {
+    event?.stopPropagation();
+
+    if (this.disabled() || this.readonly()) return;
+
+    const trigger = this.optionsTrigger();
+    if (!trigger) return;
+
+    if (trigger.panelOpen) {
+      trigger.closePanel();
+    } else {
+      trigger.openPanel();
+    }
+  }
+
+  protected setOptionsOpen(open: boolean): void {
+    this.optionsOpen.set(open);
   }
 
   protected markAsTouched(): void {
@@ -210,9 +244,7 @@ export class TpInputAutocompleteMultiselect implements FormValueControl<string[]
     this.touched.set(true);
   }
 
-  private uniqueOptions(): TpAutocompleteMultiselectOption[] {
-    return [...new Set(this.options())];
-  }
+  protected readonly uniqueOptions = computed(() => [...new Set(this.options())]);
 
   private clearSearch(): void {
     this.searchQuery.set('');
@@ -220,26 +252,11 @@ export class TpInputAutocompleteMultiselect implements FormValueControl<string[]
     if (triggerInput) triggerInput.value = '';
   }
 
-  private reopenOptions(scrollTop: number): void {
+  private reopenOptions(): void {
     if (this.destroyRef.destroyed) return;
-    this.pendingPanelScrollTop = scrollTop;
-    this.clearPanelReopenTimeout();
-    if (this.panelReopenQueued) return;
-    this.panelReopenQueued = true;
     queueMicrotask(() => {
-      this.panelReopenQueued = false;
       if (this.destroyRef.destroyed) return;
-      const pendingScrollTop = this.pendingPanelScrollTop;
-      this.pendingPanelScrollTop = undefined;
-      if (pendingScrollTop === undefined) return;
       this.optionsTrigger()?.openPanel();
-      queueMicrotask(() => {
-        if (!this.destroyRef.destroyed) this.optionsPanel()?._setScrollTop(pendingScrollTop);
-      });
-      this.panelReopenTimeout = setTimeout(() => {
-        this.panelReopenTimeout = undefined;
-        if (!this.destroyRef.destroyed) this.optionsPanel()?._setScrollTop(pendingScrollTop);
-      });
     });
   }
 
@@ -260,18 +277,8 @@ export class TpInputAutocompleteMultiselect implements FormValueControl<string[]
   }
 
   private cancelPendingCallbacks(): void {
-    this.clearPanelReopenTimeout();
     this.clearPanelPositionTimeout();
-    this.pendingPanelScrollTop = undefined;
-    this.panelReopenQueued = false;
     this.panelPositionUpdateQueued = false;
-  }
-
-  private clearPanelReopenTimeout(): void {
-    if (this.panelReopenTimeout !== undefined) {
-      clearTimeout(this.panelReopenTimeout);
-      this.panelReopenTimeout = undefined;
-    }
   }
 
   private clearPanelPositionTimeout(): void {

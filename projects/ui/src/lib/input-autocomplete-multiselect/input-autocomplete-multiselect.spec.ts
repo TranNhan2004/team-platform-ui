@@ -21,6 +21,22 @@ describe('TpInputAutocompleteMultiselect', () => {
     expect(component).toBeTruthy();
   });
 
+  it('should show an up or down chevron based on the panel state', () => {
+    const arrowButton = fixture.nativeElement.querySelector(
+      '.tp-input-autocomplete-multiselect__trailing-action',
+    ) as HTMLButtonElement;
+    const arrow = arrowButton.querySelector('.tp-icon') as HTMLElement;
+
+    expect(arrow.textContent?.trim()).toBe('keyboard_arrow_down');
+    (component as unknown as { optionsOpen: { set: (open: boolean) => void } }).optionsOpen.set(
+      true,
+    );
+    fixture.detectChanges();
+
+    expect(arrow.textContent?.trim()).toBe('keyboard_arrow_up');
+    expect(arrowButton.getAttribute('aria-expanded')).toBe('true');
+  });
+
   it('should filter options case-insensitively from typed text', async () => {
     fixture.componentRef.setInput('options', ['Platform API', 'Platform UI', 'Project Atlas']);
     fixture.detectChanges();
@@ -36,6 +52,36 @@ describe('TpInputAutocompleteMultiselect', () => {
       component as unknown as { filteredOptions: () => readonly string[] }
     ).filteredOptions();
     expect(filteredOptions).toEqual(['Platform UI']);
+  });
+
+  it('should place the typing input immediately after selected chips', async () => {
+    component.value.set(['Platform API', 'Platform UI']);
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    const valueContainer = fixture.nativeElement.querySelector(
+      '.tp-input-autocomplete-multiselect__value',
+    ) as HTMLElement;
+    const triggerInput = fixture.nativeElement.querySelector(
+      '.tp-input-autocomplete-multiselect__trigger',
+    ) as HTMLInputElement;
+
+    expect(valueContainer.lastElementChild).toBe(triggerInput);
+  });
+
+  it('should keep the title floating above selected values', async () => {
+    fixture.componentRef.setInput('title', 'Projects');
+    component.value.set(['Platform API']);
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    const title = fixture.nativeElement.querySelector('.mat-mdc-floating-label') as HTMLElement;
+    const chips = fixture.nativeElement.querySelectorAll(
+      '.tp-input-autocomplete-multiselect__chip-label',
+    ) as NodeListOf<HTMLElement>;
+
+    expect(title.classList).toContain('mdc-floating-label--float-above');
+    expect(chips[0].textContent?.trim()).toBe('Platform API');
   });
 
   it('should toggle one selected value', () => {

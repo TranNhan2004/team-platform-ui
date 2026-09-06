@@ -1,0 +1,24 @@
+<section class="component-section" aria-labelledby="input-autocomplete-singleselect-title">
+  <div class="component-section__heading">
+    <h2 id="input-autocomplete-singleselect-title">Input autocomplete single select</h2>
+    <code>&lt;tp-input-autocomplete-singleselect&gt;</code>
+  </div>
+  <div class="input-grid">
+    <tp-input-autocomplete-singleselect
+      title="Project"
+      placeholder="Start typing a project name"
+      [options]="projectOptions"
+      hint="You can enter a new project name"
+    ></tp-input-autocomplete-singleselect>
+    <tp-input-autocomplete-singleselect
+      title="Loading projects"
+      value="pro"
+      [loading]="true"
+    ></tp-input-autocomplete-singleselect>
+    <tp-input-autocomplete-singleselect
+      title="Required project"
+      [options]="projectOptions"
+      [required]="true"
+    ></tp-input-autocomplete-singleselect>
+  </div>
+</section>

@@ -12,15 +12,21 @@
   --mat-chip-selected-focus-state-layer-opacity: 0;
   --mat-chip-container-shape-radius: var(--tp-radius-md);
 
-  border: none !important;
+  border: none;
   border-radius: var(--tp-radius-md);
   cursor: default;
   user-select: none;
-  box-shadow: none !important;
+  box-shadow: none;
   transition:
     background-color var(--tp-transition-fast),
     border-color var(--tp-transition-fast),
     color var(--tp-transition-fast);
+}
+
+.tp-chip__content {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--tp-space-2);
 }
 
 .tp-chip--sm {

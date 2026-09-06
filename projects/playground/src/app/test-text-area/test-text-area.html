@@ -1,0 +1,22 @@
+<section class="component-section" aria-labelledby="text-areas-title">
+  <div class="component-section__heading">
+    <h2 id="text-areas-title">Text area</h2>
+    <code>&lt;tp-text-area&gt;</code>
+  </div>
+  <div class="input-grid">
+    <div>
+      <p>Required:</p>
+      <tp-text-area [required]="true"></tp-text-area>
+    </div>
+    <tp-text-area title="Description" placeholder="Add a description"></tp-text-area>
+    <tp-text-area title="Three rows minimum" [rows]="1"></tp-text-area>
+    <tp-text-area title="Character limit" [rows]="5" [maxLength]="120"></tp-text-area>
+    <tp-text-area title="Required" [required]="true"></tp-text-area>
+    <tp-text-area title="Sized" width="320px" maxWidth="100%"></tp-text-area>
+    <tp-text-area
+      title="Disabled"
+      value="This content cannot be changed"
+      [disabled]="true"
+    ></tp-text-area>
+  </div>
+</section>

@@ -30,6 +30,7 @@
     [attr.name]="name() || null"
     [attr.aria-label]="ariaLabel() || null"
     [attr.aria-invalid]="showError()"
+    [attr.aria-describedby]="showError() ? errorId : null"
     (focusout)="markAsTouched()"
     (selectionChange)="selectOption($event)"
   >
@@ -70,5 +71,7 @@
 </mat-form-field>
 
 @if (showError()) {
-  <div class="tp-input-singleselect__error" role="alert">{{ displayedError() }}</div>
+  <div [id]="errorId" class="tp-input-singleselect__error" role="alert">
+    {{ displayedError() }}
+  </div>
 }

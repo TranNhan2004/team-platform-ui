@@ -22,6 +22,7 @@
     matInput
     class="tp-input__control"
     [type]="inputType()"
+    [placeholder]="placeholder()"
     [value]="inputValue()"
     [required]="required()"
     [disabled]="disabled()"
@@ -32,6 +33,7 @@
     [attr.max]="variant() === 'number' ? max() : null"
     [attr.step]="variant() === 'number' ? step() : null"
     [attr.aria-invalid]="showError()"
+    [attr.aria-describedby]="showError() ? errorId : null"
     (blur)="markAsTouched()"
     (input)="updateValue($event)"
   />
@@ -41,6 +43,12 @@
   }
 </mat-form-field>
 
+@if (required() && !title()) {
+  <span class="tp-input__required-marker tp-input__required-marker--standalone" aria-hidden="true"
+    >*</span
+  >
+}
+
 @if (showError()) {
-  <div class="tp-input__error" role="alert">{{ displayedError() }}</div>
+  <div [id]="errorId" class="tp-input__error" role="alert">{{ displayedError() }}</div>
 }

@@ -1,18 +1,25 @@
-import { ConnectedPosition } from '@angular/cdk/overlay';
+import { ScrollDispatcher } from '@angular/cdk/scrolling';
 import {
-  AfterViewInit,
   ChangeDetectionStrategy,
   Component,
   computed,
+  DestroyRef,
+  inject,
   input,
   model,
   viewChild,
 } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormValueControl } from '@angular/forms/signals';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelect, MatSelectChange, MatSelectModule } from '@angular/material/select';
 import { TpSpinner } from '../spinner/spinner';
+import {
+  createValidationErrorId,
+  TpValidationErrors,
+  validationErrorMessage,
+} from '../utils/form-validation';
 
 export type TpSingleselectOption = string;
 
@@ -23,11 +30,6 @@ const CONTENT_SIZE_MAP: Record<TpInputSingleselectContentSize, string> = {
   md: 'var(--tp-text-md)',
   lg: 'var(--tp-text-lg)',
 };
-
-const BELOW_POSITIONS: ConnectedPosition[] = [
-  { originX: 'start', originY: 'bottom', overlayX: 'start', overlayY: 'top' },
-  { originX: 'end', originY: 'bottom', overlayX: 'end', overlayY: 'top' },
-];
 
 @Component({
   selector: 'tp-input-singleselect',
@@ -40,9 +42,11 @@ const BELOW_POSITIONS: ConnectedPosition[] = [
   styleUrl: './input-singleselect.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TpInputSingleselect implements FormValueControl<string | null>, AfterViewInit {
+export class TpInputSingleselect implements FormValueControl<string | null> {
   value = model<string | null>(null);
   touched = model(false);
+  errors = input<TpValidationErrors>([]);
+  invalid = input(false);
 
   options = input<readonly TpSingleselectOption[]>([]);
   loading = input(false);
@@ -63,12 +67,14 @@ export class TpInputSingleselect implements FormValueControl<string | null>, Aft
   contentSize = input<TpInputSingleselectContentSize>('md');
 
   private readonly select = viewChild(MatSelect);
+  private readonly scrollDispatcher = inject(ScrollDispatcher);
+  private readonly destroyRef = inject(DestroyRef);
 
-  ngAfterViewInit(): void {
-    // MatSelect has no public position input. Restrict its overlay strategy to
-    // downward positions so it cannot flip above the control.
-    const select = this.select();
-    if (select) select._positions = BELOW_POSITIONS;
+  constructor() {
+    this.scrollDispatcher
+      .scrolled()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => this.select()?.close());
   }
 
   protected readonly contentFontSize = computed(() => CONTENT_SIZE_MAP[this.contentSize()]);
@@ -79,12 +85,19 @@ export class TpInputSingleselect implements FormValueControl<string | null>, Aft
   });
 
   protected readonly hasRequiredError = computed(() => this.required() && this.isEmpty());
+  protected readonly errorId = createValidationErrorId('tp-input-singleselect-error');
 
   protected readonly showError = computed(
-    () => !!this.error() || (this.touched() && this.hasRequiredError()),
+    () =>
+      !!this.error() ||
+      this.invalid() ||
+      this.errors().length > 0 ||
+      (this.touched() && this.hasRequiredError()),
   );
 
-  protected readonly displayedError = computed(() => this.error() ?? this.requiredMessage());
+  protected readonly displayedError = computed(() =>
+    this.error() ?? validationErrorMessage(this.errors(), this.requiredMessage()),
+  );
 
   protected selectOption(event: MatSelectChange): void {
     this.value.set(event.value as TpSingleselectOption);

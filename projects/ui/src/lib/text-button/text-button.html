@@ -9,5 +9,11 @@
   [ngClass]="textButtonClass()"
   [ngStyle]="textButtonStyle()"
 >
-  <ng-content></ng-content>
+  <span
+    class="tp-text-button__content"
+    [class.tp-text-button__content--align-start]="contentAlignment() === 'start'"
+    [class.tp-text-button__content--align-end]="contentAlignment() === 'end'"
+  >
+    <ng-content></ng-content>
+  </span>
 </button>

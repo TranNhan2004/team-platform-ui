@@ -1,27 +1,29 @@
 <mat-form-field
-  class="tp-input-autocomplete"
-  [class.tp-input-autocomplete--invalid]="showError()"
+  class="tp-input-autocomplete-singleselect"
+  [class.tp-input-autocomplete-singleselect--invalid]="showError()"
   appearance="outline"
   [hideRequiredMarker]="true"
   subscriptSizing="dynamic"
   [style.width]="width()"
   [style.max-width]="maxWidth()"
-  [style.--tp-input-autocomplete-height]="height()"
-  [style.--tp-input-autocomplete-max-height]="maxHeight()"
-  [style.--tp-input-autocomplete-content-size]="contentFontSize()"
+  [style.--tp-input-autocomplete-singleselect-height]="height()"
+  [style.--tp-input-autocomplete-singleselect-max-height]="maxHeight()"
+  [style.--tp-input-autocomplete-singleselect-content-size]="contentFontSize()"
 >
   @if (title()) {
     <mat-label>
       {{ title() }}
       @if (required()) {
-        <span class="tp-input-autocomplete__required-marker" aria-hidden="true">*</span>
+        <span class="tp-input-autocomplete-singleselect__required-marker" aria-hidden="true"
+          >*</span
+        >
       }
     </mat-label>
   }
 
   <input
     matInput
-    class="tp-input-autocomplete__control"
+    class="tp-input-autocomplete-singleselect__control"
     [matAutocomplete]="suggestions"
     matAutocompletePosition="below"
     [value]="value()"
@@ -33,6 +35,7 @@
     [attr.autocomplete]="autocomplete()"
     [attr.aria-label]="ariaLabel() || null"
     [attr.aria-invalid]="showError()"
+    [attr.aria-describedby]="showError() ? errorId : null"
     (blur)="markAsTouched()"
     (input)="updateValue($event)"
   />
@@ -44,15 +47,19 @@
 
 <mat-autocomplete
   #suggestions="matAutocomplete"
-  class="tp-input-autocomplete__panel"
+  class="tp-input-autocomplete-singleselect__panel"
   (optionSelected)="selectOption($event)"
 >
   @if (query()) {
     @if (loading()) {
-      <mat-option class="tp-input-autocomplete__feedback" [disabled]="true">
-        <span class="tp-input-autocomplete__feedback-content">
+      <mat-option class="tp-input-autocomplete-singleselect__feedback" [disabled]="true">
+        <span class="tp-input-autocomplete-singleselect__feedback-content">
           <span>Loading</span>
-          <tp-spinner [diameter]="16" [strokeWidth]="2" ariaLabel="Loading suggestions"></tp-spinner>
+          <tp-spinner
+            [diameter]="16"
+            [strokeWidth]="2"
+            ariaLabel="Loading suggestions"
+          ></tp-spinner>
         </span>
       </mat-option>
     } @else if (filteredOptions().length) {
@@ -60,7 +67,7 @@
         <mat-option [value]="option">{{ option }}</mat-option>
       }
     } @else {
-      <mat-option class="tp-input-autocomplete__feedback" [disabled]="true">
+      <mat-option class="tp-input-autocomplete-singleselect__feedback" [disabled]="true">
         No matching result
       </mat-option>
     }
@@ -68,5 +75,7 @@
 </mat-autocomplete>
 
 @if (showError()) {
-  <div class="tp-input-autocomplete__error" role="alert">{{ displayedError() }}</div>
+  <div [id]="errorId" class="tp-input-autocomplete-singleselect__error" role="alert">
+    {{ displayedError() }}
+  </div>
 }

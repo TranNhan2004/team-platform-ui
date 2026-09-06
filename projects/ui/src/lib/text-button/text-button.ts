@@ -6,6 +6,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 export type TpTextButtonColor = 'gray' | 'white' | 'black';
 export type TpTextButtonAfterPressEffect = 'underline' | 'none';
 export type TpTextButtonPressEffectShape = 'circle' | 'elip' | 'rect';
+export type TpTextButtonContentAlignment = 'start' | 'center' | 'end';
 
 const TEXT_BUTTON_COLOR_MAP: Record<TpTextButtonColor, string> = {
   gray: 'var(--tp-color-gray-500)',
@@ -25,6 +26,7 @@ export class TpTextButton {
   afterPressEffect = input<TpTextButtonAfterPressEffect>('none');
   pressEffectShape = input<TpTextButtonPressEffectShape>('elip');
   hoverShape = input<TpTextButtonPressEffectShape>();
+  contentAlignment = input<TpTextButtonContentAlignment>('center');
   disabled = input(false);
   fullWidth = input(false);
   tooltipTitle = input<string | null>(null);
@@ -32,6 +34,8 @@ export class TpTextButton {
   maxWidth = input('none');
   height = input('var(--tp-control-height-md)');
   maxHeight = input('var(--tp-control-height-lg)');
+  fontSize = input('14px');
+  fontWeight = input('500');
   onClick = output<MouseEvent>();
 
   protected readonly textButtonStyle = computed(() => ({
@@ -40,6 +44,8 @@ export class TpTextButton {
     maxWidth: this.maxWidth(),
     height: this.height(),
     maxHeight: this.maxHeight(),
+    fontSize: this.fontSize(),
+    fontWeight: this.fontWeight(),
   }));
 
   protected readonly textButtonClass = computed(() => {

@@ -1,7 +1,13 @@
 @if (isOpen()) {
-  <div class="tp-dialog-backdrop" (click)="handleBackdropClick($event)">
+  <div
+    class="tp-dialog-backdrop"
+    (click)="handleBackdropClick($event)"
+    (keydown.escape)="handleEscape($event)"
+  >
     <section
       class="tp-dialog"
+      cdkTrapFocus
+      [cdkTrapFocusAutoCapture]="true"
       role="dialog"
       aria-modal="true"
       [attr.aria-label]="ariaLabel() || title()"

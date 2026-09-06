@@ -1,11 +1,11 @@
 import { NgStyle } from '@angular/common';
+import { CdkTrapFocus } from '@angular/cdk/a11y';
 import {
   ChangeDetectionStrategy,
   Component,
-  HostListener,
   computed,
   input,
-  linkedSignal,
+  model,
   output,
 } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
@@ -13,13 +13,13 @@ import { MatDialogModule } from '@angular/material/dialog';
 
 @Component({
   selector: 'tp-dialog',
-  imports: [MatButtonModule, MatDialogModule, NgStyle],
+  imports: [CdkTrapFocus, MatButtonModule, MatDialogModule, NgStyle],
   templateUrl: './dialog.html',
   styleUrl: './dialog.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TpDialog {
-  open = input(false);
+  open = model(false);
   title = input('Dialog');
   ariaLabel = input<string | null>(null);
   color = input('var(--tp-color-surface-elevated)');
@@ -35,7 +35,7 @@ export class TpDialog {
   onOpen = output<void>();
   onClose = output<void>();
 
-  protected readonly isOpen = linkedSignal(() => this.open());
+  protected readonly isOpen = this.open;
 
   protected readonly dialogStyle = computed(() => ({
     '--tp-dialog-color': this.color(),
@@ -67,8 +67,8 @@ export class TpDialog {
     }
   }
 
-  @HostListener('document:keydown.escape')
-  protected handleEscape(): void {
+  protected handleEscape(event: Event): void {
+    event.stopPropagation();
     if (this.isOpen() && this.closeOnEscape()) {
       this.closeDialog();
     }

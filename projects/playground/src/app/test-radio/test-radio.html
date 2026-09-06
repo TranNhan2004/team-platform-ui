@@ -1,0 +1,39 @@
+<section class="component-section" aria-labelledby="radios-title">
+  <div class="component-section__heading">
+    <h2 id="radios-title">Radio</h2>
+    <code>&lt;tp-radio&gt;</code>
+  </div>
+  <div class="choice-grid">
+    <div class="example-stack">
+      <h3>Plan</h3>
+      <tp-radio
+        name="plan"
+        value="starter"
+        [checked]="selectedPlan() === 'starter'"
+        (checkedChange)="selectPlan('starter', $event)"
+        >Starter</tp-radio
+      >
+      <tp-radio
+        name="plan"
+        value="team"
+        [checked]="selectedPlan() === 'team'"
+        (checkedChange)="selectPlan('team', $event)"
+        >Team</tp-radio
+      >
+      <tp-radio
+        name="plan"
+        value="enterprise"
+        [checked]="selectedPlan() === 'enterprise'"
+        (checkedChange)="selectPlan('enterprise', $event)"
+        >Enterprise</tp-radio
+      >
+    </div>
+    <div class="example-stack">
+      <h3>Selection</h3>
+      <p>
+        Selected plan: <strong>{{ selectedPlan() }}</strong>
+      </p>
+      <tp-radio [disabled]="true">Unavailable option</tp-radio>
+    </div>
+  </div>
+</section>

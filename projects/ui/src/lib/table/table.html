@@ -1,0 +1,220 @@
+<mat-menu #actionMenu="matMenu" xPosition="before" yPosition="below" class="tp-table__action-menu">
+  <div
+    class="tp-table__action-menu-content"
+    [style.width]="actionMenuWidthCss()"
+    [style.height]="actionMenuHeightCss()"
+  >
+    @if (currentActionRow(); as actionRow) {
+      @if (actionContent(); as actionContent) {
+        <ng-container
+          [ngTemplateOutlet]="actionContent.template"
+          [ngTemplateOutletContext]="{ $implicit: actionRow, row: actionRow }"
+        ></ng-container>
+      }
+    }
+  </div>
+</mat-menu>
+
+<div class="tp-table__container" [style.max-width]="maxWidth()" [attr.aria-busy]="loading()">
+  <div class="tp-table__scroll-container" cdkScrollable [style.max-height]="maxHeightCss()">
+    <table class="tp-table__table">
+      <thead>
+        <tr>
+          @for (column of columns(); track column.key) {
+            <th
+              scope="col"
+              [attr.aria-sort]="columnAriaSort(column)"
+              [style.width]="column.width || null"
+              [style.min-width]="column.minWidth || null"
+            >
+              @if (column.sortable && sortEnabled()) {
+                <button
+                  type="button"
+                  class="tp-table__sort-button"
+                  [class.tp-table__sort-button--active]="isSorted(column)"
+                  (click)="toggleSort(column)"
+                >
+                  <span>{{ column.title }}</span>
+                  <span
+                    class="tp-icon material-symbols-outlined tp-table__sort-icon"
+                    aria-hidden="true"
+                  >
+                    {{ sortIcon(column) }}
+                  </span>
+                </button>
+              } @else {
+                {{ column.title }}
+              }
+            </th>
+          }
+          @if (actionsEnabled()) {
+            <th class="tp-table__action-header" scope="col">{{ actionTitle() }}</th>
+          }
+        </tr>
+      </thead>
+      <tbody>
+        @if (filterEnabled()) {
+          <tr class="tp-table__filter-row">
+            @for (column of columns(); track column.key) {
+              <td [style.width]="column.width || null" [style.min-width]="column.minWidth || null">
+                @if (filterContentFor(column); as filterContent) {
+                  <div class="tp-table__filter-cell-content">
+                    <ng-container
+                      [ngTemplateOutlet]="filterContent.template"
+                      [ngTemplateOutletContext]="{
+                        $implicit: column,
+                        column,
+                        key: column.key,
+                      }"
+                    ></ng-container>
+                  </div>
+                }
+              </td>
+            }
+            @if (actionsEnabled()) {
+              <td class="tp-table__action-cell tp-table__filter-action-cell"></td>
+            }
+          </tr>
+        }
+
+        @for (row of displayedRows(); track trackRow(row, $index); let first = $first) {
+          <tr
+            [class.tp-table__row--clickable]="rowsClickable()"
+            [class.tp-table__row--loading]="loading() && first"
+            [attr.tabindex]="rowsClickable() ? 0 : null"
+            (click)="activateRow(row)"
+            (keydown)="activateRowFromKeyboard(row, $event)"
+          >
+            @for (column of columns(); track column.key) {
+              <td [style.width]="column.width || null" [style.min-width]="column.minWidth || null">
+                @let cell = cellPresentation(row, column);
+                <span
+                  class="tp-table__cell-value"
+                  [matTooltip]="cell.fullText"
+                  [matTooltipDisabled]="!cell.fullText"
+                  >{{ cell.displayText }}</span
+                >
+              </td>
+            }
+            @if (actionsEnabled()) {
+              <td class="tp-table__action-cell">
+                <button
+                  mat-icon-button
+                  type="button"
+                  class="tp-table__action-trigger"
+                  [matMenuTriggerFor]="actionMenu"
+                  [attr.aria-label]="actionTitle() + ' for this row'"
+                  (click)="openActions(row, $event)"
+                >
+                  <span class="tp-icon material-symbols-outlined" aria-hidden="true">
+                    more_vert
+                  </span>
+                </button>
+              </td>
+            }
+          </tr>
+        } @empty {
+          @if (loading()) {
+            <tr class="tp-table__loading-row">
+              <td [attr.colspan]="columnSpan()"></td>
+            </tr>
+          } @else {
+            <tr class="tp-table__empty-row">
+              <td [attr.colspan]="columnSpan()">
+                @if (emptyContent(); as emptyContent) {
+                  <ng-container
+                    [ngTemplateOutlet]="emptyContent.template"
+                    [ngTemplateOutletContext]="emptyContentContext()"
+                  ></ng-container>
+                } @else {
+                  <span>No data available</span>
+                }
+              </td>
+            </tr>
+          }
+        }
+      </tbody>
+    </table>
+  </div>
+
+  @if (reloadEnabled() || paginationEnabled()) {
+    <div class="tp-table__footer">
+      @if (reloadEnabled()) {
+        <div class="tp-table__reload-group">
+          <span class="tp-table__reload-title">{{ reloadTitle() }}</span>
+          <button
+            mat-icon-button
+            type="button"
+            class="tp-table__reload"
+            aria-label="Reload table"
+            [disabled]="reloadButtonDisabled()"
+            (click)="onReload.emit()"
+          >
+            <span class="tp-icon material-symbols-outlined" aria-hidden="true">refresh</span>
+          </button>
+        </div>
+      }
+
+      @if (paginationEnabled()) {
+        <div class="tp-table__pagination" aria-label="Table pagination">
+          <span class="tp-table__row-range">{{ rowRange().from }} - {{ rowRange().to }}</span>
+
+          <nav class="tp-table__page-navigation" aria-label="Page navigation">
+            <button
+              mat-icon-button
+              type="button"
+              aria-label="Previous page"
+              [disabled]="prevPageButtonDisabled() || currentPage() === 1"
+              (click)="previousPage()"
+            >
+              <span class="tp-icon material-symbols-outlined" aria-hidden="true">chevron_left</span>
+            </button>
+            <span aria-label="Current page">{{ currentPage() }}</span>
+            <button
+              mat-icon-button
+              type="button"
+              aria-label="Next page"
+              [disabled]="nextPageButtonDisabled() || currentPage() === pageCount()"
+              (click)="nextPage()"
+            >
+              <span class="tp-icon material-symbols-outlined" aria-hidden="true"
+                >chevron_right</span
+              >
+            </button>
+          </nav>
+
+          <div class="tp-table__pagination-group">
+            <label class="tp-table__pagination-select-label">
+              <span>{{ pageSizeTitle() }}</span>
+              <mat-select
+                class="tp-table__pagination-select"
+                [value]="validPageSize()"
+                [panelWidth]="null"
+                [attr.aria-label]="pageSizeTitle()"
+                (selectionChange)="selectPageSize($event)"
+              >
+                @for (option of resolvedPageSizeOptions(); track option) {
+                  <mat-option [value]="option">{{ option }}</mat-option>
+                }
+              </mat-select>
+            </label>
+            <label class="tp-table__pagination-select-label">
+              <span>{{ goToPageTitle() }}</span>
+              <mat-select
+                class="tp-table__pagination-select"
+                [value]="currentPage()"
+                [panelWidth]="null"
+                [attr.aria-label]="goToPageTitle()"
+                (selectionChange)="selectPage($event)"
+              >
+                @for (option of goToPageOptions(); track option) {
+                  <mat-option [value]="option">{{ option }}</mat-option>
+                }
+              </mat-select>
+            </label>
+          </div>
+        </div>
+      }
+    </div>
+  }
+</div>

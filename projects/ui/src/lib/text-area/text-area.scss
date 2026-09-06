@@ -24,6 +24,10 @@
   line-height: 1.5;
 }
 
+.tp-text-area__control:disabled {
+  cursor: not-allowed;
+}
+
 .tp-text-area__error {
   margin-top: var(--tp-space-1);
   padding: 0 var(--tp-space-4);
@@ -39,13 +43,13 @@
   --mat-form-field-outlined-focus-outline-width: 2px;
 
   .mat-mdc-notch-piece {
-    border-color: var(--tp-color-red-600) !important;
-    border-width: 2px !important;
+    border-color: var(--tp-color-red-600);
+    border-width: 2px;
   }
 
   .mdc-notched-outline__notch {
-    border-right-color: transparent !important;
-    border-left-color: transparent !important;
+    border-right-color: transparent;
+    border-left-color: transparent;
   }
 
   .mat-mdc-floating-label {
@@ -55,4 +59,9 @@
   .tp-text-area__control {
     caret-color: var(--tp-color-red-600);
   }
+}
+
+:host ::ng-deep .tp-text-area.mat-form-field-disabled,
+:host ::ng-deep .tp-text-area.mat-form-field-disabled * {
+  cursor: not-allowed;
 }

@@ -7,6 +7,8 @@
     [ngClass]="chipClass()"
     [ngStyle]="chipStyle()"
   >
-    <ng-content></ng-content>
+    <span class="tp-chip__content">
+      <ng-content></ng-content>
+    </span>
   </mat-chip>
 </mat-chip-set>

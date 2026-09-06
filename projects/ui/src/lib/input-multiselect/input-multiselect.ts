@@ -7,11 +7,13 @@ import {
   inject,
   input,
   model,
+  signal,
   viewChild,
 } from '@angular/core';
+import { ScrollDispatcher } from '@angular/cdk/scrolling';
 import { FormValueControl } from '@angular/forms/signals';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import {
-  MatAutocomplete,
   MatAutocompleteModule,
   MatAutocompleteSelectedEvent,
   MatAutocompleteTrigger,
@@ -23,9 +25,13 @@ import { MatInputModule } from '@angular/material/input';
 import { TpCheckbox } from '../checkbox/checkbox';
 import { TpSpinner } from '../spinner/spinner';
 import { truncateText } from '../utils/text-wrapping';
+import {
+  createValidationErrorId,
+  TpValidationErrors,
+  validationErrorMessage,
+} from '../utils/form-validation';
 
 export type TpMultiselectOption = string;
-export type TpInputMultiselectChipDisplayMode = 'inline' | 'new-line';
 export type TpInputMultiselectContentSize = 'sm' | 'md' | 'lg';
 
 const CONTENT_SIZE_MAP: Record<TpInputMultiselectContentSize, string> = {
@@ -37,12 +43,12 @@ const CONTENT_SIZE_MAP: Record<TpInputMultiselectContentSize, string> = {
 @Component({
   selector: 'tp-input-multiselect',
   imports: [
-    TpCheckbox,
     MatAutocompleteModule,
     MatButtonModule,
     MatDividerModule,
     MatFormFieldModule,
     MatInputModule,
+    TpCheckbox,
     TpSpinner,
   ],
   templateUrl: './input-multiselect.html',
@@ -52,6 +58,8 @@ const CONTENT_SIZE_MAP: Record<TpInputMultiselectContentSize, string> = {
 export class TpInputMultiselect implements FormValueControl<string[]> {
   value = model<string[]>([]);
   touched = model(false);
+  errors = input<TpValidationErrors>([]);
+  invalid = input(false);
 
   options = input<readonly TpMultiselectOption[]>([]);
   loading = input(false);
@@ -72,21 +80,22 @@ export class TpInputMultiselect implements FormValueControl<string[]> {
   contentSize = input<TpInputMultiselectContentSize>('md');
   maxChipContentLength = input<number | undefined>(undefined);
   maxChips = input<number | undefined>(undefined);
-  chipDisplayMode = input<TpInputMultiselectChipDisplayMode>('inline');
 
   protected readonly selectAllOptionValue = '__tp-input-multiselect-select-all__';
   private readonly destroyRef = inject(DestroyRef);
+  private readonly scrollDispatcher = inject(ScrollDispatcher);
   private readonly optionsTrigger = viewChild(MatAutocompleteTrigger);
-  private readonly optionsPanel = viewChild(MatAutocomplete);
   private readonly triggerInput = viewChild<ElementRef<HTMLInputElement>>('triggerInput');
-  private panelReopenQueued = false;
+  protected readonly optionsOpen = signal(false);
   private panelPositionUpdateQueued = false;
-  private pendingPanelScrollTop: number | undefined;
-  private panelReopenTimeout: ReturnType<typeof setTimeout> | undefined;
   private panelPositionTimeout: ReturnType<typeof setTimeout> | undefined;
 
   constructor() {
     this.destroyRef.onDestroy(() => this.cancelPendingCallbacks());
+    this.scrollDispatcher
+      .scrolled()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => this.optionsTrigger()?.closePanel());
   }
 
   protected readonly selectedValues = computed(() => [...new Set(this.value())]);
@@ -121,22 +130,28 @@ export class TpInputMultiselect implements FormValueControl<string[]> {
   protected readonly contentFontSize = computed(() => CONTENT_SIZE_MAP[this.contentSize()]);
 
   protected readonly floatLabel = computed<'always' | 'auto'>(() =>
-    this.selectedValues().length ? 'always' : 'auto',
+    this.title() || this.selectedValues().length ? 'always' : 'auto',
   );
 
   protected readonly isEmpty = computed(() => this.selectedValues().length === 0);
 
   protected readonly hasRequiredError = computed(() => this.required() && this.isEmpty());
+  protected readonly errorId = createValidationErrorId('tp-input-multiselect-error');
 
   protected readonly showError = computed(
-    () => !!this.error() || (this.touched() && this.hasRequiredError()),
+    () =>
+      !!this.error() ||
+      this.invalid() ||
+      this.errors().length > 0 ||
+      (this.touched() && this.hasRequiredError()),
   );
 
-  protected readonly displayedError = computed(() => this.error() ?? this.requiredMessage());
+  protected readonly displayedError = computed(() =>
+    this.error() ?? validationErrorMessage(this.errors(), this.requiredMessage()),
+  );
 
   protected selectOption(event: MatAutocompleteSelectedEvent): void {
     const option = event.option.value as TpMultiselectOption;
-    const scrollTop = this.optionsPanel()?._getScrollTop() ?? 0;
 
     if (option === this.selectAllOptionValue) {
       this.toggleAll();
@@ -144,16 +159,12 @@ export class TpInputMultiselect implements FormValueControl<string[]> {
       this.toggleOption(option);
     }
 
-    // Checkbox selections own the displayed state. Remove Material's transient
-    // option selection so a row does not remain highlighted after it changes.
     event.option.deselect(false);
-    event.option.setInactiveStyles();
     this.clearTriggerValue();
-    this.reopenOptions(scrollTop);
+    this.reopenOptions();
   }
 
   protected toggleOptionFromPointer(option: TpMultiselectOption, event: MouseEvent): void {
-    // Keep pointer selections in the existing panel instead of recreating it.
     event.stopPropagation();
 
     if (option === this.selectAllOptionValue) {
@@ -161,8 +172,6 @@ export class TpInputMultiselect implements FormValueControl<string[]> {
     } else {
       this.toggleOption(option);
     }
-
-    this.updatePanelPosition();
   }
 
   protected removeOption(option: TpMultiselectOption, event: MouseEvent): void {
@@ -186,6 +195,25 @@ export class TpInputMultiselect implements FormValueControl<string[]> {
     if (!this.disabled() && !this.readonly()) {
       this.optionsTrigger()?.openPanel();
     }
+  }
+
+  protected toggleOptions(event?: Event): void {
+    event?.stopPropagation();
+
+    if (this.disabled() || this.readonly()) return;
+
+    const trigger = this.optionsTrigger();
+    if (!trigger) return;
+
+    if (trigger.panelOpen) {
+      trigger.closePanel();
+    } else {
+      trigger.openPanel();
+    }
+  }
+
+  protected setOptionsOpen(open: boolean): void {
+    this.optionsOpen.set(open);
   }
 
   protected markAsTouched(): void {
@@ -212,9 +240,7 @@ export class TpInputMultiselect implements FormValueControl<string[]> {
     this.touched.set(true);
   }
 
-  private uniqueOptions(): TpMultiselectOption[] {
-    return [...new Set(this.options())];
-  }
+  protected readonly uniqueOptions = computed(() => [...new Set(this.options())]);
 
   private clearTriggerValue(): void {
     const triggerInput = this.triggerInput()?.nativeElement;
@@ -224,41 +250,12 @@ export class TpInputMultiselect implements FormValueControl<string[]> {
     }
   }
 
-  private reopenOptions(scrollTop: number): void {
+  private reopenOptions(): void {
     if (this.destroyRef.destroyed) return;
-
-    this.pendingPanelScrollTop = scrollTop;
-    this.clearPanelReopenTimeout();
-
-    if (this.panelReopenQueued) return;
-
-    this.panelReopenQueued = true;
     queueMicrotask(() => {
-      this.panelReopenQueued = false;
       if (this.destroyRef.destroyed) return;
-
-      const pendingScrollTop = this.pendingPanelScrollTop;
-      this.pendingPanelScrollTop = undefined;
-      if (pendingScrollTop === undefined) return;
-
       this.optionsTrigger()?.openPanel();
-      queueMicrotask(() => {
-        if (!this.destroyRef.destroyed) {
-          this.restorePanelScroll(pendingScrollTop);
-        }
-      });
-      this.panelReopenTimeout = setTimeout(() => {
-        this.panelReopenTimeout = undefined;
-
-        if (!this.destroyRef.destroyed) {
-          this.restorePanelScroll(pendingScrollTop);
-        }
-      });
     });
-  }
-
-  private restorePanelScroll(scrollTop: number): void {
-    this.optionsPanel()?._setScrollTop(scrollTop);
   }
 
   private updatePanelPosition(): void {
@@ -285,18 +282,8 @@ export class TpInputMultiselect implements FormValueControl<string[]> {
   }
 
   private cancelPendingCallbacks(): void {
-    this.clearPanelReopenTimeout();
     this.clearPanelPositionTimeout();
-    this.pendingPanelScrollTop = undefined;
-    this.panelReopenQueued = false;
     this.panelPositionUpdateQueued = false;
-  }
-
-  private clearPanelReopenTimeout(): void {
-    if (this.panelReopenTimeout !== undefined) {
-      clearTimeout(this.panelReopenTimeout);
-      this.panelReopenTimeout = undefined;
-    }
   }
 
   private clearPanelPositionTimeout(): void {

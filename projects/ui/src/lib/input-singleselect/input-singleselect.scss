@@ -30,6 +30,13 @@
   font-size: var(--tp-input-singleselect-content-size);
 }
 
+:host ::ng-deep .tp-input-singleselect.mat-form-field-disabled,
+:host ::ng-deep .tp-input-singleselect.mat-form-field-disabled *,
+:host ::ng-deep .tp-input-singleselect__control.mat-mdc-select-disabled,
+:host ::ng-deep .tp-input-singleselect__control.mat-mdc-select-disabled .mat-mdc-select-trigger {
+  cursor: not-allowed;
+}
+
 .tp-input-singleselect__clear {
   --tp-icon-size: 18px;
   --mat-icon-button-icon-color: var(--tp-color-text-secondary);
@@ -99,7 +106,7 @@
   color: var(--tp-color-red-600);
 }
 
-:host ::ng-deep .tp-input-singleselect__panel {
+::ng-deep .tp-input-singleselect__panel {
   .tp-input-singleselect__feedback-content {
     display: inline-flex;
     align-items: center;
@@ -113,13 +120,13 @@
   --mat-form-field-outlined-focus-outline-width: 2px;
 
   .mat-mdc-notch-piece {
-    border-color: var(--tp-color-red-600) !important;
-    border-width: 2px !important;
+    border-color: var(--tp-color-red-600);
+    border-width: 2px;
   }
 
   .mdc-notched-outline__notch {
-    border-right-color: transparent !important;
-    border-left-color: transparent !important;
+    border-right-color: transparent;
+    border-left-color: transparent;
   }
 
   .mat-mdc-floating-label {

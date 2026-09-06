@@ -95,4 +95,18 @@ describe('Button', () => {
     expect(button.style.height).toBe('40px');
     expect(button.style.maxHeight).toBe('44px');
   });
+
+  it('should apply explicit typography and center projected content', async () => {
+    fixture.componentRef.setInput('fontSize', '18px');
+    fixture.componentRef.setInput('fontWeight', '700');
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    const button = fixture.nativeElement.querySelector('button') as HTMLButtonElement;
+    const content = button.querySelector('.tp-button__content') as HTMLElement;
+
+    expect(button.style.fontSize).toBe('18px');
+    expect(button.style.fontWeight).toBe('700');
+    expect(content).toBeTruthy();
+  });
 });
