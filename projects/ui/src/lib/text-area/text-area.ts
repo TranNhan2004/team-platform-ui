@@ -2,6 +2,11 @@ import { ChangeDetectionStrategy, Component, computed, input, model, numberAttri
 import { FormValueControl } from '@angular/forms/signals';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import {
+  createValidationErrorId,
+  TpValidationErrors,
+  validationErrorMessage,
+} from '../utils/form-validation';
 
 @Component({
   selector: 'tp-text-area',
@@ -13,6 +18,8 @@ import { MatInputModule } from '@angular/material/input';
 export class TpTextArea implements FormValueControl<string> {
   value = model('');
   touched = model(false);
+  errors = input<TpValidationErrors>([]);
+  invalid = input(false);
 
   title = input('');
   placeholder = input('');
@@ -35,12 +42,19 @@ export class TpTextArea implements FormValueControl<string> {
   protected readonly isEmpty = computed(() => this.value().trim() === '');
 
   protected readonly hasRequiredError = computed(() => this.required() && this.isEmpty());
+  protected readonly errorId = createValidationErrorId('tp-text-area-error');
 
   protected readonly showError = computed(
-    () => !!this.error() || (this.touched() && this.hasRequiredError()),
+    () =>
+      !!this.error() ||
+      this.invalid() ||
+      this.errors().length > 0 ||
+      (this.touched() && this.hasRequiredError()),
   );
 
-  protected readonly displayedError = computed(() => this.error() ?? this.requiredMessage());
+  protected readonly displayedError = computed(() =>
+    this.error() ?? validationErrorMessage(this.errors(), this.requiredMessage()),
+  );
 
   protected updateValue(event: Event): void {
     this.value.set((event.target as HTMLTextAreaElement).value);

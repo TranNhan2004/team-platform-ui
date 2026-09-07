@@ -21,3 +21,15 @@
   --mat-checkbox-disabled-selected-icon-color: var(--tp-color-gray-400);
   --mat-checkbox-disabled-unselected-icon-color: var(--tp-color-gray-400);
 }
+
+.tp-checkbox.mat-mdc-checkbox-disabled {
+  pointer-events: auto;
+  cursor: not-allowed;
+}
+
+.tp-checkbox.mat-mdc-checkbox-disabled,
+.tp-checkbox.mat-mdc-checkbox-disabled *,
+.tp-checkbox.mat-mdc-checkbox-disabled .mdc-checkbox--disabled,
+.tp-checkbox.mat-mdc-checkbox-disabled label {
+  cursor: not-allowed;
+}

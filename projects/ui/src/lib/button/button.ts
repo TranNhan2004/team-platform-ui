@@ -1,11 +1,10 @@
 import { NgClass, NgStyle, NgTemplateOutlet } from '@angular/common';
-import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { TP_COMPONENT_COLOR_MAP, TpComponentColor } from '../utils/component-color';
 
 export type TpButtonColor = TpComponentColor;
-type TpButtonSize = 'sm' | 'md' | 'lg';
 type TpButtonVariant = 'filled' | 'outlined' | 'tonal';
 
 @Component({
@@ -17,11 +16,17 @@ type TpButtonVariant = 'filled' | 'outlined' | 'tonal';
 })
 export class TpButton {
   color = input<TpButtonColor>('blue');
-  size = input<TpButtonSize>('md');
   variant = input<TpButtonVariant>('filled');
   disabled = input(false);
   fullWidth = input(false);
   tooltipTitle = input<string | null>(null);
+  width = input('auto');
+  maxWidth = input('none');
+  height = input('var(--tp-control-height-md)');
+  maxHeight = input('var(--tp-control-height-lg)');
+  fontSize = input('14px');
+  fontWeight = input('500');
+  onClick = output<MouseEvent>();
 
   protected readonly buttonStyle = computed(() => {
     const color = TP_COMPONENT_COLOR_MAP[this.color()];
@@ -30,14 +35,16 @@ export class TpButton {
       '--tp-button-color': color.color,
       '--tp-button-contrast-color': color.contrast,
       '--tp-button-tonal-bg': color.container,
+      width: this.fullWidth() ? '100%' : this.width(),
+      maxWidth: this.maxWidth(),
+      height: this.height(),
+      maxHeight: this.maxHeight(),
+      fontSize: this.fontSize(),
+      fontWeight: this.fontWeight(),
     };
   });
 
   protected readonly buttonClass = computed(() => ({
-    'tp-button--sm': this.size() === 'sm',
-    'tp-button--md': this.size() === 'md',
-    'tp-button--lg': this.size() === 'lg',
-    'tp-button--full': this.fullWidth(),
     'tp-button--filled': this.variant() === 'filled',
     'tp-button--outlined': this.variant() === 'outlined',
     'tp-button--tonal': this.variant() === 'tonal',

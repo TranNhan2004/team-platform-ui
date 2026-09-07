@@ -1,0 +1,26 @@
+<section class="component-section" aria-labelledby="inputs-title">
+  <div class="component-section__heading">
+    <h2 id="inputs-title">Input</h2>
+    <code>&lt;tp-input&gt;</code>
+  </div>
+  <div class="input-grid">
+    <tp-input title="Free text"></tp-input>
+
+    <tp-input title="Compact text" contentSize="sm" height="80px" maxHeight="100px"></tp-input>
+    <tp-input title="Required title" [required]="true"></tp-input>
+    <div>
+      <p>ABC:</p>
+      <tp-input [required]="true"></tp-input>
+    </div>
+    <tp-input title="Populated title" value="Existing value"></tp-input>
+    <tp-input title="Number" variant="number" [min]="0" [max]="100" [step]="1"></tp-input>
+    <tp-input title="Disabled" value="Unavailable" [disabled]="true"></tp-input>
+    <tp-input title="With hint" hint="Enter a clear, descriptive name"></tp-input>
+    <tp-input
+      title="Large content"
+      contentSize="lg"
+      height="var(--tp-control-height-lg)"
+      maxHeight="var(--tp-control-height-lg)"
+    ></tp-input>
+  </div>
+</section>

@@ -29,6 +29,17 @@ describe('Button', () => {
     expect(component).toBeTruthy();
   });
 
+  it('should emit the click event', () => {
+    const onClick = vi.fn();
+    component.onClick.subscribe(onClick);
+
+    const button = fixture.nativeElement.querySelector('button') as HTMLButtonElement;
+    button.click();
+
+    expect(onClick).toHaveBeenCalledTimes(1);
+    expect(onClick.mock.calls[0][0]).toBeInstanceOf(MouseEvent);
+  });
+
   it.each(['filled', 'outlined', 'tonal'] as const)(
     'should project its label for the %s variant',
     (variant) => {
@@ -67,5 +78,35 @@ describe('Button', () => {
     expect(button.style.getPropertyValue('--tp-button-contrast-color')).toBe(
       'var(--tp-color-white)',
     );
+  });
+
+  it('should apply explicit dimension constraints', async () => {
+    fixture.componentRef.setInput('width', '12rem');
+    fixture.componentRef.setInput('maxWidth', '16rem');
+    fixture.componentRef.setInput('height', '40px');
+    fixture.componentRef.setInput('maxHeight', '44px');
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    const button = fixture.nativeElement.querySelector('button') as HTMLButtonElement;
+
+    expect(button.style.width).toBe('12rem');
+    expect(button.style.maxWidth).toBe('16rem');
+    expect(button.style.height).toBe('40px');
+    expect(button.style.maxHeight).toBe('44px');
+  });
+
+  it('should apply explicit typography and center projected content', async () => {
+    fixture.componentRef.setInput('fontSize', '18px');
+    fixture.componentRef.setInput('fontWeight', '700');
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    const button = fixture.nativeElement.querySelector('button') as HTMLButtonElement;
+    const content = button.querySelector('.tp-button__content') as HTMLElement;
+
+    expect(button.style.fontSize).toBe('18px');
+    expect(button.style.fontWeight).toBe('700');
+    expect(content).toBeTruthy();
   });
 });

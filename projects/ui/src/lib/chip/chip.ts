@@ -20,6 +20,8 @@ export class TpChip {
   size = input<TpChipSize>('md');
   variant = input<TpChipVariant>('filled');
   tooltipTitle = input<string | null>(null);
+  fontSize = input<string | null>(null);
+  fontWeight = input<string | null>(null);
 
   protected readonly chipStyle = computed(() => {
     const color = TP_COMPONENT_COLOR_MAP[this.color()];
@@ -28,6 +30,8 @@ export class TpChip {
       '--tp-chip-color': color.color,
       '--tp-chip-label-color': color.contrast,
       '--tp-chip-tonal-bg': color.container,
+      fontSize: this.fontSize(),
+      fontWeight: this.fontWeight(),
     };
   });
 

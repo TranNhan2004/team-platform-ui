@@ -1,0 +1,18 @@
+<section class="component-section" aria-labelledby="search-title">
+  <div class="component-section__heading">
+    <h2 id="search-title">Search bar</h2>
+    <code>&lt;tp-search-bar&gt;</code>
+  </div>
+  <div class="example-stack">
+    <tp-search-bar (onSearch)="searchValue.set($event)"></tp-search-bar>
+    <tp-search-bar
+      maxWidth="360px"
+      placeholder="Search projects"
+      ariaLabel="Search projects"
+      (onSearch)="searchValue.set($event)"
+    ></tp-search-bar>
+    <p>
+      Debounced value: <strong>{{ searchValue() || 'Start typing…' }}</strong>
+    </p>
+  </div>
+</section>

@@ -19,4 +19,59 @@ describe('TextButton', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should emit the click event', () => {
+    const onClick = vi.fn();
+    component.onClick.subscribe(onClick);
+
+    const button = fixture.nativeElement.querySelector('button') as HTMLButtonElement;
+    button.click();
+
+    expect(onClick).toHaveBeenCalledTimes(1);
+    expect(onClick.mock.calls[0][0]).toBeInstanceOf(MouseEvent);
+  });
+
+  it.each(['circle', 'elip', 'rect'] as const)(
+    'should apply the %s press effect shape',
+    async (pressEffectShape) => {
+      fixture.componentRef.setInput('pressEffectShape', pressEffectShape);
+      fixture.detectChanges();
+      await fixture.whenStable();
+
+      const button = fixture.nativeElement.querySelector('button') as HTMLButtonElement;
+
+      expect(button.classList.contains(`tp-text-button--shape-${pressEffectShape}`)).toBe(true);
+      expect(button.classList.contains(`tp-text-button--hover-shape-${pressEffectShape}`)).toBe(
+        true,
+      );
+    },
+  );
+
+  it('should apply an explicit hover shape independently from the press effect shape', async () => {
+    fixture.componentRef.setInput('pressEffectShape', 'rect');
+    fixture.componentRef.setInput('hoverShape', 'circle');
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    const button = fixture.nativeElement.querySelector('button') as HTMLButtonElement;
+
+    expect(button.classList.contains('tp-text-button--shape-rect')).toBe(true);
+    expect(button.classList.contains('tp-text-button--hover-shape-circle')).toBe(true);
+  });
+
+  it('should apply explicit dimension constraints', async () => {
+    fixture.componentRef.setInput('width', '12rem');
+    fixture.componentRef.setInput('maxWidth', '16rem');
+    fixture.componentRef.setInput('height', '40px');
+    fixture.componentRef.setInput('maxHeight', '44px');
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    const button = fixture.nativeElement.querySelector('button') as HTMLButtonElement;
+
+    expect(button.style.width).toBe('12rem');
+    expect(button.style.maxWidth).toBe('16rem');
+    expect(button.style.height).toBe('40px');
+    expect(button.style.maxHeight).toBe('44px');
+  });
 });

@@ -1,103 +1,52 @@
-import { Component, signal } from '@angular/core';
-import { MatIconRegistry } from '@angular/material/icon';
-import {
-  TpAvatar,
-  TpBellNotification,
-  TpButton,
-  TpCard,
-  TpCheckbox,
-  TpChip,
-  TpDatePicker,
-  TpDialog,
-  TpInput,
-  TpInputAutocomplete,
-  TpInputDatePicker,
-  TpInputMultiselect,
-  TpInputSingleselect,
-  TpRadio,
-  TpSearchBar,
-  TpSkeleton,
-  TpSpinner,
-  TpTextArea,
-  TpTextButton,
-} from 'ui';
+import { Component } from '@angular/core';
+import { TestAvatar } from './test-avatar/test-avatar';
+import { TestBellNotification } from './test-bell-notification/test-bell-notification';
+import { TestButton } from './test-button/test-button';
+import { TestCard } from './test-card/test-card';
+import { TestCheckbox } from './test-checkbox/test-checkbox';
+import { TestChip } from './test-chip/test-chip';
+import { TestDatePicker } from './test-date-picker/test-date-picker';
+import { TestDialog } from './test-dialog/test-dialog';
+import { TestInput } from './test-input/test-input';
+import { TestInputAutocompleteMultiselect } from './test-input-autocomplete-multiselect/test-input-autocomplete-multiselect';
+import { TestInputAutocompleteSingleselect } from './test-input-autocomplete-singleselect/test-input-autocomplete-singleselect';
+import { TestInputDatePicker } from './test-input-date-picker/test-input-date-picker';
+import { TestInputMultiselect } from './test-input-multiselect/test-input-multiselect';
+import { TestInputSingleselect } from './test-input-singleselect/test-input-singleselect';
+import { TestRadio } from './test-radio/test-radio';
+import { TestSearchBar } from './test-search-bar/test-search-bar';
+import { TestSkeleton } from './test-skeleton/test-skeleton';
+import { TestSpinner } from './test-spinner/test-spinner';
+import { TestTextArea } from './test-text-area/test-text-area';
+import { TestTextButton } from './test-text-button/test-text-button';
+import { TestTable } from './test-table/test-table';
 
 @Component({
   selector: 'app-root',
   imports: [
-    TpAvatar,
-    TpBellNotification,
-    TpButton,
-    TpCard,
-    TpChip,
-    TpCheckbox,
-    TpDatePicker,
-    TpDialog,
-    TpInput,
-    TpInputAutocomplete,
-    TpInputDatePicker,
-    TpInputSingleselect,
-    TpInputMultiselect,
-    TpRadio,
-    TpSearchBar,
-    TpSkeleton,
-    TpSpinner,
-    TpTextButton,
-    TpTextArea,
+    TestAvatar,
+    TestBellNotification,
+    TestButton,
+    TestCard,
+    TestCheckbox,
+    TestChip,
+    TestDatePicker,
+    TestDialog,
+    TestInput,
+    TestInputAutocompleteMultiselect,
+    TestInputAutocompleteSingleselect,
+    TestInputDatePicker,
+    TestInputMultiselect,
+    TestInputSingleselect,
+    TestRadio,
+    TestSearchBar,
+    TestSkeleton,
+    TestSpinner,
+    TestTextArea,
+    TestTextButton,
+    TestTable,
   ],
   templateUrl: './app.html',
   styleUrl: './app.scss',
 })
-export class App {
-  protected readonly colors = [
-    'gray',
-    'red',
-    'pink',
-    'amber',
-    'orange',
-    'yellow',
-    'green',
-    'emerald',
-    'teal',
-    'blue',
-    'cyan',
-    'purple',
-    'violet',
-    'indigo',
-  ] as const;
-  protected readonly buttonVariants = ['filled', 'outlined', 'tonal'] as const;
-  protected readonly chipVariants = ['filled', 'outlined', 'tonal', 'text'] as const;
-  protected readonly sizes = ['sm', 'md', 'lg'] as const;
-  protected readonly searchValue = signal('');
-  protected readonly projectOptions = [
-    'Platform API',
-    'Platform UI',
-    'Project Atlas',
-    'Project Nova',
-    'Platform API 1',
-    'Platform UI 1',
-    'Project Atlas 1',
-    'Project Nova 1',
-    '1',
-    '2',
-    '3',
-  ];
-  protected readonly selectedProject = signal<string | null>(null);
-  protected readonly selectedProjects = signal<string[]>(['Platform API', 'Project Nova']);
-  protected readonly notificationsEnabled = signal(false);
-  protected readonly selectedPlan = signal('starter');
-  protected readonly selectedDate = signal<Date | null>(new Date(2032, 5, 15));
-  protected readonly calendarDate = signal<Date | null>(null);
-  protected readonly minPlaygroundDate = new Date(2025, 0, 1);
-  protected readonly maxPlaygroundDate = new Date(2030, 11, 31);
-
-  protected selectPlan(plan: string, checked: boolean): void {
-    if (checked) {
-      this.selectedPlan.set(plan);
-    }
-  }
-
-  constructor(iconRegistry: MatIconRegistry) {
-    iconRegistry.setDefaultFontSetClass('material-symbols-outlined');
-  }
-}
+export class App {}

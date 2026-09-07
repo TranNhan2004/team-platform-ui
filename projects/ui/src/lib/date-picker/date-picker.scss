@@ -19,9 +19,14 @@
   --mat-icon-button-ripple-color: var(--tp-color-press-ripple);
 }
 
+.tp-date-picker__trigger:disabled {
+  pointer-events: auto;
+  cursor: not-allowed;
+}
+
 ::ng-deep .tp-date-picker-calendar {
-  width: 360px !important;
-  height: auto !important;
+  width: 360px;
+  height: auto;
   --mat-datepicker-calendar-date-today-outline-color: var(--tp-color-blue-600);
   --mat-datepicker-calendar-date-focus-state-background-color: transparent;
   --mat-datepicker-calendar-date-hover-state-background-color: transparent;
@@ -42,6 +47,6 @@
 }
 
 ::ng-deep .mat-datepicker-content:has(.tp-date-picker-calendar) {
-  --mat-datepicker-calendar-container-shape: var(--tp-radius-sm);
-  border-radius: var(--tp-radius-sm);
+  --mat-datepicker-calendar-container-shape: var(--tp-radius-xs);
+  border-radius: var(--tp-radius-xs);
 }

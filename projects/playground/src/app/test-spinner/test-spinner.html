@@ -1,0 +1,16 @@
+<section class="component-section" aria-labelledby="spinners-title">
+  <div class="component-section__heading">
+    <h2 id="spinners-title">Spinner</h2>
+    <code>&lt;tp-spinner&gt;</code>
+  </div>
+  <div class="example-row">
+    @for (color of colors; track color) {
+      <tp-spinner [color]="color" [ariaLabel]="color + ' loading'"></tp-spinner>
+    }
+  </div>
+  <div class="example-row">
+    <tp-spinner [diameter]="24" [strokeWidth]="3"></tp-spinner>
+    <tp-spinner [diameter]="48"></tp-spinner>
+    <tp-spinner [diameter]="64" [strokeWidth]="5"></tp-spinner>
+  </div>
+</section>

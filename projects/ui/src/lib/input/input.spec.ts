@@ -43,7 +43,7 @@ describe('Input', () => {
     expect(marker).toBeTruthy();
   });
 
-  it('should show the required marker without a title', async () => {
+  it('should not show a required marker without a title', async () => {
     fixture.componentRef.setInput('title', '');
     fixture.componentRef.setInput('required', true);
     fixture.detectChanges();
@@ -51,7 +51,7 @@ describe('Input', () => {
 
     const marker = fixture.nativeElement.querySelector('.tp-input__required-marker') as HTMLElement;
 
-    expect(marker.textContent).toBe('*');
+    expect(marker).toBeNull();
   });
 
   it('should show the required error only after an empty input is touched', async () => {

@@ -1,0 +1,31 @@
+<section class="component-section" aria-labelledby="input-date-picker-title">
+  <div class="component-section__heading">
+    <h2 id="input-date-picker-title">Input date picker</h2>
+    <code>&lt;tp-input-date-picker&gt;</code>
+  </div>
+  <div class="input-grid">
+    <tp-input-date-picker title="Choose a date"></tp-input-date-picker>
+    <tp-input-date-picker
+      title="Compact date"
+      height="60px"
+      maxHeight="100px"
+    ></tp-input-date-picker>
+    <tp-input-date-picker
+      title="Preselected date"
+      dateFormat="DD-MMM-YYYY"
+      [value]="selectedDate()"
+      (valueChange)="selectedDate.set($event)"
+    ></tp-input-date-picker>
+    <tp-input-date-picker
+      title="ISO display"
+      dateFormat="YYYY-MM-DD"
+      [value]="selectedDate()"
+    ></tp-input-date-picker>
+    <tp-input-date-picker
+      title="Restricted range"
+      [minDate]="minPlaygroundDate"
+      [maxDate]="maxPlaygroundDate"
+    ></tp-input-date-picker>
+    <tp-input-date-picker title="Disabled" [disabled]="true"></tp-input-date-picker>
+  </div>
+</section>

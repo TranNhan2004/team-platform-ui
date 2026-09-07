@@ -28,6 +28,7 @@
     [attr.name]="name() || null"
     [attr.maxlength]="maxLength()"
     [attr.aria-invalid]="showError()"
+    [attr.aria-describedby]="showError() ? errorId : null"
     (blur)="markAsTouched()"
     (input)="updateValue($event)"
   ></textarea>
@@ -41,5 +42,5 @@
 </mat-form-field>
 
 @if (showError()) {
-  <div class="tp-text-area__error" role="alert">{{ displayedError() }}</div>
+  <div [id]="errorId" class="tp-text-area__error" role="alert">{{ displayedError() }}</div>
 }

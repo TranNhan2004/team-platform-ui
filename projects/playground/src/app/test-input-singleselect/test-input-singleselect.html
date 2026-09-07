@@ -1,0 +1,29 @@
+<section class="component-section" aria-labelledby="input-singleselect-title">
+  <div class="component-section__heading">
+    <h2 id="input-singleselect-title">Input single select</h2>
+    <code>&lt;tp-input-singleselect&gt;</code>
+  </div>
+  <div class="input-grid">
+    <tp-input-singleselect
+      title="Project"
+      placeholder="Choose a project"
+      [options]="projectOptions"
+      [(value)]="selectedProject"
+      hint="Choose one existing project"
+    ></tp-input-singleselect>
+    <tp-input-singleselect title="Loading projects" [loading]="true"></tp-input-singleselect>
+    <tp-input-singleselect
+      title="Required project"
+      [options]="projectOptions"
+      [required]="true"
+    ></tp-input-singleselect>
+    <tp-input-singleselect
+      title="Required project 2"
+      [options]="projectOptions"
+      [required]="true"
+    ></tp-input-singleselect>
+  </div>
+  <p>
+    Selected project: <strong>{{ selectedProject() || 'None' }}</strong>
+  </p>
+</section>

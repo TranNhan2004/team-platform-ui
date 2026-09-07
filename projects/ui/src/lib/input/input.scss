@@ -11,7 +11,7 @@
   --mat-form-field-outlined-focus-label-text-color: var(--tp-color-focus);
   --mat-form-field-outlined-caret-color: var(--tp-color-focus);
   --mat-form-field-outlined-focus-outline-width: 3px;
-  --mat-form-field-outlined-container-shape: var(--tp-radius-md);
+  --mat-form-field-outlined-container-shape: var(--tp-radius-xs);
   --mat-form-field-outlined-outline-color: var(--tp-color-border-strong);
   --mat-form-field-outlined-input-text-color: var(--tp-color-text-primary);
   --mat-form-field-outlined-label-text-color: var(--tp-color-text-secondary);
@@ -29,6 +29,10 @@
   font-size: var(--tp-input-content-size);
   line-height: normal;
   margin: 0;
+}
+
+.tp-input__control:disabled {
+  cursor: not-allowed;
 }
 
 :host ::ng-deep .tp-input {
@@ -50,6 +54,11 @@
     padding-top: 0;
     padding-bottom: 0;
   }
+
+  &.mat-form-field-disabled,
+  &.mat-form-field-disabled * {
+    cursor: not-allowed;
+  }
 }
 
 .tp-input__error {
@@ -60,16 +69,23 @@
 }
 
 :host ::ng-deep .tp-input--invalid {
+  --mat-form-field-outlined-outline-color: var(--tp-color-red-600);
+  --mat-form-field-outlined-hover-outline-color: var(--tp-color-red-600);
+  --mat-form-field-outlined-focus-outline-color: var(--tp-color-red-600);
+  --mat-form-field-outlined-outline-width: 2px;
   --mat-form-field-outlined-focus-outline-width: 2px;
-
-  .mat-mdc-notch-piece {
-    border-color: var(--tp-color-red-600) !important;
-    border-width: 2px !important;
-  }
+  --mat-form-field-outlined-label-text-color: var(--tp-color-red-600);
+  --mat-form-field-outlined-hover-label-text-color: var(--tp-color-red-600);
+  --mat-form-field-outlined-focus-label-text-color: var(--tp-color-red-600);
+  --mat-form-field-outlined-error-label-text-color: var(--tp-color-red-600);
+  --mat-form-field-outlined-error-hover-label-text-color: var(--tp-color-red-600);
+  --mat-form-field-outlined-error-focus-label-text-color: var(--tp-color-red-600);
+  --mat-form-field-outlined-caret-color: var(--tp-color-red-600);
+  --mat-form-field-outlined-error-caret-color: var(--tp-color-red-600);
 
   .mdc-notched-outline__notch {
-    border-right-color: transparent !important;
-    border-left-color: transparent !important;
+    border-right-color: transparent;
+    border-left-color: transparent;
   }
 
   .mat-mdc-floating-label {
@@ -83,13 +99,4 @@
 
 .tp-input__required-marker {
   color: var(--tp-color-red-600);
-}
-
-.tp-input__required-marker--standalone {
-  position: absolute;
-  z-index: 1;
-  top: calc(min(var(--tp-input-height), var(--tp-input-max-height)) / 2);
-  left: var(--tp-space-4);
-  transform: translateY(-50%);
-  pointer-events: none;
 }
