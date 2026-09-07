@@ -1,10 +1,25 @@
-import { ChangeDetectionStrategy, Component, computed, input, model } from '@angular/core';
+import { ScrollDispatcher } from '@angular/cdk/scrolling';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  DestroyRef,
+  inject,
+  input,
+  model,
+  viewChild,
+} from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormValueControl } from '@angular/forms/signals';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatIconModule } from '@angular/material/icon';
-import { MatSelectChange, MatSelectModule } from '@angular/material/select';
+import { MatSelect, MatSelectChange, MatSelectModule } from '@angular/material/select';
 import { TpSpinner } from '../spinner/spinner';
+import {
+  createValidationErrorId,
+  TpValidationErrors,
+  validationErrorMessage,
+} from '../utils/form-validation';
 
 export type TpSingleselectOption = string;
 
@@ -22,7 +37,7 @@ const CONTENT_SIZE_MAP: Record<TpInputSingleselectContentSize, string> = {
     '[style.--tp-input-singleselect-height]': 'height()',
     '[style.--tp-input-singleselect-max-height]': 'maxHeight()',
   },
-  imports: [MatButtonModule, MatFormFieldModule, MatIconModule, MatSelectModule, TpSpinner],
+  imports: [MatButtonModule, MatFormFieldModule, MatSelectModule, TpSpinner],
   templateUrl: './input-singleselect.html',
   styleUrl: './input-singleselect.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -30,6 +45,8 @@ const CONTENT_SIZE_MAP: Record<TpInputSingleselectContentSize, string> = {
 export class TpInputSingleselect implements FormValueControl<string | null> {
   value = model<string | null>(null);
   touched = model(false);
+  errors = input<TpValidationErrors>([]);
+  invalid = input(false);
 
   options = input<readonly TpSingleselectOption[]>([]);
   loading = input(false);
@@ -49,6 +66,17 @@ export class TpInputSingleselect implements FormValueControl<string | null> {
   maxHeight = input('var(--tp-control-height-lg)');
   contentSize = input<TpInputSingleselectContentSize>('md');
 
+  private readonly select = viewChild(MatSelect);
+  private readonly scrollDispatcher = inject(ScrollDispatcher);
+  private readonly destroyRef = inject(DestroyRef);
+
+  constructor() {
+    this.scrollDispatcher
+      .scrolled()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => this.select()?.close());
+  }
+
   protected readonly contentFontSize = computed(() => CONTENT_SIZE_MAP[this.contentSize()]);
 
   protected readonly isEmpty = computed(() => {
@@ -57,12 +85,19 @@ export class TpInputSingleselect implements FormValueControl<string | null> {
   });
 
   protected readonly hasRequiredError = computed(() => this.required() && this.isEmpty());
+  protected readonly errorId = createValidationErrorId('tp-input-singleselect-error');
 
   protected readonly showError = computed(
-    () => !!this.error() || (this.touched() && this.hasRequiredError()),
+    () =>
+      !!this.error() ||
+      this.invalid() ||
+      this.errors().length > 0 ||
+      (this.touched() && this.hasRequiredError()),
   );
 
-  protected readonly displayedError = computed(() => this.error() ?? this.requiredMessage());
+  protected readonly displayedError = computed(() =>
+    this.error() ?? validationErrorMessage(this.errors(), this.requiredMessage()),
+  );
 
   protected selectOption(event: MatSelectChange): void {
     this.value.set(event.value as TpSingleselectOption);

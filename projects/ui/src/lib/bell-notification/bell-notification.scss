@@ -16,5 +16,7 @@
 
   &:disabled {
     opacity: 0.55;
+    pointer-events: auto;
+    cursor: not-allowed;
   }
 }

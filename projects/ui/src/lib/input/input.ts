@@ -2,6 +2,11 @@ import { ChangeDetectionStrategy, Component, computed, input, model } from '@ang
 import { FormValueControl } from '@angular/forms/signals';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import {
+  createValidationErrorId,
+  TpValidationErrors,
+  validationErrorMessage,
+} from '../utils/form-validation';
 
 export type TpInputVariant = 'text' | 'number';
 export type TpInputValue = string | number | null;
@@ -15,10 +20,6 @@ const CONTENT_SIZE_MAP: Record<TpInputContentSize, string> = {
 
 @Component({
   selector: 'tp-input',
-  host: {
-    '[style.--tp-input-height]': 'height()',
-    '[style.--tp-input-max-height]': 'maxHeight()',
-  },
   imports: [MatFormFieldModule, MatInputModule],
   templateUrl: './input.html',
   styleUrl: './input.scss',
@@ -27,9 +28,12 @@ const CONTENT_SIZE_MAP: Record<TpInputContentSize, string> = {
 export class TpInput implements FormValueControl<TpInputValue> {
   value = model<TpInputValue>('');
   touched = model(false);
+  errors = input<TpValidationErrors>([]);
+  invalid = input(false);
 
   variant = input<TpInputVariant>('text');
   title = input('');
+  placeholder = input('');
   required = input(false);
   disabled = input(false);
   readonly = input(false);
@@ -59,12 +63,19 @@ export class TpInput implements FormValueControl<TpInputValue> {
   });
 
   protected readonly hasRequiredError = computed(() => this.required() && this.isEmpty());
+  protected readonly errorId = createValidationErrorId('tp-input-error');
 
   protected readonly showError = computed(
-    () => !!this.error() || (this.touched() && this.hasRequiredError()),
+    () =>
+      !!this.error() ||
+      this.invalid() ||
+      this.errors().length > 0 ||
+      (this.touched() && this.hasRequiredError()),
   );
 
-  protected readonly displayedError = computed(() => this.error() ?? this.requiredMessage());
+  protected readonly displayedError = computed(() =>
+    this.error() ?? validationErrorMessage(this.errors(), this.requiredMessage()),
+  );
 
   protected updateValue(event: Event): void {
     const inputElement = event.target as HTMLInputElement;

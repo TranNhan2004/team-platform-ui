@@ -13,6 +13,6 @@
   @if (hasImage()) {
     <img class="tp-avatar__image" [src]="src()!" [alt]="alt()" (error)="handleImageError()" />
   } @else {
-    <mat-icon class="tp-avatar__fallback" aria-hidden="true">person</mat-icon>
+    <span class="tp-icon material-symbols-outlined tp-avatar__fallback" aria-hidden="true">person</span>
   }
 </button>

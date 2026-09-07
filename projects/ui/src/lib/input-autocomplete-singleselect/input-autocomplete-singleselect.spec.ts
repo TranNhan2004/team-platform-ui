@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TpInputAutocomplete } from './input-autocomplete';
+import { TpInputAutocompleteSingleselect } from './input-autocomplete-singleselect';
 
-describe('InputAutocomplete', () => {
-  let component: TpInputAutocomplete;
-  let fixture: ComponentFixture<TpInputAutocomplete>;
+describe('InputAutocompleteSingleselect', () => {
+  let component: TpInputAutocompleteSingleselect;
+  let fixture: ComponentFixture<TpInputAutocompleteSingleselect>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [TpInputAutocomplete],
+      imports: [TpInputAutocompleteSingleselect],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(TpInputAutocomplete);
+    fixture = TestBed.createComponent(TpInputAutocompleteSingleselect);
     component = fixture.componentInstance;
     fixture.detectChanges();
     await fixture.whenStable();
@@ -66,7 +66,7 @@ describe('InputAutocomplete', () => {
     await fixture.whenStable();
 
     const error = fixture.nativeElement.querySelector(
-      '.tp-input-autocomplete__error',
+      '.tp-input-autocomplete-singleselect__error',
     ) as HTMLElement;
 
     expect(input.getAttribute('aria-invalid')).toBe('true');

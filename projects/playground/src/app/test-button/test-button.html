@@ -1,0 +1,30 @@
+<section class="component-section" aria-labelledby="buttons-title">
+  <div class="component-section__heading">
+    <h2 id="buttons-title">Button</h2>
+    <code>&lt;tp-button&gt;</code>
+  </div>
+
+  @for (variant of buttonVariants; track variant) {
+    <div class="example-group">
+      <h3>{{ variant }}</h3>
+      <div class="example-row">
+        @for (color of colors; track color) {
+          <tp-button [variant]="variant" [color]="color" [tooltipTitle]="color">
+            {{ color }}
+          </tp-button>
+        }
+      </div>
+    </div>
+  }
+
+  <div class="example-group">
+    <h3>Dimensions and states</h3>
+    <div class="example-row">
+      <tp-button height="32px" width="72px">32 px</tp-button>
+      <tp-button height="40px" width="96px">40 px</tp-button>
+      <tp-button height="48px" width="120px">48 px</tp-button>
+      <tp-button [disabled]="true">Disabled</tp-button>
+    </div>
+    <tp-button width="100%">Full-width button</tp-button>
+  </div>
+</section>

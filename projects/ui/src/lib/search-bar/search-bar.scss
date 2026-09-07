@@ -9,7 +9,7 @@
   height: calc(var(--tp-control-height-md) - var(--tp-space-1));
   overflow: hidden;
   border: 1px solid var(--tp-color-border-strong);
-  border-radius: var(--tp-radius-md);
+  border-radius: var(--tp-radius-xs);
   background: var(--tp-color-surface);
   box-shadow: var(--tp-shadow-sm);
   transition: border-color var(--tp-transition-normal);

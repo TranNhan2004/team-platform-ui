@@ -22,6 +22,22 @@ describe('InputMultiselect', () => {
     expect(component).toBeTruthy();
   });
 
+  it('should show an up or down chevron based on the panel state', () => {
+    const arrowButton = fixture.nativeElement.querySelector(
+      '.tp-input-multiselect__trailing-action',
+    ) as HTMLButtonElement;
+    const arrow = arrowButton.querySelector('.tp-icon') as HTMLElement;
+
+    expect(arrow.textContent?.trim()).toBe('keyboard_arrow_down');
+    (component as unknown as { optionsOpen: { set: (open: boolean) => void } }).optionsOpen.set(
+      true,
+    );
+    fixture.detectChanges();
+
+    expect(arrow.textContent?.trim()).toBe('keyboard_arrow_up');
+    expect(arrowButton.getAttribute('aria-expanded')).toBe('true');
+  });
+
   it('should toggle one selected value', () => {
     const toggleOption = (
       component as unknown as { toggleOption: (option: string) => void }
@@ -32,6 +48,22 @@ describe('InputMultiselect', () => {
 
     toggleOption.call(component, 'Platform UI');
     expect(component.value()).toEqual([]);
+  });
+
+  it('should update the panel position after a pointer selection', () => {
+    const updatePanelPosition = vi.spyOn(
+      component as unknown as { updatePanelPosition: () => void },
+      'updatePanelPosition',
+    );
+    const toggleOptionFromPointer = (
+      component as unknown as {
+        toggleOptionFromPointer: (option: string, event: MouseEvent) => void;
+      }
+    ).toggleOptionFromPointer;
+
+    toggleOptionFromPointer.call(component, 'Platform UI', new MouseEvent('click'));
+
+    expect(updatePanelPosition).toHaveBeenCalledOnce();
   });
 
   it('should select and unselect every option', async () => {
@@ -64,7 +96,6 @@ describe('InputMultiselect', () => {
           option: {
             value: string;
             deselect: (emitEvent: boolean) => void;
-            setInactiveStyles: () => void;
           };
         }) => void;
       }
@@ -73,7 +104,6 @@ describe('InputMultiselect', () => {
       option: {
         value: '__tp-input-multiselect-select-all__',
         deselect: () => undefined,
-        setInactiveStyles: () => undefined,
       },
     });
 
@@ -133,23 +163,17 @@ describe('InputMultiselect', () => {
     expect(triggerInput.value).toBe('Platform API');
   });
 
-  it('should clear deferred panel callbacks when destroyed', async () => {
+  it('should clear deferred panel-position callbacks when destroyed', async () => {
     vi.useFakeTimers();
     const deferredCallback = vi.fn();
     const internals = component as unknown as {
-      pendingPanelScrollTop: number | undefined;
       panelPositionTimeout: ReturnType<typeof setTimeout> | undefined;
-      panelReopenTimeout: ReturnType<typeof setTimeout> | undefined;
     };
 
-    internals.pendingPanelScrollTop = 120;
-    internals.panelReopenTimeout = setTimeout(deferredCallback, 0);
     internals.panelPositionTimeout = setTimeout(deferredCallback, 0);
 
     fixture.destroy();
 
-    expect(internals.pendingPanelScrollTop).toBeUndefined();
-    expect(internals.panelReopenTimeout).toBeUndefined();
     expect(internals.panelPositionTimeout).toBeUndefined();
 
     await vi.runAllTimersAsync();

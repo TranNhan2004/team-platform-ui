@@ -56,4 +56,16 @@ describe('DatePicker', () => {
 
     expect(picker.startAt).toEqual(selected);
   });
+
+  it('should close the calendar when the document is scrolled', async () => {
+    const picker = fixture.debugElement
+      .query(By.directive(MatDatepicker))
+      .injector.get(MatDatepicker<Date>);
+    const close = vi.spyOn(picker, 'close');
+
+    document.dispatchEvent(new Event('scroll'));
+    await new Promise((resolve) => setTimeout(resolve, 30));
+
+    expect(close).toHaveBeenCalled();
+  });
 });

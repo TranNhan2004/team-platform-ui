@@ -19,3 +19,15 @@
   --mat-radio-disabled-selected-icon-color: var(--tp-color-gray-400);
   --mat-radio-disabled-unselected-icon-color: var(--tp-color-gray-400);
 }
+
+.tp-radio.mat-mdc-radio-disabled {
+  pointer-events: auto;
+  cursor: not-allowed;
+}
+
+.tp-radio.mat-mdc-radio-disabled,
+.tp-radio.mat-mdc-radio-disabled *,
+.tp-radio.mat-mdc-radio-disabled .mdc-radio--disabled,
+.tp-radio.mat-mdc-radio-disabled label {
+  cursor: not-allowed;
+}

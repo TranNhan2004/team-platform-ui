@@ -4,10 +4,10 @@ import {
   Component,
   computed,
   input,
-  numberAttribute,
 } from '@angular/core';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { TP_COMPONENT_COLOR_MAP, TpComponentColor } from '../utils/component-color';
+import { positiveNumberAttribute } from '../utils/number-input';
 
 export type TpSpinnerColor = TpComponentColor;
 
@@ -20,8 +20,8 @@ export type TpSpinnerColor = TpComponentColor;
 })
 export class TpSpinner {
   color = input<TpSpinnerColor>('blue');
-  diameter = input(48, { transform: numberAttribute });
-  strokeWidth = input(4, { transform: numberAttribute });
+  diameter = input(48, { transform: positiveNumberAttribute });
+  strokeWidth = input(4, { transform: positiveNumberAttribute });
   ariaLabel = input('Loading');
 
   protected readonly spinnerStyle = computed(() => ({

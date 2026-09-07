@@ -1,0 +1,24 @@
+<section class="component-section" aria-labelledby="cards-title">
+  <div class="component-section__heading">
+    <h2 id="cards-title">Card</h2>
+    <code>&lt;tp-card&gt;</code>
+  </div>
+  <div class="card-grid">
+    <tp-card>
+      <div class="card-content">
+        <h3>Default card</h3>
+        <p>Uses the shared surface, text, border, radius, and shadow tokens.</p>
+      </div>
+    </tp-card>
+    <tp-card
+      color="var(--tp-color-blue-50)"
+      textColor="var(--tp-color-blue-900)"
+      borderColor="var(--tp-color-blue-200)"
+    >
+      <div class="card-content">
+        <h3>Customized card</h3>
+        <p>Color inputs can reference any predefined palette token.</p>
+      </div>
+    </tp-card>
+  </div>
+</section>

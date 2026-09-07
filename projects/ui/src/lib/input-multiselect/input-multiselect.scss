@@ -11,7 +11,7 @@
   --mat-form-field-outlined-focus-label-text-color: var(--tp-color-focus);
   --mat-form-field-outlined-caret-color: var(--tp-color-focus);
   --mat-form-field-outlined-focus-outline-width: 3px;
-  --mat-form-field-outlined-container-shape: var(--tp-radius-md);
+  --mat-form-field-outlined-container-shape: var(--tp-radius-xs);
   --mat-form-field-outlined-outline-color: var(--tp-color-border-strong);
   --mat-form-field-outlined-input-text-color: var(--tp-color-text-primary);
   --mat-form-field-outlined-label-text-color: var(--tp-color-text-secondary);
@@ -25,6 +25,7 @@
   display: flex;
   position: relative;
   align-items: center;
+  flex-flow: row wrap;
   width: 100%;
   min-width: 0;
   min-height: 24px;
@@ -32,13 +33,9 @@
   cursor: pointer;
 }
 
-.tp-input-multiselect--inline .tp-input-multiselect__value {
-  flex-flow: row wrap;
-}
-
-.tp-input-multiselect--new-line .tp-input-multiselect__value {
-  flex-direction: column;
-  align-items: flex-start;
+:host ::ng-deep .tp-input-multiselect--disabled,
+:host ::ng-deep .tp-input-multiselect--disabled * {
+  cursor: not-allowed;
 }
 
 .tp-input-multiselect__chip {
@@ -85,11 +82,8 @@
     background: color-mix(in srgb, currentcolor 12%, transparent);
   }
 
-  .mat-icon {
-    width: 14px;
-    height: 14px;
-    font-size: 14px;
-    line-height: 14px;
+  .tp-icon {
+    --tp-icon-size: 14px;
   }
 }
 
@@ -109,10 +103,8 @@
   cursor: pointer;
 }
 
-.tp-input-multiselect--new-line .tp-input-multiselect__trigger {
-  flex-basis: 24px;
-  align-self: stretch;
-  width: 100%;
+.tp-input-multiselect__trigger:disabled {
+  cursor: not-allowed;
 }
 
 .tp-input-multiselect--has-values .tp-input-multiselect__trigger {
@@ -126,11 +118,17 @@
 }
 
 .tp-input-multiselect__trailing-action {
+  --tp-icon-size: 18px;
   --mat-icon-button-icon-color: var(--tp-color-text-secondary);
   --mat-icon-button-state-layer-color: var(--tp-color-text-secondary);
   --mat-icon-button-state-layer-size: 32px;
   --mat-icon-button-icon-size: 18px;
   margin-right: var(--tp-space-1);
+}
+
+.tp-input-multiselect__trailing-action:disabled {
+  pointer-events: auto;
+  cursor: not-allowed;
 }
 
 .tp-input-multiselect__error {
@@ -213,18 +211,46 @@
   }
 }
 
-:host ::ng-deep .tp-input-multiselect__panel {
+::ng-deep .tp-input-multiselect__panel {
   .tp-input-multiselect__option .mdc-list-item__primary-text {
     display: flex;
     flex: 1 1 auto;
-    align-items: stretch;
+    align-items: center;
+    justify-content: flex-start;
     margin-right: 0;
   }
 
-  .tp-input-multiselect__option-control {
+  .tp-input-multiselect__option-content {
+    // Extend through MatOption's padding so clicks cannot fall through and close the panel.
     display: flex;
     flex: 1 1 auto;
     align-items: center;
+    box-sizing: border-box;
+    min-width: 0;
+    min-height: 48px;
+    margin: -4px -16px;
+    padding: 4px 16px;
+    gap: var(--tp-space-2);
+    cursor: pointer;
+  }
+
+  .tp-input-multiselect__option-control {
+    flex: 0 0 18px;
+    pointer-events: none;
+
+    * {
+      pointer-events: none;
+    }
+
+    .tp-checkbox {
+      margin: 0;
+    }
+  }
+
+  .tp-input-multiselect__option-label {
+    flex: 1 1 auto;
+    min-width: 0;
+    text-align: left;
   }
 
   .tp-input-multiselect__select-all {
@@ -244,13 +270,13 @@
   --mat-form-field-outlined-focus-outline-width: 2px;
 
   .mat-mdc-notch-piece {
-    border-color: var(--tp-color-red-600) !important;
-    border-width: 2px !important;
+    border-color: var(--tp-color-red-600);
+    border-width: 2px;
   }
 
   .mdc-notched-outline__notch {
-    border-right-color: transparent !important;
-    border-left-color: transparent !important;
+    border-right-color: transparent;
+    border-left-color: transparent;
   }
 
   .mat-mdc-floating-label {

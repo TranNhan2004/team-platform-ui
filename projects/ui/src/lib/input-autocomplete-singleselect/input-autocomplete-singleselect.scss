@@ -1,0 +1,113 @@
+:host {
+  position: relative;
+  display: block;
+}
+
+.tp-input-autocomplete-singleselect {
+  --tp-input-autocomplete-singleselect-height: var(--tp-control-height-md);
+  --tp-input-autocomplete-singleselect-max-height: var(--tp-control-height-lg);
+  --tp-input-autocomplete-singleselect-content-size: var(--tp-text-md);
+  --mat-form-field-outlined-focus-outline-color: var(--tp-color-focus);
+  --mat-form-field-outlined-focus-label-text-color: var(--tp-color-focus);
+  --mat-form-field-outlined-caret-color: var(--tp-color-focus);
+  --mat-form-field-outlined-focus-outline-width: 3px;
+  --mat-form-field-outlined-container-shape: var(--tp-radius-xs);
+  --mat-form-field-outlined-outline-color: var(--tp-color-border-strong);
+  --mat-form-field-outlined-input-text-color: var(--tp-color-text-primary);
+  --mat-form-field-outlined-label-text-color: var(--tp-color-text-secondary);
+  --mat-form-field-error-text-color: var(--tp-color-red-600);
+  --mat-form-field-container-height: min(
+    var(--tp-input-autocomplete-singleselect-height),
+    var(--tp-input-autocomplete-singleselect-max-height)
+  );
+  --mat-form-field-container-vertical-padding: var(--tp-space-2);
+  --mat-form-field-container-text-size: var(--tp-input-autocomplete-singleselect-content-size);
+  --mat-form-field-outlined-label-text-size: var(--tp-input-autocomplete-singleselect-content-size);
+  --mat-form-field-outlined-label-text-populated-size: var(
+    --tp-input-autocomplete-singleselect-content-size
+  );
+}
+
+.tp-input-autocomplete-singleselect__control {
+  height: auto;
+  max-height: 100%;
+  margin: 0;
+  font-size: var(--tp-input-autocomplete-singleselect-content-size);
+  line-height: normal;
+}
+
+.tp-input-autocomplete-singleselect__control:disabled {
+  cursor: not-allowed;
+}
+
+:host ::ng-deep .tp-input-autocomplete-singleselect {
+  .mat-mdc-text-field-wrapper.mdc-text-field--outlined,
+  .mat-mdc-form-field-flex,
+  .mat-mdc-form-field-infix {
+    height: min(
+      var(--tp-input-autocomplete-singleselect-height),
+      var(--tp-input-autocomplete-singleselect-max-height)
+    );
+    max-height: var(--tp-input-autocomplete-singleselect-max-height);
+  }
+
+  .mat-mdc-form-field-flex,
+  .mat-mdc-form-field-infix {
+    align-items: center;
+  }
+
+  .mat-mdc-form-field-infix {
+    display: flex;
+    min-height: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+
+  &.mat-form-field-disabled,
+  &.mat-form-field-disabled * {
+    cursor: not-allowed;
+  }
+}
+
+.tp-input-autocomplete-singleselect__error {
+  margin-top: var(--tp-space-1);
+  padding: 0 var(--tp-space-4);
+  color: var(--tp-color-red-600);
+  font-size: var(--tp-text-sm);
+}
+
+.tp-input-autocomplete-singleselect__required-marker {
+  color: var(--tp-color-red-600);
+}
+
+::ng-deep .tp-input-autocomplete-singleselect__panel {
+  .tp-input-autocomplete-singleselect__feedback-content {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--tp-space-2);
+    color: var(--tp-color-text-secondary);
+    line-height: 1;
+  }
+}
+
+:host ::ng-deep .tp-input-autocomplete-singleselect--invalid {
+  --mat-form-field-outlined-focus-outline-width: 2px;
+
+  .mat-mdc-notch-piece {
+    border-color: var(--tp-color-red-600);
+    border-width: 2px;
+  }
+
+  .mdc-notched-outline__notch {
+    border-right-color: transparent;
+    border-left-color: transparent;
+  }
+
+  .mat-mdc-floating-label {
+    color: var(--tp-color-red-600);
+  }
+
+  .tp-input-autocomplete-singleselect__control {
+    caret-color: var(--tp-color-red-600);
+  }
+}

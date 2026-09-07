@@ -1,5 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
+import { MatDatepicker } from '@angular/material/datepicker';
+
 import { TP_DEFAULT_MAX_DATE, TP_DEFAULT_MIN_DATE, TpDatePicker } from '../date-picker/date-picker';
 
 import { TpInputDatePicker } from './input-date-picker';
@@ -23,7 +25,7 @@ describe('InputDatePicker', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should show the required marker without a title', async () => {
+  it('should not show a required marker without a title', async () => {
     fixture.componentRef.setInput('title', '');
     fixture.componentRef.setInput('required', true);
     fixture.detectChanges();
@@ -33,7 +35,7 @@ describe('InputDatePicker', () => {
       '.tp-input-date-picker__required-marker',
     ) as HTMLElement;
 
-    expect(marker.textContent).toBe('*');
+    expect(marker).toBeNull();
   });
 
   it('should default its allowed range to 1 January 1900 through 1 January 2100', () => {
@@ -52,6 +54,34 @@ describe('InputDatePicker', () => {
     datePicker.value.set(selectedDate);
 
     expect(component.value()).toEqual(selectedDate);
+  });
+
+  it.each(['Backspace', 'Delete'])('should clear the selected date with the %s key', (key) => {
+    component.value.set(new Date(2030, 3, 12));
+    fixture.detectChanges();
+
+    const input = fixture.nativeElement.querySelector(
+      '.tp-input-date-picker__control',
+    ) as HTMLInputElement;
+    const event = new KeyboardEvent('keydown', { key, bubbles: true, cancelable: true });
+    input.dispatchEvent(event);
+    fixture.detectChanges();
+
+    expect(event.defaultPrevented).toBe(true);
+    expect(component.value()).toBeNull();
+    expect(input.value).toBe('');
+  });
+
+  it('should close its calendar when the document is scrolled', async () => {
+    const picker = fixture.debugElement
+      .query(By.directive(MatDatepicker))
+      .injector.get(MatDatepicker<Date>);
+    const close = vi.spyOn(picker, 'close');
+
+    document.dispatchEvent(new Event('scroll'));
+    await new Promise((resolve) => setTimeout(resolve, 30));
+
+    expect(close).toHaveBeenCalled();
   });
 
   it.each([

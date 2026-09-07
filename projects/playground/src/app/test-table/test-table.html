@@ -1,0 +1,146 @@
+<section class="test-table" aria-labelledby="table-playground-title">
+  <div class="test-table__heading">
+    <div>
+      <h2 id="table-playground-title">Table</h2>
+      <p>
+        100 example projects, with filter controls, sortable columns, pagination, row activation,
+        tooltips, and actions.
+      </p>
+    </div>
+    <code>&lt;tp-table&gt;</code>
+  </div>
+
+  <div class="test-table__state-controls">
+    <tp-text-button pressEffectShape="rect" hoverShape="rect" (onClick)="toggleLoading()">
+      {{ manuallyLoading() ? 'Stop loading' : 'Show loading' }}
+    </tp-text-button>
+    <tp-text-button pressEffectShape="rect" hoverShape="rect" (onClick)="toggleEmptyState()">
+      {{ emptyState() ? 'Show project rows' : 'Show custom empty state' }}
+    </tp-text-button>
+    <span class="test-table__filter-status"
+      >Filters apply after a 500 ms debounce. Reload keeps filters and shows loading for 1
+      second.</span
+    >
+  </div>
+
+  <tp-table
+    [data]="tableData()"
+    [config]="tableConfig()"
+    [state]="tableState()"
+    [actionColumn]="actionColumn"
+    (onRowClick)="showRow($event)"
+    (onPaginationChange)="showPage($event)"
+    (onReload)="reload()"
+    (onSortChange)="showSort($event)"
+  >
+    <ng-template tpTableEmpty>
+      <span class="material-symbols-outlined"> search_off </span><br />
+      <span class="test-table__empty-content">No projects match the current filters.</span>
+    </ng-template>
+
+    <ng-template tpTableFilter="id">
+      <tp-input
+        variant="number"
+        placeholder="ID"
+        aria-label="Filter by ID"
+        height="40px"
+        [(value)]="idFilter"
+      ></tp-input>
+    </ng-template>
+    <ng-template tpTableFilter="name">
+      <tp-input-autocomplete-singleselect
+        placeholder="Filter projects"
+        ariaLabel="Filter by project"
+        [options]="projectOptions"
+        height="40px"
+        [(value)]="projectFilter"
+      ></tp-input-autocomplete-singleselect>
+    </ng-template>
+    <ng-template tpTableFilter="owner">
+      <tp-input-autocomplete-singleselect
+        placeholder="Filter owners"
+        ariaLabel="Filter by owner"
+        [options]="ownerOptions"
+        height="40px"
+        [(value)]="ownerFilter"
+      ></tp-input-autocomplete-singleselect>
+    </ng-template>
+    <ng-template tpTableFilter="team">
+      <tp-input-autocomplete-multiselect
+        placeholder="Filter teams"
+        ariaLabel="Filter by team"
+        [options]="teamOptions"
+        minHeight="40px"
+        [maxChips]="0"
+        [(value)]="teamFilter"
+      ></tp-input-autocomplete-multiselect>
+    </ng-template>
+    <ng-template tpTableFilter="status">
+      <tp-input-autocomplete-multiselect
+        placeholder="Filter statuses"
+        ariaLabel="Filter by status"
+        [options]="statusOptions"
+        minHeight="40px"
+        [maxChips]="1"
+        [(value)]="statusFilter"
+      ></tp-input-autocomplete-multiselect>
+    </ng-template>
+    <ng-template tpTableFilter="updated">
+      <tp-input-date-picker
+        placeholder="Select date"
+        height="40px"
+        [(value)]="updatedFilter"
+      ></tp-input-date-picker>
+    </ng-template>
+    <ng-template tpTableFilter="description">
+      <tp-input placeholder="Description" height="40px" [(value)]="descriptionFilter"></tp-input>
+    </ng-template>
+
+    <ng-template tpTableActionContent let-row>
+      <tp-text-button
+        pressEffectShape="rect"
+        hoverShape="rect"
+        contentAlignment="start"
+        color="black"
+        [fontSize]="textButtonFontSize()"
+        [fontWeight]="textButtonFontWeight()"
+        (onClick)="showAction('View details', row)"
+      >
+        <span class="tp-icon material-symbols-outlined" aria-hidden="true">visibility</span>
+        <span>View details</span>
+      </tp-text-button>
+      <tp-text-button
+        pressEffectShape="rect"
+        hoverShape="rect"
+        contentAlignment="start"
+        color="black"
+        [fontSize]="textButtonFontSize()"
+        [fontWeight]="textButtonFontWeight()"
+        (onClick)="showAction('Edit project', row)"
+      >
+        <span class="tp-icon material-symbols-outlined" aria-hidden="true">edit</span>
+        <span>Edit project</span>
+      </tp-text-button>
+      <tp-text-button
+        pressEffectShape="rect"
+        hoverShape="rect"
+        contentAlignment="start"
+        color="black"
+        [fontSize]="textButtonFontSize()"
+        [fontWeight]="textButtonFontWeight()"
+        [disabled]="row.status === 'Archived'"
+        (onClick)="showAction('Archive', row)"
+      >
+        <span class="tp-icon material-symbols-outlined" aria-hidden="true">archive</span>
+        <span>Archive</span>
+      </tp-text-button>
+    </ng-template>
+  </tp-table>
+
+  <p class="test-table__event" aria-live="polite">{{ lastAction() }}</p>
+  @if (selectedRow(); as row) {
+    <p class="test-table__selection">
+      Selected: <strong>{{ row.name }}</strong> · {{ row.owner }}
+    </p>
+  }
+</section>

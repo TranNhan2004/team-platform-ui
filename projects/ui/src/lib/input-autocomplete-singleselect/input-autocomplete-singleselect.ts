@@ -1,35 +1,54 @@
-import { ChangeDetectionStrategy, Component, computed, input, model } from '@angular/core';
-import { FormValueControl } from '@angular/forms/signals';
 import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  DestroyRef,
+  inject,
+  input,
+  model,
+  viewChild,
+} from '@angular/core';
+import { ScrollDispatcher } from '@angular/cdk/scrolling';
+import { FormValueControl } from '@angular/forms/signals';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import {
+  MatAutocompleteTrigger,
   MatAutocompleteModule,
   MatAutocompleteSelectedEvent,
 } from '@angular/material/autocomplete';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { TpSpinner } from '../spinner/spinner';
+import {
+  createValidationErrorId,
+  TpValidationErrors,
+  validationErrorMessage,
+} from '../utils/form-validation';
 
-export type TpAutocompleteOption = string;
+export type TpAutocompleteSingleselectOption = string;
 
-export type TpInputAutocompleteContentSize = 'sm' | 'md' | 'lg';
+export type TpInputAutocompleteSingleselectContentSize = 'sm' | 'md' | 'lg';
 
-const CONTENT_SIZE_MAP: Record<TpInputAutocompleteContentSize, string> = {
+const CONTENT_SIZE_MAP: Record<TpInputAutocompleteSingleselectContentSize, string> = {
   sm: 'var(--tp-text-sm)',
   md: 'var(--tp-text-md)',
   lg: 'var(--tp-text-lg)',
 };
 
 @Component({
-  selector: 'tp-input-autocomplete',
+  selector: 'tp-input-autocomplete-singleselect',
   imports: [MatAutocompleteModule, MatFormFieldModule, MatInputModule, TpSpinner],
-  templateUrl: './input-autocomplete.html',
-  styleUrl: './input-autocomplete.scss',
+  templateUrl: './input-autocomplete-singleselect.html',
+  styleUrl: './input-autocomplete-singleselect.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TpInputAutocomplete implements FormValueControl<string> {
+export class TpInputAutocompleteSingleselect implements FormValueControl<string> {
   value = model('');
   touched = model(false);
+  errors = input<TpValidationErrors>([]);
+  invalid = input(false);
 
-  options = input<readonly TpAutocompleteOption[]>([]);
+  options = input<readonly TpAutocompleteSingleselectOption[]>([]);
   loading = input(false);
   title = input('');
   placeholder = input('');
@@ -46,7 +65,18 @@ export class TpInputAutocomplete implements FormValueControl<string> {
   maxWidth = input('none');
   height = input('var(--tp-control-height-md)');
   maxHeight = input('var(--tp-control-height-lg)');
-  contentSize = input<TpInputAutocompleteContentSize>('md');
+  contentSize = input<TpInputAutocompleteSingleselectContentSize>('md');
+
+  private readonly suggestionsTrigger = viewChild(MatAutocompleteTrigger);
+  private readonly scrollDispatcher = inject(ScrollDispatcher);
+  private readonly destroyRef = inject(DestroyRef);
+
+  constructor() {
+    this.scrollDispatcher
+      .scrolled()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => this.suggestionsTrigger()?.closePanel());
+  }
 
   protected readonly query = computed(() => this.value().trim());
 
@@ -63,19 +93,26 @@ export class TpInputAutocomplete implements FormValueControl<string> {
   protected readonly isEmpty = computed(() => this.value().trim() === '');
 
   protected readonly hasRequiredError = computed(() => this.required() && this.isEmpty());
+  protected readonly errorId = createValidationErrorId('tp-input-autocomplete-singleselect-error');
 
   protected readonly showError = computed(
-    () => !!this.error() || (this.touched() && this.hasRequiredError()),
+    () =>
+      !!this.error() ||
+      this.invalid() ||
+      this.errors().length > 0 ||
+      (this.touched() && this.hasRequiredError()),
   );
 
-  protected readonly displayedError = computed(() => this.error() ?? this.requiredMessage());
+  protected readonly displayedError = computed(() =>
+    this.error() ?? validationErrorMessage(this.errors(), this.requiredMessage()),
+  );
 
   protected updateValue(event: Event): void {
     this.value.set((event.target as HTMLInputElement).value);
   }
 
   protected selectOption(event: MatAutocompleteSelectedEvent): void {
-    this.value.set(event.option.value as TpAutocompleteOption);
+    this.value.set(event.option.value as TpAutocompleteSingleselectOption);
   }
 
   protected markAsTouched(): void {

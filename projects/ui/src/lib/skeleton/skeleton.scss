@@ -16,7 +16,7 @@
 }
 
 .tp-skeleton--text {
-  border-radius: var(--tp-radius-sm);
+  border-radius: var(--tp-radius-xs);
 }
 
 .tp-skeleton--circle {
@@ -24,7 +24,7 @@
 }
 
 .tp-skeleton--rectangle {
-  border-radius: var(--tp-radius-md);
+  border-radius: var(--tp-radius-xs);
 }
 
 @keyframes tp-skeleton-loading {

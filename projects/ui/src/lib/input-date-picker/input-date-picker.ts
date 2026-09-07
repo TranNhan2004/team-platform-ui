@@ -2,7 +2,16 @@ import { ChangeDetectionStrategy, Component, computed, input, model } from '@ang
 import { FormValueControl } from '@angular/forms/signals';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { TP_DEFAULT_MAX_DATE, TP_DEFAULT_MIN_DATE, TpDatePicker } from '../date-picker/date-picker';
+import {
+  createTpDefaultMaxDate,
+  createTpDefaultMinDate,
+  TpDatePicker,
+} from '../date-picker/date-picker';
+import {
+  createValidationErrorId,
+  TpValidationErrors,
+  validationErrorMessage,
+} from '../utils/form-validation';
 
 export type TpDateFormat = 'DD-MM-YYYY' | 'DD-MMM-YYYY' | 'MM-DD-YYYY' | 'YYYY-MM-DD';
 
@@ -23,10 +32,6 @@ const MONTH_NAMES = [
 
 @Component({
   selector: 'tp-input-date-picker',
-  host: {
-    '[style.--tp-input-date-picker-height]': 'height()',
-    '[style.--tp-input-date-picker-max-height]': 'maxHeight()',
-  },
   imports: [TpDatePicker, MatFormFieldModule, MatInputModule],
   templateUrl: './input-date-picker.html',
   styleUrl: './input-date-picker.scss',
@@ -34,19 +39,38 @@ const MONTH_NAMES = [
 })
 export class TpInputDatePicker implements FormValueControl<Date | null> {
   value = model<Date | null>(null);
+  touched = model(false);
+  errors = input<TpValidationErrors>([]);
+  invalid = input(false);
 
-  title = input('Date');
+  title = input('');
+  placeholder = input('Select date');
   dateFormat = input<TpDateFormat>('DD-MM-YYYY');
-  minDate = input<Date>(TP_DEFAULT_MIN_DATE);
-  maxDate = input<Date>(TP_DEFAULT_MAX_DATE);
+  minDate = input<Date>(createTpDefaultMinDate());
+  maxDate = input<Date>(createTpDefaultMaxDate());
   disabled = input(false);
   readonly = input(false);
   required = input(false);
+  error = input<string | null>(null);
+  requiredMessage = input('This field is required');
   name = input('');
   width = input('100%');
   maxWidth = input('none');
   height = input('var(--tp-control-height-md)');
   maxHeight = input('var(--tp-control-height-lg)');
+
+  protected readonly errorId = createValidationErrorId('tp-input-date-picker-error');
+  protected readonly hasRequiredError = computed(() => this.required() && !this.value());
+  protected readonly showError = computed(
+    () =>
+      !!this.error() ||
+      this.invalid() ||
+      this.errors().length > 0 ||
+      (this.touched() && this.hasRequiredError()),
+  );
+  protected readonly displayedError = computed(() =>
+    this.error() ?? validationErrorMessage(this.errors(), this.requiredMessage()),
+  );
 
   protected readonly formattedValue = computed(() => {
     const date = this.value();
@@ -70,5 +94,18 @@ export class TpInputDatePicker implements FormValueControl<Date | null> {
 
   protected selectDate(date: Date | null): void {
     this.value.set(date);
+    this.touched.set(true);
+  }
+
+  protected clearOnKeydown(event: KeyboardEvent): void {
+    if ((event.key !== 'Backspace' && event.key !== 'Delete') || !this.value()) return;
+
+    event.preventDefault();
+    this.value.set(null);
+    this.touched.set(true);
+  }
+
+  protected markAsTouched(): void {
+    this.touched.set(true);
   }
 }

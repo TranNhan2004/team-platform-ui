@@ -1,5 +1,4 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { TpInputSingleselect } from './input-singleselect';
 
 describe('InputSingleselect', () => {

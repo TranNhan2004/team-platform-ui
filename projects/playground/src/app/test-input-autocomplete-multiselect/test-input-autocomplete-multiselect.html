@@ -1,0 +1,31 @@
+<section class="component-section" aria-labelledby="input-autocomplete-multiselect-title">
+  <div class="component-section__heading">
+    <h2 id="input-autocomplete-multiselect-title">Input autocomplete multi select</h2>
+    <code>&lt;tp-input-autocomplete-multiselect&gt;</code>
+  </div>
+  <div class="input-grid">
+    <tp-input-autocomplete-multiselect
+      title="Projects"
+      placeholder="Search projects"
+      [options]="projectOptions"
+      [(value)]="selectedProjects"
+      [maxChipContentLength]="14"
+      [maxChips]="2"
+      hint="Type to filter and select one or more projects"
+    ></tp-input-autocomplete-multiselect>
+    <tp-input-autocomplete-multiselect
+      title="Loading projects"
+      [loading]="true"
+    ></tp-input-autocomplete-multiselect>
+    <tp-input-autocomplete-multiselect
+      title="Required projects"
+      placeholder="Search projects"
+      [options]="projectOptions"
+      [required]="true"
+      [maxChips]="2"
+    ></tp-input-autocomplete-multiselect>
+  </div>
+  <p>
+    Selected projects: <strong>{{ selectedProjects().join(', ') || 'None' }}</strong>
+  </p>
+</section>

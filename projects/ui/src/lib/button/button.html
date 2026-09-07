@@ -1,5 +1,7 @@
 <ng-template #buttonContent>
-  <ng-content></ng-content>
+  <span class="tp-button__content">
+    <ng-content></ng-content>
+  </span>
 </ng-template>
 
 @switch (variant()) {
@@ -10,6 +12,7 @@
       [matTooltipDisabled]="!tooltipTitle()"
       class="tp-button"
       [disabled]="disabled()"
+      (click)="onClick.emit($event)"
       [ngClass]="buttonClass()"
       [ngStyle]="buttonStyle()"
     >
@@ -23,6 +26,7 @@
       [matTooltipDisabled]="!tooltipTitle()"
       class="tp-button"
       [disabled]="disabled()"
+      (click)="onClick.emit($event)"
       [ngClass]="buttonClass()"
       [ngStyle]="buttonStyle()"
     >
@@ -36,6 +40,7 @@
       [matTooltipDisabled]="!tooltipTitle()"
       class="tp-button"
       [disabled]="disabled()"
+      (click)="onClick.emit($event)"
       [ngClass]="buttonClass()"
       [ngStyle]="buttonStyle()"
     >

@@ -1,0 +1,23 @@
+<section class="component-section" aria-labelledby="checkboxes-title">
+  <div class="component-section__heading">
+    <h2 id="checkboxes-title">Checkbox</h2>
+    <code>&lt;tp-checkbox&gt;</code>
+  </div>
+  <div class="choice-grid">
+    <div class="example-stack">
+      <h3>States</h3>
+      <tp-checkbox>Unchecked</tp-checkbox>
+      <tp-checkbox [checked]="true">Checked</tp-checkbox>
+      <tp-checkbox [indeterminate]="true">Indeterminate</tp-checkbox>
+      <tp-checkbox [disabled]="true">Disabled</tp-checkbox>
+    </div>
+    <div class="example-stack">
+      <h3>Interactive</h3>
+      <tp-checkbox [(checked)]="notificationsEnabled">Enable notifications</tp-checkbox>
+      <p>
+        Notifications are <strong>{{ notificationsEnabled() ? 'enabled' : 'disabled' }}</strong
+        >.
+      </p>
+    </div>
+  </div>
+</section>

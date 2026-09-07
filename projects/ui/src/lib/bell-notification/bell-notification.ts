@@ -3,23 +3,22 @@ import {
   Component,
   computed,
   input,
-  numberAttribute,
   output,
 } from '@angular/core';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { nonNegativeIntegerAttribute } from '../utils/number-input';
 
 @Component({
   selector: 'tp-bell-notification',
-  imports: [MatBadgeModule, MatButtonModule, MatIconModule, MatTooltipModule],
+  imports: [MatBadgeModule, MatButtonModule, MatTooltipModule],
   templateUrl: './bell-notification.html',
   styleUrl: './bell-notification.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TpBellNotification {
-  count = input(0, { transform: numberAttribute });
+  count = input(0, { transform: nonNegativeIntegerAttribute });
   ariaLabel = input('Notifications');
   tooltipTitle = input<string | null>('Notifications');
   disabled = input(false);
