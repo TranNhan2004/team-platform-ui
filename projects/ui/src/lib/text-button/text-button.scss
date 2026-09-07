@@ -40,7 +40,7 @@
 }
 
 .tp-text-button--shape-rect {
-  border-radius: var(--tp-radius-sm);
+  border-radius: var(--tp-radius-xs);
 }
 
 .tp-text-button--hover-shape-circle:hover {
@@ -52,7 +52,7 @@
 }
 
 .tp-text-button--hover-shape-rect:hover {
-  border-radius: var(--tp-radius-sm);
+  border-radius: var(--tp-radius-xs);
 }
 
 .tp-text-button--shape-circle:active {
@@ -64,7 +64,7 @@
 }
 
 .tp-text-button--shape-rect:active {
-  border-radius: var(--tp-radius-sm);
+  border-radius: var(--tp-radius-xs);
 }
 
 .tp-text-button--underline:active .mdc-button__label {

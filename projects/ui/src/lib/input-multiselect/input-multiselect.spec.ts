@@ -50,6 +50,22 @@ describe('InputMultiselect', () => {
     expect(component.value()).toEqual([]);
   });
 
+  it('should update the panel position after a pointer selection', () => {
+    const updatePanelPosition = vi.spyOn(
+      component as unknown as { updatePanelPosition: () => void },
+      'updatePanelPosition',
+    );
+    const toggleOptionFromPointer = (
+      component as unknown as {
+        toggleOptionFromPointer: (option: string, event: MouseEvent) => void;
+      }
+    ).toggleOptionFromPointer;
+
+    toggleOptionFromPointer.call(component, 'Platform UI', new MouseEvent('click'));
+
+    expect(updatePanelPosition).toHaveBeenCalledOnce();
+  });
+
   it('should select and unselect every option', async () => {
     fixture.componentRef.setInput('options', ['Platform API', 'Platform UI']);
     fixture.detectChanges();

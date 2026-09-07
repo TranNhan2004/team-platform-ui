@@ -47,6 +47,6 @@
 }
 
 ::ng-deep .mat-datepicker-content:has(.tp-date-picker-calendar) {
-  --mat-datepicker-calendar-container-shape: var(--tp-radius-sm);
-  border-radius: var(--tp-radius-sm);
+  --mat-datepicker-calendar-container-shape: var(--tp-radius-xs);
+  border-radius: var(--tp-radius-xs);
 }

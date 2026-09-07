@@ -173,6 +173,7 @@ export class TpInputAutocompleteMultiselect implements FormValueControl<string[]
     }
 
     this.clearSearch();
+    this.updatePanelPosition();
   }
 
   protected removeOption(option: TpAutocompleteMultiselectOption, event: MouseEvent): void {

@@ -31,6 +31,7 @@
     [attr.aria-describedby]="showError() ? errorId : null"
     (click)="calendar.open()"
     (blur)="markAsTouched()"
+    (keydown)="clearOnKeydown($event)"
   />
   <tp-date-picker
     #calendar
@@ -42,14 +43,6 @@
     (valueChange)="selectDate($event)"
   ></tp-date-picker>
 </mat-form-field>
-
-@if (required() && !title()) {
-  <span
-    class="tp-input-date-picker__required-marker tp-input-date-picker__required-marker--standalone"
-    aria-hidden="true"
-    >*</span
-  >
-}
 
 @if (showError()) {
   <div [id]="errorId" class="tp-input-date-picker__error" role="alert">

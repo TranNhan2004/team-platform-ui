@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { vi } from 'vitest';
 
 import { TpInputAutocompleteMultiselect } from './input-autocomplete-multiselect';
 
@@ -93,6 +94,22 @@ describe('TpInputAutocompleteMultiselect', () => {
 
     toggleOption.call(component, 'Platform UI');
     expect(component.value()).toEqual([]);
+  });
+
+  it('should update the panel position after a pointer selection', () => {
+    const updatePanelPosition = vi.spyOn(
+      component as unknown as { updatePanelPosition: () => void },
+      'updatePanelPosition',
+    );
+    const toggleOptionFromPointer = (
+      component as unknown as {
+        toggleOptionFromPointer: (option: string, event: MouseEvent) => void;
+      }
+    ).toggleOptionFromPointer;
+
+    toggleOptionFromPointer.call(component, 'Platform UI', new MouseEvent('click'));
+
+    expect(updatePanelPosition).toHaveBeenCalledOnce();
   });
 
   it('should select only the matching options when selecting all', async () => {

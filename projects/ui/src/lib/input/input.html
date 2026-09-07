@@ -43,12 +43,6 @@
   }
 </mat-form-field>
 
-@if (required() && !title()) {
-  <span class="tp-input__required-marker tp-input__required-marker--standalone" aria-hidden="true"
-    >*</span
-  >
-}
-
 @if (showError()) {
   <div [id]="errorId" class="tp-input__error" role="alert">{{ displayedError() }}</div>
 }

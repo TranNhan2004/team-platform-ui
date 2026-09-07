@@ -32,10 +32,6 @@ const MONTH_NAMES = [
 
 @Component({
   selector: 'tp-input-date-picker',
-  host: {
-    '[style.--tp-input-date-picker-height]': 'height()',
-    '[style.--tp-input-date-picker-max-height]': 'maxHeight()',
-  },
   imports: [TpDatePicker, MatFormFieldModule, MatInputModule],
   templateUrl: './input-date-picker.html',
   styleUrl: './input-date-picker.scss',
@@ -98,6 +94,14 @@ export class TpInputDatePicker implements FormValueControl<Date | null> {
 
   protected selectDate(date: Date | null): void {
     this.value.set(date);
+    this.touched.set(true);
+  }
+
+  protected clearOnKeydown(event: KeyboardEvent): void {
+    if ((event.key !== 'Backspace' && event.key !== 'Delete') || !this.value()) return;
+
+    event.preventDefault();
+    this.value.set(null);
     this.touched.set(true);
   }
 

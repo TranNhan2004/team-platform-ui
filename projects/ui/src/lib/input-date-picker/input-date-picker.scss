@@ -10,7 +10,7 @@
   --mat-form-field-outlined-focus-label-text-color: var(--tp-color-focus);
   --mat-form-field-outlined-caret-color: var(--tp-color-focus);
   --mat-form-field-outlined-focus-outline-width: 3px;
-  --mat-form-field-outlined-container-shape: var(--tp-radius-md);
+  --mat-form-field-outlined-container-shape: var(--tp-radius-xs);
   --mat-form-field-outlined-outline-color: var(--tp-color-border-strong);
   --mat-form-field-outlined-input-text-color: var(--tp-color-text-primary);
   --mat-form-field-outlined-label-text-color: var(--tp-color-text-secondary);
@@ -61,15 +61,6 @@
 
 .tp-input-date-picker__required-marker {
   color: var(--tp-color-red-600);
-}
-
-.tp-input-date-picker__required-marker--standalone {
-  position: absolute;
-  z-index: 1;
-  top: calc(min(var(--tp-input-date-picker-height), var(--tp-input-date-picker-max-height)) / 2);
-  left: var(--tp-space-4);
-  transform: translateY(-50%);
-  pointer-events: none;
 }
 
 .tp-input-date-picker__error {

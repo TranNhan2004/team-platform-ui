@@ -8,7 +8,7 @@
 .tp-table__container {
   width: 100%;
   border: 1px solid var(--tp-color-border);
-  border-radius: var(--tp-radius-md);
+  border-radius: var(--tp-radius-xs);
   overflow: hidden;
 }
 
@@ -116,7 +116,7 @@ tbody tr:not(.tp-table__empty-row):hover {
 .tp-table__sort-button:focus-visible {
   outline: 2px solid var(--tp-color-focus);
   outline-offset: 2px;
-  border-radius: var(--tp-radius-sm);
+  border-radius: var(--tp-radius-xs);
 }
 .tp-table__sort-icon {
   width: 18px;

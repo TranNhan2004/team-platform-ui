@@ -172,6 +172,8 @@ export class TpInputMultiselect implements FormValueControl<string[]> {
     } else {
       this.toggleOption(option);
     }
+
+    this.updatePanelPosition();
   }
 
   protected removeOption(option: TpMultiselectOption, event: MouseEvent): void {
