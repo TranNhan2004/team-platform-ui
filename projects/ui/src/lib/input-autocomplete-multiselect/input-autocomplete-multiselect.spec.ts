@@ -22,6 +22,14 @@ describe('TpInputAutocompleteMultiselect', () => {
     expect(component).toBeTruthy();
   });
 
+  it('should allow overriding loading and no-results messages', () => {
+    fixture.componentRef.setInput('loadingMessage', 'Fetching projects');
+    fixture.componentRef.setInput('noResultsMessage', 'No projects found');
+
+    expect(component.loadingMessage()).toBe('Fetching projects');
+    expect(component.noResultsMessage()).toBe('No projects found');
+  });
+
   it('should show an up or down chevron based on the panel state', () => {
     const arrowButton = fixture.nativeElement.querySelector(
       '.tp-input-autocomplete-multiselect__trailing-action',
@@ -38,7 +46,9 @@ describe('TpInputAutocompleteMultiselect', () => {
     expect(arrowButton.getAttribute('aria-expanded')).toBe('true');
   });
 
-  it('should filter options case-insensitively from typed text', async () => {
+  it('should emit typed search text without filtering its options', async () => {
+    const onSearch = vi.fn();
+    component.onSearch.subscribe(onSearch);
     fixture.componentRef.setInput('options', ['Platform API', 'Platform UI', 'Project Atlas']);
     fixture.detectChanges();
     await fixture.whenStable();
@@ -49,10 +59,32 @@ describe('TpInputAutocompleteMultiselect', () => {
     input.value = 'ui';
     input.dispatchEvent(new Event('input'));
 
-    const filteredOptions = (
-      component as unknown as { filteredOptions: () => readonly string[] }
-    ).filteredOptions();
-    expect(filteredOptions).toEqual(['Platform UI']);
+    expect(onSearch).toHaveBeenCalledWith('ui');
+    expect(component.options()).toEqual(['Platform API', 'Platform UI', 'Project Atlas']);
+  });
+
+  it('should display object options using displayWith', async () => {
+    const options = [
+      { id: 'api', name: 'Platform API' },
+      { id: 'ui', name: 'Platform UI' },
+    ];
+    fixture.componentRef.setInput('options', options);
+    fixture.componentRef.setInput('displayWith', (option: unknown) =>
+      typeof option === 'object' && option !== null
+        ? (option as { name: string }).name
+        : String(option),
+    );
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    const toggleOption = (component as unknown as { toggleOption: (option: unknown) => void })
+      .toggleOption;
+    toggleOption.call(component, options[1]);
+
+    expect(component.value()).toEqual([options[1]]);
+    expect(
+      (component as unknown as { optionText: (option: unknown) => string }).optionText(options[1]),
+    ).toBe('Platform UI');
   });
 
   it('should place the typing input immediately after selected chips', async () => {
@@ -112,22 +144,18 @@ describe('TpInputAutocompleteMultiselect', () => {
     expect(updatePanelPosition).toHaveBeenCalledOnce();
   });
 
-  it('should select only the matching options when selecting all', async () => {
+  it('should select all options currently supplied by the API', async () => {
     fixture.componentRef.setInput('options', ['Platform API', 'Platform UI', 'Project Atlas']);
     fixture.detectChanges();
     await fixture.whenStable();
 
-    const input = fixture.nativeElement.querySelector(
-      '.tp-input-autocomplete-multiselect__trigger',
-    ) as HTMLInputElement;
-    input.value = 'platform';
-    input.dispatchEvent(new Event('input'));
-
-    const toggleAll = (component as unknown as { toggleAllFilteredOptions: () => void })
-      .toggleAllFilteredOptions;
+    const toggleAll = (component as unknown as { toggleAllOptions: () => void }).toggleAllOptions;
     toggleAll.call(component);
 
-    expect(component.value()).toEqual(['Platform API', 'Platform UI']);
+    expect(component.value()).toEqual(['Platform API', 'Platform UI', 'Project Atlas']);
+
+    toggleAll.call(component);
+    expect(component.value()).toEqual([]);
   });
 
   it('should show a required error once touched without selections', async () => {

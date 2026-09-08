@@ -26,7 +26,7 @@
     class="tp-input-autocomplete-singleselect__control"
     [matAutocomplete]="suggestions"
     matAutocompletePosition="below"
-    [value]="value()"
+    [value]="inputText()"
     [placeholder]="placeholder()"
     [required]="required()"
     [disabled]="disabled()"
@@ -48,29 +48,24 @@
 <mat-autocomplete
   #suggestions="matAutocomplete"
   class="tp-input-autocomplete-singleselect__panel"
+  [displayWith]="optionText"
   (optionSelected)="selectOption($event)"
 >
-  @if (query()) {
-    @if (loading()) {
-      <mat-option class="tp-input-autocomplete-singleselect__feedback" [disabled]="true">
-        <span class="tp-input-autocomplete-singleselect__feedback-content">
-          <span>Loading</span>
-          <tp-spinner
-            [diameter]="16"
-            [strokeWidth]="2"
-            ariaLabel="Loading suggestions"
-          ></tp-spinner>
-        </span>
-      </mat-option>
-    } @else if (filteredOptions().length) {
-      @for (option of filteredOptions(); track option) {
-        <mat-option [value]="option">{{ option }}</mat-option>
-      }
-    } @else {
-      <mat-option class="tp-input-autocomplete-singleselect__feedback" [disabled]="true">
-        No matching result
-      </mat-option>
+  @if (loading()) {
+    <mat-option class="tp-input-autocomplete-singleselect__feedback" [disabled]="true">
+      <span class="tp-input-autocomplete-singleselect__feedback-content">
+        <span>{{ loadingMessage() }}</span>
+        <tp-spinner [diameter]="16" [strokeWidth]="2" ariaLabel="Loading suggestions"></tp-spinner>
+      </span>
+    </mat-option>
+  } @else if (options().length) {
+    @for (option of options(); track option) {
+      <mat-option [value]="option">{{ optionText(option) }}</mat-option>
     }
+  } @else {
+    <mat-option class="tp-input-autocomplete-singleselect__feedback" [disabled]="true">
+      {{ noResultsMessage() }}
+    </mat-option>
   }
 </mat-autocomplete>
 

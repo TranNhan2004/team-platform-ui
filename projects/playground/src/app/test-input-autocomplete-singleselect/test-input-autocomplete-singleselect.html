@@ -7,18 +7,30 @@
     <tp-input-autocomplete-singleselect
       title="Project"
       placeholder="Start typing a project name"
-      [options]="projectOptions"
-      hint="You can enter a new project name"
+      [options]="projectOptions()"
+      [displayWith]="displayProject"
+      [(value)]="selectedProject"
+      (onSearch)="searchProjects($event)"
+      hint="Search is handled by the parent/API"
     ></tp-input-autocomplete-singleselect>
     <tp-input-autocomplete-singleselect
       title="Loading projects"
       value="pro"
       [loading]="true"
+      loadingMessage="Fetching projects..."
     ></tp-input-autocomplete-singleselect>
     <tp-input-autocomplete-singleselect
       title="Required project"
-      [options]="projectOptions"
+      [options]="projectOptions()"
+      [displayWith]="displayProject"
       [required]="true"
     ></tp-input-autocomplete-singleselect>
+    <tp-input-autocomplete-singleselect
+      title="Empty projects"
+      noResultsMessage="No projects are available"
+    ></tp-input-autocomplete-singleselect>
   </div>
+  <p>
+    Selected project: <strong>{{ selectedProjectText() }}</strong>
+  </p>
 </section>

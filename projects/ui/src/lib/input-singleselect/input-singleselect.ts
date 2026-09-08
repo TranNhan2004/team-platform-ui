@@ -16,12 +16,17 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelect, MatSelectChange, MatSelectModule } from '@angular/material/select';
 import { TpSpinner } from '../spinner/spinner';
 import {
+  getSelectOptionText,
+  TpSelectOption,
+  TpSelectOptionDisplayFn,
+} from '../utils/select-option';
+import {
   createValidationErrorId,
   TpValidationErrors,
   validationErrorMessage,
 } from '../utils/form-validation';
 
-export type TpSingleselectOption = string;
+export type TpSingleselectOption = TpSelectOption;
 
 export type TpInputSingleselectContentSize = 'sm' | 'md' | 'lg';
 
@@ -42,14 +47,17 @@ const CONTENT_SIZE_MAP: Record<TpInputSingleselectContentSize, string> = {
   styleUrl: './input-singleselect.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TpInputSingleselect implements FormValueControl<string | null> {
-  value = model<string | null>(null);
+export class TpInputSingleselect implements FormValueControl<TpSelectOption | null> {
+  value = model<TpSelectOption | null>(null);
   touched = model(false);
   errors = input<TpValidationErrors>([]);
   invalid = input(false);
 
   options = input<readonly TpSingleselectOption[]>([]);
+  displayWith = input<TpSelectOptionDisplayFn | null>(null);
   loading = input(false);
+  loadingMessage = input('Loading');
+  noResultsMessage = input('No matching results');
   title = input('');
   placeholder = input('');
   required = input(false);
@@ -81,7 +89,7 @@ export class TpInputSingleselect implements FormValueControl<string | null> {
 
   protected readonly isEmpty = computed(() => {
     const value = this.value();
-    return value === null || value.trim() === '';
+    return value === null || this.optionText(value).trim() === '';
   });
 
   protected readonly hasRequiredError = computed(() => this.required() && this.isEmpty());
@@ -95,9 +103,13 @@ export class TpInputSingleselect implements FormValueControl<string | null> {
       (this.touched() && this.hasRequiredError()),
   );
 
-  protected readonly displayedError = computed(() =>
-    this.error() ?? validationErrorMessage(this.errors(), this.requiredMessage()),
+  protected readonly displayedError = computed(
+    () => this.error() ?? validationErrorMessage(this.errors(), this.requiredMessage()),
   );
+
+  protected optionText(option: TpSelectOption | null): string {
+    return getSelectOptionText(option, this.displayWith());
+  }
 
   protected selectOption(event: MatSelectChange): void {
     this.value.set(event.value as TpSingleselectOption);

@@ -1,5 +1,10 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { TpInputAutocompleteSingleselect } from 'ui';
+import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+import { TpInputAutocompleteSingleselect, TpSelectOption } from 'ui';
+import {
+  displayProjectOption,
+  PLAYGROUND_PROJECTS,
+  searchProjectOptions,
+} from '../project-options';
 
 @Component({
   selector: 'app-test-input-autocomplete-singleselect',
@@ -8,17 +13,15 @@ import { TpInputAutocompleteSingleselect } from 'ui';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TestInputAutocompleteSingleselect {
-  protected readonly projectOptions = [
-    'Platform API',
-    'Platform UI',
-    'Project Atlas',
-    'Project Nova',
-    'Platform API 1',
-    'Platform UI 1',
-    'Project Atlas 1',
-    'Project Nova 1',
-    '1',
-    '2',
-    '3',
-  ];
+  protected readonly projectOptions = signal(PLAYGROUND_PROJECTS);
+  protected readonly selectedProject = signal<TpSelectOption | null>(null);
+  protected readonly displayProject = displayProjectOption;
+
+  protected searchProjects(query: string): void {
+    this.projectOptions.set(searchProjectOptions(query));
+  }
+
+  protected selectedProjectText(): string {
+    return displayProjectOption(this.selectedProject()) || 'None';
+  }
 }

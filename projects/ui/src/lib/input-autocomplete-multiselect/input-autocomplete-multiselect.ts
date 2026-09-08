@@ -7,6 +7,7 @@ import {
   inject,
   input,
   model,
+  output,
   signal,
   viewChild,
 } from '@angular/core';
@@ -26,12 +27,17 @@ import { TpCheckbox } from '../checkbox/checkbox';
 import { TpSpinner } from '../spinner/spinner';
 import { truncateText } from '../utils/text-wrapping';
 import {
+  getSelectOptionText,
+  TpSelectOption,
+  TpSelectOptionDisplayFn,
+} from '../utils/select-option';
+import {
   createValidationErrorId,
   TpValidationErrors,
   validationErrorMessage,
 } from '../utils/form-validation';
 
-export type TpAutocompleteMultiselectOption = string;
+export type TpAutocompleteMultiselectOption = TpSelectOption;
 export type TpInputAutocompleteMultiselectContentSize = 'sm' | 'md' | 'lg';
 
 const CONTENT_SIZE_MAP: Record<TpInputAutocompleteMultiselectContentSize, string> = {
@@ -55,14 +61,18 @@ const CONTENT_SIZE_MAP: Record<TpInputAutocompleteMultiselectContentSize, string
   styleUrl: './input-autocomplete-multiselect.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TpInputAutocompleteMultiselect implements FormValueControl<string[]> {
-  value = model<string[]>([]);
+export class TpInputAutocompleteMultiselect implements FormValueControl<TpSelectOption[]> {
+  value = model<TpSelectOption[]>([]);
   touched = model(false);
   errors = input<TpValidationErrors>([]);
   invalid = input(false);
 
   options = input<readonly TpAutocompleteMultiselectOption[]>([]);
+  displayWith = input<TpSelectOptionDisplayFn | null>(null);
+  onSearch = output<string>();
   loading = input(false);
+  loadingMessage = input('Loading');
+  noResultsMessage = input('No matching results');
   title = input('');
   placeholder = input('');
   required = input(false);
@@ -87,7 +97,6 @@ export class TpInputAutocompleteMultiselect implements FormValueControl<string[]
   private readonly scrollDispatcher = inject(ScrollDispatcher);
   private readonly optionsTrigger = viewChild(MatAutocompleteTrigger);
   private readonly triggerInput = viewChild<ElementRef<HTMLInputElement>>('triggerInput');
-  private readonly searchQuery = signal('');
   protected readonly optionsOpen = signal(false);
   private panelPositionUpdateQueued = false;
   private panelPositionTimeout: ReturnType<typeof setTimeout> | undefined;
@@ -110,25 +119,19 @@ export class TpInputAutocompleteMultiselect implements FormValueControl<string[]
   protected readonly hiddenSelectedCount = computed(
     () => this.selectedValues().length - this.visibleSelectedValues().length,
   );
-  protected readonly filteredOptions = computed(() => {
-    const query = this.searchQuery().trim().toLocaleLowerCase();
-    return this.uniqueOptions().filter((option) =>
-      query ? option.toLocaleLowerCase().includes(query) : true,
-    );
-  });
-  protected readonly allFilteredOptionsSelected = computed(() => {
-    const options = this.filteredOptions();
+  protected readonly allOptionsSelected = computed(() => {
+    const options = this.uniqueOptions();
     return options.length > 0 && options.every((option) => this.isSelected(option));
   });
-  protected readonly someFilteredOptionsSelected = computed(() =>
-    this.filteredOptions().some((option) => this.isSelected(option)),
+  protected readonly someOptionsSelected = computed(() =>
+    this.uniqueOptions().some((option) => this.isSelected(option)),
   );
   protected readonly selectAllLabel = computed(() =>
-    this.allFilteredOptionsSelected() ? 'Unselect all' : 'Select all',
+    this.allOptionsSelected() ? 'Unselect all' : 'Select all',
   );
   protected readonly contentFontSize = computed(() => CONTENT_SIZE_MAP[this.contentSize()]);
   protected readonly floatLabel = computed<'always' | 'auto'>(() =>
-    this.title() || this.selectedValues().length || this.searchQuery() ? 'always' : 'auto',
+    this.title() || this.selectedValues().length ? 'always' : 'auto',
   );
   protected readonly isEmpty = computed(() => this.selectedValues().length === 0);
   protected readonly hasRequiredError = computed(() => this.required() && this.isEmpty());
@@ -140,18 +143,22 @@ export class TpInputAutocompleteMultiselect implements FormValueControl<string[]
       this.errors().length > 0 ||
       (this.touched() && this.hasRequiredError()),
   );
-  protected readonly displayedError = computed(() =>
-    this.error() ?? validationErrorMessage(this.errors(), this.requiredMessage()),
+  protected readonly displayedError = computed(
+    () => this.error() ?? validationErrorMessage(this.errors(), this.requiredMessage()),
   );
 
+  protected optionText(option: TpSelectOption | null): string {
+    return getSelectOptionText(option, this.displayWith());
+  }
+
   protected updateQuery(event: Event): void {
-    this.searchQuery.set((event.target as HTMLInputElement).value);
+    this.onSearch.emit((event.target as HTMLInputElement).value.trim());
   }
 
   protected selectOption(event: MatAutocompleteSelectedEvent): void {
     const option = event.option.value as TpAutocompleteMultiselectOption;
     if (option === this.selectAllOptionValue) {
-      this.toggleAllFilteredOptions();
+      this.toggleAllOptions();
     } else {
       this.toggleOption(option);
     }
@@ -167,7 +174,7 @@ export class TpInputAutocompleteMultiselect implements FormValueControl<string[]
     event.stopPropagation();
 
     if (option === this.selectAllOptionValue) {
-      this.toggleAllFilteredOptions();
+      this.toggleAllOptions();
     } else {
       this.toggleOption(option);
     }
@@ -223,8 +230,8 @@ export class TpInputAutocompleteMultiselect implements FormValueControl<string[]
     return this.selectedValues().includes(option);
   }
 
-  protected chipText(value: string): string {
-    return truncateText(value, this.maxChipContentLength());
+  protected chipText(value: TpSelectOption): string {
+    return truncateText(this.optionText(value), this.maxChipContentLength());
   }
 
   private toggleOption(option: TpAutocompleteMultiselectOption): void {
@@ -234,13 +241,13 @@ export class TpInputAutocompleteMultiselect implements FormValueControl<string[]
     this.touched.set(true);
   }
 
-  private toggleAllFilteredOptions(): void {
-    const filteredOptions = this.filteredOptions();
-    const filteredOptionSet = new Set(filteredOptions);
+  private toggleAllOptions(): void {
+    const options = this.uniqueOptions();
+    const optionSet = new Set(options);
     this.value.update((values) =>
-      this.allFilteredOptionsSelected()
-        ? values.filter((value) => !filteredOptionSet.has(value))
-        : [...values, ...filteredOptions.filter((option) => !values.includes(option))],
+      this.allOptionsSelected()
+        ? values.filter((value) => !optionSet.has(value))
+        : [...values, ...options.filter((option) => !values.includes(option))],
     );
     this.touched.set(true);
   }
@@ -248,9 +255,9 @@ export class TpInputAutocompleteMultiselect implements FormValueControl<string[]
   protected readonly uniqueOptions = computed(() => [...new Set(this.options())]);
 
   private clearSearch(): void {
-    this.searchQuery.set('');
     const triggerInput = this.triggerInput()?.nativeElement;
     if (triggerInput) triggerInput.value = '';
+    this.onSearch.emit('');
   }
 
   private reopenOptions(): void {

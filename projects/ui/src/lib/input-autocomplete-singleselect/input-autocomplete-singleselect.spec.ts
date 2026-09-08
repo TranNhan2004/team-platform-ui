@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { vi } from 'vitest';
 
 import { TpInputAutocompleteSingleselect } from './input-autocomplete-singleselect';
 
@@ -21,38 +22,62 @@ describe('InputAutocompleteSingleselect', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should update its single value with free text', () => {
+  it('should allow overriding loading and no-results messages', () => {
+    fixture.componentRef.setInput('loadingMessage', 'Fetching projects');
+    fixture.componentRef.setInput('noResultsMessage', 'No projects found');
+
+    expect(component.loadingMessage()).toBe('Fetching projects');
+    expect(component.noResultsMessage()).toBe('No projects found');
+  });
+
+  it('should update its single value and emit the trimmed search text', () => {
+    const onSearch = vi.fn();
+    component.onSearch.subscribe(onSearch);
+
     const input = fixture.nativeElement.querySelector('input') as HTMLInputElement;
-    input.value = 'Custom project';
+    input.value = ' Custom project ';
     input.dispatchEvent(new Event('input'));
 
-    expect(component.value()).toBe('Custom project');
+    expect(component.value()).toBe(' Custom project ');
+    expect(onSearch).toHaveBeenCalledWith('Custom project');
   });
 
-  it('should filter options case-insensitively', async () => {
-    fixture.componentRef.setInput('options', ['Angular', 'React', 'Vue']);
-    component.value.set('aNg');
+  it('should display server-provided object options using displayWith', async () => {
+    const options = [
+      { id: 'ng', name: 'Angular' },
+      { id: 'rx', name: 'React' },
+    ];
+    fixture.componentRef.setInput('options', options);
+    fixture.componentRef.setInput('displayWith', (option: unknown) =>
+      typeof option === 'object' && option !== null
+        ? (option as { name: string }).name
+        : String(option),
+    );
     fixture.detectChanges();
     await fixture.whenStable();
 
-    const filteredOptions = (
-      component as unknown as { filteredOptions: () => readonly string[] }
-    ).filteredOptions();
+    const optionText = (component as unknown as { optionText: (option: unknown) => string })
+      .optionText;
+    expect(optionText.call(component, options[0])).toBe('Angular');
 
-    expect(filteredOptions).toEqual(['Angular']);
+    const selectOption = (
+      component as unknown as { selectOption: (event: { option: { value: unknown } }) => void }
+    ).selectOption;
+    selectOption.call(component, { option: { value: options[1] } });
+
+    expect(component.value()).toBe(options[1]);
+    expect((component as unknown as { inputText: () => string }).inputText()).toBe('React');
   });
 
-  it('should have no suggestions for a query with no matches', async () => {
-    fixture.componentRef.setInput('options', ['Angular']);
-    component.value.set('Svelte');
-    fixture.detectChanges();
-    await fixture.whenStable();
+  it('should emit an empty search when the input is cleared', () => {
+    const onSearch = vi.fn();
+    component.onSearch.subscribe(onSearch);
 
-    const filteredOptions = (
-      component as unknown as { filteredOptions: () => readonly string[] }
-    ).filteredOptions();
+    const input = fixture.nativeElement.querySelector('input') as HTMLInputElement;
+    input.value = '';
+    input.dispatchEvent(new Event('input'));
 
-    expect(filteredOptions).toEqual([]);
+    expect(onSearch).toHaveBeenCalledWith('');
   });
 
   it('should show the required error after an empty input is touched', async () => {

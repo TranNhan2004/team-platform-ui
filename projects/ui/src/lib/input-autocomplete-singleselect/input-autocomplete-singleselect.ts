@@ -6,6 +6,7 @@ import {
   inject,
   input,
   model,
+  output,
   viewChild,
 } from '@angular/core';
 import { ScrollDispatcher } from '@angular/cdk/scrolling';
@@ -20,12 +21,17 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { TpSpinner } from '../spinner/spinner';
 import {
+  getSelectOptionText,
+  TpSelectOption,
+  TpSelectOptionDisplayFn,
+} from '../utils/select-option';
+import {
   createValidationErrorId,
   TpValidationErrors,
   validationErrorMessage,
 } from '../utils/form-validation';
 
-export type TpAutocompleteSingleselectOption = string;
+export type TpAutocompleteSingleselectOption = TpSelectOption;
 
 export type TpInputAutocompleteSingleselectContentSize = 'sm' | 'md' | 'lg';
 
@@ -42,14 +48,18 @@ const CONTENT_SIZE_MAP: Record<TpInputAutocompleteSingleselectContentSize, strin
   styleUrl: './input-autocomplete-singleselect.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TpInputAutocompleteSingleselect implements FormValueControl<string> {
-  value = model('');
+export class TpInputAutocompleteSingleselect implements FormValueControl<TpSelectOption | null> {
+  value = model<TpSelectOption | null>('');
   touched = model(false);
   errors = input<TpValidationErrors>([]);
   invalid = input(false);
 
   options = input<readonly TpAutocompleteSingleselectOption[]>([]);
+  displayWith = input<TpSelectOptionDisplayFn | null>(null);
+  onSearch = output<string>();
   loading = input(false);
+  loadingMessage = input('Loading');
+  noResultsMessage = input('No matching results');
   title = input('');
   placeholder = input('');
   required = input(false);
@@ -78,19 +88,9 @@ export class TpInputAutocompleteSingleselect implements FormValueControl<string>
       .subscribe(() => this.suggestionsTrigger()?.closePanel());
   }
 
-  protected readonly query = computed(() => this.value().trim());
-
-  protected readonly filteredOptions = computed(() => {
-    const query = this.query().toLocaleLowerCase();
-
-    return query
-      ? this.options().filter((option) => option.toLocaleLowerCase().includes(query))
-      : [];
-  });
-
   protected readonly contentFontSize = computed(() => CONTENT_SIZE_MAP[this.contentSize()]);
 
-  protected readonly isEmpty = computed(() => this.value().trim() === '');
+  protected readonly isEmpty = computed(() => this.optionText(this.value()).trim() === '');
 
   protected readonly hasRequiredError = computed(() => this.required() && this.isEmpty());
   protected readonly errorId = createValidationErrorId('tp-input-autocomplete-singleselect-error');
@@ -103,12 +103,19 @@ export class TpInputAutocompleteSingleselect implements FormValueControl<string>
       (this.touched() && this.hasRequiredError()),
   );
 
-  protected readonly displayedError = computed(() =>
-    this.error() ?? validationErrorMessage(this.errors(), this.requiredMessage()),
+  protected readonly displayedError = computed(
+    () => this.error() ?? validationErrorMessage(this.errors(), this.requiredMessage()),
   );
 
+  protected readonly inputText = computed(() => this.optionText(this.value()));
+
+  protected readonly optionText = (option: TpSelectOption | null): string =>
+    getSelectOptionText(option, this.displayWith());
+
   protected updateValue(event: Event): void {
-    this.value.set((event.target as HTMLInputElement).value);
+    const value = (event.target as HTMLInputElement).value;
+    this.value.set(value);
+    this.onSearch.emit(value.trim());
   }
 
   protected selectOption(event: MatAutocompleteSelectedEvent): void {

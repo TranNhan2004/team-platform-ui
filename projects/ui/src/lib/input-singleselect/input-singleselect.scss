@@ -107,6 +107,10 @@
 }
 
 ::ng-deep .tp-input-singleselect__panel {
+  // Keep the selected option appearance consistent with autocomplete selects.
+  --mat-option-selected-state-layer-color: var(--mat-sys-secondary-container);
+  --mat-option-selected-state-label-text-color: var(--mat-sys-on-secondary-container);
+
   .tp-input-singleselect__feedback-content {
     display: inline-flex;
     align-items: center;

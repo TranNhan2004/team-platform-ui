@@ -24,13 +24,13 @@
 
   <div class="tp-input-multiselect__value" (click)="openOptions()">
     @for (selectedValue of visibleSelectedValues(); track selectedValue) {
-      <span class="tp-input-multiselect__chip" [attr.title]="selectedValue">
+      <span class="tp-input-multiselect__chip" [attr.title]="optionText(selectedValue)">
         <span class="tp-input-multiselect__chip-label">{{ chipText(selectedValue) }}</span>
         @if (!disabled() && !readonly()) {
           <button
             type="button"
             class="tp-input-multiselect__chip-remove"
-            [attr.aria-label]="'Remove ' + selectedValue"
+            [attr.aria-label]="'Remove ' + optionText(selectedValue)"
             (click)="removeOption(selectedValue, $event)"
           >
             <span class="tp-icon material-symbols-outlined" aria-hidden="true">close</span>
@@ -51,7 +51,7 @@
       class="tp-input-multiselect__trigger"
       [matAutocomplete]="optionsPanel"
       matAutocompletePosition="below"
-      [value]="selectedValues().join(', ')"
+      [value]="selectedValuesText()"
       [placeholder]="selectedValues().length ? '' : placeholder()"
       readonly
       [disabled]="disabled() || readonly()"
@@ -111,7 +111,7 @@
   @if (loading()) {
     <mat-option class="tp-input-multiselect__feedback" [disabled]="true">
       <span class="tp-input-multiselect__feedback-content">
-        <span>Loading</span>
+        <span>{{ loadingMessage() }}</span>
         <tp-spinner [diameter]="16" [strokeWidth]="2" ariaLabel="Loading options"></tp-spinner>
       </span>
     </mat-option>
@@ -148,13 +148,13 @@
             [tabIndex]="-1"
             aria-hidden="true"
           ></tp-checkbox>
-          <span class="tp-input-multiselect__option-label">{{ option }}</span>
+          <span class="tp-input-multiselect__option-label">{{ optionText(option) }}</span>
         </span>
       </mat-option>
     }
   } @else {
     <mat-option class="tp-input-multiselect__feedback" [disabled]="true">
-      No options available
+      {{ noResultsMessage() }}
     </mat-option>
   }
 </mat-autocomplete>

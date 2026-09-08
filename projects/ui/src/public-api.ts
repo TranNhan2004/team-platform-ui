@@ -16,6 +16,7 @@ export * from './lib/input-autocomplete-singleselect/input-autocomplete-singlese
 export * from './lib/input-autocomplete-multiselect/input-autocomplete-multiselect';
 export * from './lib/input-singleselect/input-singleselect';
 export * from './lib/input-multiselect/input-multiselect';
+export * from './lib/utils/select-option';
 export * from './lib/radio/radio';
 export * from './lib/search-bar/search-bar';
 export * from './lib/skeleton/skeleton';

@@ -7,25 +7,33 @@
     <tp-input-autocomplete-multiselect
       title="Projects"
       placeholder="Search projects"
-      [options]="projectOptions"
+      [options]="projectOptions()"
+      [displayWith]="displayProject"
       [(value)]="selectedProjects"
+      (onSearch)="searchProjects($event)"
       [maxChipContentLength]="14"
       [maxChips]="2"
-      hint="Type to filter and select one or more projects"
+      hint="Search is handled by the parent/API"
     ></tp-input-autocomplete-multiselect>
     <tp-input-autocomplete-multiselect
       title="Loading projects"
       [loading]="true"
+      loadingMessage="Fetching projects..."
     ></tp-input-autocomplete-multiselect>
     <tp-input-autocomplete-multiselect
       title="Required projects"
       placeholder="Search projects"
-      [options]="projectOptions"
+      [options]="projectOptions()"
+      [displayWith]="displayProject"
       [required]="true"
       [maxChips]="2"
     ></tp-input-autocomplete-multiselect>
+    <tp-input-autocomplete-multiselect
+      title="Empty projects"
+      noResultsMessage="No projects are available"
+    ></tp-input-autocomplete-multiselect>
   </div>
   <p>
-    Selected projects: <strong>{{ selectedProjects().join(', ') || 'None' }}</strong>
+    Selected projects: <strong>{{ selectedProjectText() }}</strong>
   </p>
 </section>

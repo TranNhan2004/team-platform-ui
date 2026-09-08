@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
-import { TpInputMultiselect } from 'ui';
+import { TpInputMultiselect, TpSelectOption } from 'ui';
+import { displayProjectOption, PLAYGROUND_PROJECTS } from '../project-options';
 
 @Component({
   selector: 'app-test-input-multiselect',
@@ -8,18 +9,18 @@ import { TpInputMultiselect } from 'ui';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TestInputMultiselect {
-  protected readonly projectOptions = [
-    'Platform API',
-    'Platform UI',
-    'Project Atlas',
-    'Project Nova',
-    'Platform API 1',
-    'Platform UI 1',
-    'Project Atlas 1',
-    'Project Nova 1',
-    '1',
-    '2',
-    '3',
-  ];
-  protected readonly selectedProjects = signal<string[]>(['Platform API', 'Project Nova']);
+  protected readonly projectOptions = PLAYGROUND_PROJECTS;
+  protected readonly selectedProjects = signal<TpSelectOption[]>([
+    PLAYGROUND_PROJECTS[0],
+    PLAYGROUND_PROJECTS[3],
+  ]);
+  protected readonly displayProject = displayProjectOption;
+
+  protected selectedProjectText(): string {
+    return (
+      this.selectedProjects()
+        .map((project) => displayProjectOption(project))
+        .join(', ') || 'None'
+    );
+  }
 }

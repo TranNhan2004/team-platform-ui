@@ -9,9 +9,6 @@ export function createValidationErrorId(prefix: string): string {
   return `${prefix}-${nextErrorId}`;
 }
 
-export function validationErrorMessage(
-  errors: TpValidationErrors,
-  fallback: string,
-): string {
+export function validationErrorMessage(errors: TpValidationErrors, fallback: string): string {
   return errors.find((error) => !!error.message)?.message ?? fallback;
 }

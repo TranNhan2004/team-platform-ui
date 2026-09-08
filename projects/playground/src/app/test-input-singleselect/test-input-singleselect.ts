@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
-import { TpInputSingleselect } from 'ui';
+import { TpInputSingleselect, TpSelectOption } from 'ui';
+import { displayProjectOption, PLAYGROUND_PROJECTS } from '../project-options';
 
 @Component({
   selector: 'app-test-input-singleselect',
@@ -8,18 +9,11 @@ import { TpInputSingleselect } from 'ui';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TestInputSingleselect {
-  protected readonly projectOptions = [
-    'Platform API',
-    'Platform UI',
-    'Project Atlas',
-    'Project Nova',
-    'Platform API 1',
-    'Platform UI 1',
-    'Project Atlas 1',
-    'Project Nova 1',
-    '1',
-    '2',
-    '3',
-  ];
-  protected readonly selectedProject = signal<string | null>(null);
+  protected readonly projectOptions = PLAYGROUND_PROJECTS;
+  protected readonly selectedProject = signal<TpSelectOption | null>(null);
+  protected readonly displayProject = displayProjectOption;
+
+  protected selectedProjectText(): string {
+    return displayProjectOption(this.selectedProject()) || 'None';
+  }
 }

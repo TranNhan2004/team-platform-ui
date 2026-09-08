@@ -26,12 +26,17 @@ import { TpCheckbox } from '../checkbox/checkbox';
 import { TpSpinner } from '../spinner/spinner';
 import { truncateText } from '../utils/text-wrapping';
 import {
+  getSelectOptionText,
+  TpSelectOption,
+  TpSelectOptionDisplayFn,
+} from '../utils/select-option';
+import {
   createValidationErrorId,
   TpValidationErrors,
   validationErrorMessage,
 } from '../utils/form-validation';
 
-export type TpMultiselectOption = string;
+export type TpMultiselectOption = TpSelectOption;
 export type TpInputMultiselectContentSize = 'sm' | 'md' | 'lg';
 
 const CONTENT_SIZE_MAP: Record<TpInputMultiselectContentSize, string> = {
@@ -55,14 +60,17 @@ const CONTENT_SIZE_MAP: Record<TpInputMultiselectContentSize, string> = {
   styleUrl: './input-multiselect.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TpInputMultiselect implements FormValueControl<string[]> {
-  value = model<string[]>([]);
+export class TpInputMultiselect implements FormValueControl<TpSelectOption[]> {
+  value = model<TpSelectOption[]>([]);
   touched = model(false);
   errors = input<TpValidationErrors>([]);
   invalid = input(false);
 
   options = input<readonly TpMultiselectOption[]>([]);
+  displayWith = input<TpSelectOptionDisplayFn | null>(null);
   loading = input(false);
+  loadingMessage = input('Loading');
+  noResultsMessage = input('No matching results');
   title = input('');
   placeholder = input('');
   required = input(false);
@@ -146,9 +154,19 @@ export class TpInputMultiselect implements FormValueControl<string[]> {
       (this.touched() && this.hasRequiredError()),
   );
 
-  protected readonly displayedError = computed(() =>
-    this.error() ?? validationErrorMessage(this.errors(), this.requiredMessage()),
+  protected readonly displayedError = computed(
+    () => this.error() ?? validationErrorMessage(this.errors(), this.requiredMessage()),
   );
+
+  protected readonly selectedValuesText = computed(() =>
+    this.selectedValues()
+      .map((value) => this.optionText(value))
+      .join(', '),
+  );
+
+  protected optionText(option: TpSelectOption | null): string {
+    return getSelectOptionText(option, this.displayWith());
+  }
 
   protected selectOption(event: MatAutocompleteSelectedEvent): void {
     const option = event.option.value as TpMultiselectOption;
@@ -226,8 +244,8 @@ export class TpInputMultiselect implements FormValueControl<string[]> {
     return this.selectedValues().includes(option);
   }
 
-  protected chipText(value: string): string {
-    return truncateText(value, this.maxChipContentLength());
+  protected chipText(value: TpSelectOption): string {
+    return truncateText(this.optionText(value), this.maxChipContentLength());
   }
 
   private toggleOption(option: TpMultiselectOption): void {
