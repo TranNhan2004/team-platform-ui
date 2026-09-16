@@ -40,6 +40,19 @@
     (input)="updateValue($event)"
   />
 
+  @if (!isEmpty() && !disabled() && !readonly()) {
+    <button
+      mat-icon-button
+      matSuffix
+      type="button"
+      class="tp-input-autocomplete-singleselect__clear"
+      aria-label="Clear selected value"
+      (click)="clearValue($event)"
+    >
+      <span class="tp-icon material-symbols-outlined" aria-hidden="true">close</span>
+    </button>
+  }
+
   @if (hint()) {
     <mat-hint>{{ hint() }}</mat-hint>
   }

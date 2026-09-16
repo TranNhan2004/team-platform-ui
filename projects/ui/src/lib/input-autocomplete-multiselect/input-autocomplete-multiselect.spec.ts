@@ -30,6 +30,28 @@ describe('TpInputAutocompleteMultiselect', () => {
     expect(component.noResultsMessage()).toBe('No projects found');
   });
 
+  it('should show the select-all option by default and allow hiding it', async () => {
+    fixture.componentRef.setInput('options', ['Platform API', 'Platform UI']);
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    expect(component.useSelectAll()).toBe(true);
+    const optionsTrigger = (
+      component as unknown as { optionsTrigger: () => { openPanel: () => void } }
+    ).optionsTrigger();
+    optionsTrigger.openPanel();
+    fixture.detectChanges();
+    await fixture.whenStable();
+    expect(document.querySelector('.tp-input-autocomplete-multiselect__select-all')).toBeTruthy();
+
+    fixture.componentRef.setInput('useSelectAll', false);
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    expect(component.useSelectAll()).toBe(false);
+    expect(document.querySelector('.tp-input-autocomplete-multiselect__select-all')).toBeNull();
+  });
+
   it('should show an up or down chevron based on the panel state', () => {
     const arrowButton = fixture.nativeElement.querySelector(
       '.tp-input-autocomplete-multiselect__trailing-action',

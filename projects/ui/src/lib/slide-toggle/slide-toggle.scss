@@ -1,0 +1,32 @@
+:host {
+  display: inline-flex;
+}
+
+.tp-slide-toggle {
+  --tp-slide-toggle-color: var(--tp-color-blue-500);
+  --tp-slide-toggle-contrast-color: var(--tp-color-white);
+  --mat-slide-toggle-label-text-color: var(--tp-color-text-primary);
+  --mat-slide-toggle-selected-track-color: var(--tp-slide-toggle-color);
+  --mat-slide-toggle-selected-hover-track-color: var(--tp-slide-toggle-color);
+  --mat-slide-toggle-selected-focus-track-color: var(--tp-slide-toggle-color);
+  --mat-slide-toggle-selected-pressed-track-color: var(--tp-slide-toggle-color);
+  --mat-slide-toggle-selected-handle-color: var(--tp-slide-toggle-contrast-color);
+  --mat-slide-toggle-selected-hover-handle-color: var(--tp-slide-toggle-contrast-color);
+  --mat-slide-toggle-selected-focus-handle-color: var(--tp-slide-toggle-contrast-color);
+  --mat-slide-toggle-selected-pressed-handle-color: var(--tp-slide-toggle-contrast-color);
+  --mat-slide-toggle-selected-focus-state-layer-color: var(--tp-slide-toggle-color);
+  --mat-slide-toggle-selected-hover-state-layer-color: var(--tp-slide-toggle-color);
+  --mat-slide-toggle-selected-pressed-state-layer-color: var(--tp-slide-toggle-color);
+}
+
+.tp-slide-toggle.mat-mdc-slide-toggle-disabled {
+  pointer-events: auto;
+  cursor: not-allowed;
+}
+
+.tp-slide-toggle.mat-mdc-slide-toggle-disabled,
+.tp-slide-toggle.mat-mdc-slide-toggle-disabled *,
+.tp-slide-toggle.mat-mdc-slide-toggle-disabled .mdc-switch,
+.tp-slide-toggle.mat-mdc-slide-toggle-disabled label {
+  cursor: not-allowed;
+}

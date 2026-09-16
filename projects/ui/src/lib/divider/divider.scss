@@ -1,0 +1,11 @@
+:host {
+  display: block;
+}
+
+.tp-divider {
+  --mat-divider-color: var(--tp-color-border);
+}
+
+.tp-divider.mat-divider-vertical {
+  height: 100%;
+}

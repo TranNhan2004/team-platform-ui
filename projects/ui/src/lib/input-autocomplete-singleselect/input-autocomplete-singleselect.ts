@@ -17,6 +17,7 @@ import {
   MatAutocompleteModule,
   MatAutocompleteSelectedEvent,
 } from '@angular/material/autocomplete';
+import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { TpSpinner } from '../spinner/spinner';
@@ -43,7 +44,7 @@ const CONTENT_SIZE_MAP: Record<TpInputAutocompleteSingleselectContentSize, strin
 
 @Component({
   selector: 'tp-input-autocomplete-singleselect',
-  imports: [MatAutocompleteModule, MatFormFieldModule, MatInputModule, TpSpinner],
+  imports: [MatAutocompleteModule, MatButtonModule, MatFormFieldModule, MatInputModule, TpSpinner],
   templateUrl: './input-autocomplete-singleselect.html',
   styleUrl: './input-autocomplete-singleselect.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -120,6 +121,14 @@ export class TpInputAutocompleteSingleselect implements FormValueControl<TpSelec
 
   protected selectOption(event: MatAutocompleteSelectedEvent): void {
     this.value.set(event.option.value as TpAutocompleteSingleselectOption);
+  }
+
+  protected clearValue(event: MouseEvent): void {
+    event.stopPropagation();
+    this.value.set(null);
+    this.suggestionsTrigger()?.autocomplete.options.forEach((option) => option.deselect(false));
+    this.onSearch.emit('');
+    this.touched.set(true);
   }
 
   protected markAsTouched(): void {

@@ -68,6 +68,7 @@ export class TpInputMultiselect implements FormValueControl<TpSelectOption[]> {
 
   options = input<readonly TpMultiselectOption[]>([]);
   displayWith = input<TpSelectOptionDisplayFn | null>(null);
+  useSelectAll = input(true);
   loading = input(false);
   loadingMessage = input('Loading');
   noResultsMessage = input('No matching results');

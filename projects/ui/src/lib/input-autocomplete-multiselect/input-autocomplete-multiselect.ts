@@ -69,6 +69,7 @@ export class TpInputAutocompleteMultiselect implements FormValueControl<TpSelect
 
   options = input<readonly TpAutocompleteMultiselectOption[]>([]);
   displayWith = input<TpSelectOptionDisplayFn | null>(null);
+  useSelectAll = input(true);
   onSearch = output<string>();
   loading = input(false);
   loadingMessage = input('Loading');

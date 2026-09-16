@@ -36,10 +36,10 @@ describe('TestTable', () => {
 
       const table = fixture.nativeElement.querySelector('.tp-table__container') as HTMLElement;
       expect(table.getAttribute('aria-busy')).toBe('true');
-      const loadingRow = fixture.nativeElement.querySelector(
-        '.tp-table__row--loading',
-      ) as HTMLTableRowElement;
-      expect(loadingRow).toBeTruthy();
+      const loadingProgress = fixture.nativeElement.querySelector(
+        '.tp-table__loading-progress',
+      ) as HTMLElement;
+      expect(loadingProgress).toBeTruthy();
       const firstDataRow = fixture.nativeElement.querySelector(
         'tbody tr:not(.tp-table__filter-row)',
       ) as HTMLTableRowElement;
@@ -52,7 +52,7 @@ describe('TestTable', () => {
       await fixture.whenStable();
 
       expect(table.getAttribute('aria-busy')).toBe('false');
-      expect(fixture.nativeElement.querySelector('.tp-table__row--loading')).toBeNull();
+      expect(fixture.nativeElement.querySelector('.tp-table__loading-progress')).toBeNull();
       const resultRow = fixture.nativeElement.querySelector(
         'tbody tr:not(.tp-table__filter-row)',
       ) as HTMLTableRowElement;
@@ -85,7 +85,7 @@ describe('TestTable', () => {
 
       const table = fixture.nativeElement.querySelector('.tp-table__container') as HTMLElement;
       expect(table.getAttribute('aria-busy')).toBe('true');
-      expect(fixture.nativeElement.querySelector('.tp-table__loading-row')).toBeTruthy();
+      expect(fixture.nativeElement.querySelector('.tp-table__loading-progress')).toBeTruthy();
       expect(reload.disabled).toBe(true);
 
       await vi.advanceTimersByTimeAsync(999);

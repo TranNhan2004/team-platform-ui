@@ -115,6 +115,7 @@ describe('TpTable', () => {
       '.tp-table__scroll-container',
     ) as HTMLElement;
     expect(viewport.style.maxHeight).toBe('240px');
+    expect(viewport.style.height).toBe('240px');
   });
 
   it('paginates client rows and reports the ordinal range', async () => {
@@ -139,7 +140,7 @@ describe('TpTable', () => {
       '2',
     );
     expect(fixture.nativeElement.querySelector('.tp-table__row-range').textContent.trim()).toBe(
-      '21 - 25',
+      '21 - 25 of 25',
     );
     expect(fixture.nativeElement.querySelectorAll('tbody tr')).toHaveLength(5);
     expect(fixture.nativeElement.querySelector('.tp-table__footer')).toBeTruthy();
@@ -249,21 +250,32 @@ describe('TpTable', () => {
     ).not.toContain('No data available');
   });
 
-  it('shows the loading bar in the first data row and while the table is empty', async () => {
+  it('shows the indeterminate loading bar at the top of the table', async () => {
+    fixture.componentRef.setInput('config', { columns, loadingColor: 'red' });
     fixture.componentRef.setInput('state', { loading: { enabled: true } });
     fixture.detectChanges();
     await fixture.whenStable();
 
-    expect(fixture.nativeElement.querySelector('.tp-table__row--loading')).toBeTruthy();
-    expect(
-      fixture.nativeElement.querySelector('.tp-table__container').getAttribute('aria-busy'),
-    ).toBe('true');
+    const container = fixture.nativeElement.querySelector('.tp-table__container') as HTMLElement;
+    const loadingProgress = fixture.nativeElement.querySelector(
+      '.tp-table__loading-progress',
+    ) as HTMLElement;
+    const materialProgress = loadingProgress.querySelector('mat-progress-bar') as HTMLElement;
+
+    expect(container.firstElementChild).toBe(loadingProgress);
+    expect(materialProgress.getAttribute('mode')).toBe('indeterminate');
+    expect(materialProgress.style.getPropertyValue('--tp-progress-bar-color')).toBe(
+      'var(--tp-color-red-500)',
+    );
+    expect(container.getAttribute('aria-busy')).toBe('true');
+    expect(fixture.nativeElement.querySelector('.tp-table__row--loading')).toBeNull();
 
     fixture.componentRef.setInput('data', { rows: [] });
     fixture.detectChanges();
     await fixture.whenStable();
 
-    expect(fixture.nativeElement.querySelector('.tp-table__loading-row')).toBeTruthy();
+    expect(fixture.nativeElement.querySelector('.tp-table__loading-progress')).toBeTruthy();
+    expect(fixture.nativeElement.querySelector('.tp-table__loading-row')).toBeNull();
     expect(fixture.nativeElement.querySelector('.tp-table__empty-row')).toBeNull();
   });
 
@@ -311,7 +323,27 @@ describe('TpTable', () => {
       .queryAll(By.directive(MatTooltip))[4]
       .injector.get(MatTooltip);
     expect(cell.textContent.trim()).toBe('Long cont...');
+    expect(getComputedStyle(cell).display).toBe('inline-block');
+    expect(getComputedStyle(cell).maxWidth).toBe('100%');
     expect(tooltip.message).toBe(rows[2].name);
+  });
+
+  it('anchors cell tooltips to the pointer origin with and without filters', async () => {
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    let tooltip = fixture.debugElement.query(By.directive(MatTooltip)).injector.get(MatTooltip);
+    expect(tooltip.positionAtOrigin).toBe(true);
+
+    fixture.componentRef.setInput('config', {
+      columns,
+      filter: { enabled: true },
+    });
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    tooltip = fixture.debugElement.query(By.directive(MatTooltip)).injector.get(MatTooltip);
+    expect(tooltip.positionAtOrigin).toBe(true);
   });
 
   it('renders keyed projected filter content in a row below the headers', async () => {
@@ -328,6 +360,49 @@ describe('TpTable', () => {
     );
     expect(filterRow.querySelector('.test-score-filter')?.textContent?.trim()).toBe('Score filter');
     expect(filterRow.querySelectorAll('td')).toHaveLength(columns.length);
+    expect(hostFixture.nativeElement.querySelector('thead .tp-table__filter-row')).toBeNull();
+    const filterCell = filterRow.querySelector('td') as HTMLElement;
+    expect(getComputedStyle(filterCell).position).toBe('sticky');
+    expect(getComputedStyle(filterCell).top).toBe('var(--tp-table-header-height)');
+    expect(getComputedStyle(filterCell).padding).toBe(
+      '6px var(--tp-space-2)',
+    );
+    const scrollContainer = hostFixture.nativeElement.querySelector(
+      '.tp-table__scroll-container',
+    ) as HTMLElement;
+    expect(getComputedStyle(scrollContainer).overflow).toBe('auto');
+    expect(scrollContainer.querySelector('tbody > tr:first-child')).toBe(filterRow);
+    expect(getComputedStyle(hostFixture.nativeElement.querySelector('th')).borderBottomWidth).toBe(
+      '0px',
+    );
+    expect(
+      getComputedStyle(filterRow.nextElementSibling?.querySelector('td') as HTMLElement)
+        .borderTopWidth,
+    ).toBe('0px');
+  });
+
+  it('starts the scroll viewport with the first data row when filters are disabled', () => {
+    const scrollContainer = fixture.nativeElement.querySelector(
+      '.tp-table__scroll-container',
+    ) as HTMLElement;
+    const firstRow = scrollContainer.querySelector('tbody > tr:first-child');
+
+    expect(firstRow?.classList.contains('tp-table__filter-row')).toBe(false);
+    expect(firstRow?.textContent).toContain('Zoe');
+  });
+
+  it('keeps the Actions cells as a fixed-width normal column', () => {
+    fixture.componentRef.setInput('actionColumn', { enabled: true });
+    fixture.detectChanges();
+
+    expect(fixture.nativeElement.querySelectorAll('.tp-table__table')).toHaveLength(1);
+    const actionHeader = fixture.nativeElement.querySelector(
+      '.tp-table__action-header',
+    ) as HTMLElement;
+    const actionCell = fixture.nativeElement.querySelector('.tp-table__action-cell') as HTMLElement;
+    expect(getComputedStyle(actionHeader).width).toBe('72px');
+    expect(getComputedStyle(actionCell).width).toBe('72px');
+    expect(getComputedStyle(actionCell).position).toBe('relative');
   });
 
   it('renders projected action content with the row that opened the menu', async () => {

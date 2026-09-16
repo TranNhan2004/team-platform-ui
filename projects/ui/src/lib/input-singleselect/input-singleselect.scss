@@ -89,6 +89,15 @@
     align-items: center;
     justify-content: center;
   }
+
+  // Blink renders the Material Symbols glyph one pixel high within its centered line box.
+  // Offset only the painted icon so the suffix button and its hit area remain unchanged.
+  @media screen and (-webkit-min-device-pixel-ratio: 0) {
+    .tp-input-singleselect__clear .tp-icon,
+    .mat-mdc-select-arrow-wrapper {
+      transform: translateY(1px);
+    }
+  }
 }
 
 :host ::ng-deep .tp-input-singleselect--has-value .mat-mdc-select-arrow {

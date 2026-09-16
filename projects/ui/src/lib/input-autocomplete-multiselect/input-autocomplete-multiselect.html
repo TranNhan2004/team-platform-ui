@@ -123,25 +123,27 @@
       </span>
     </mat-option>
   } @else if (uniqueOptions().length) {
-    <mat-option
-      class="tp-input-autocomplete-multiselect__option tp-input-autocomplete-multiselect__select-all"
-      [value]="selectAllOptionValue"
-    >
-      <span
-        class="tp-input-autocomplete-multiselect__option-content"
-        (click)="toggleOptionFromPointer(selectAllOptionValue, $event)"
+    @if (useSelectAll()) {
+      <mat-option
+        class="tp-input-autocomplete-multiselect__option tp-input-autocomplete-multiselect__select-all"
+        [value]="selectAllOptionValue"
       >
-        <tp-checkbox
-          class="tp-input-autocomplete-multiselect__option-control"
-          [checked]="allOptionsSelected()"
-          [indeterminate]="someOptionsSelected() && !allOptionsSelected()"
-          [tabIndex]="-1"
-          aria-hidden="true"
-        ></tp-checkbox>
-        <b class="tp-input-autocomplete-multiselect__option-label">{{ selectAllLabel() }}</b>
-      </span>
-    </mat-option>
-    <mat-divider></mat-divider>
+        <span
+          class="tp-input-autocomplete-multiselect__option-content"
+          (click)="toggleOptionFromPointer(selectAllOptionValue, $event)"
+        >
+          <tp-checkbox
+            class="tp-input-autocomplete-multiselect__option-control"
+            [checked]="allOptionsSelected()"
+            [indeterminate]="someOptionsSelected() && !allOptionsSelected()"
+            [tabIndex]="-1"
+            aria-hidden="true"
+          ></tp-checkbox>
+          <b class="tp-input-autocomplete-multiselect__option-label">{{ selectAllLabel() }}</b>
+        </span>
+      </mat-option>
+      <mat-divider></mat-divider>
+    }
 
     @for (option of uniqueOptions(); track option) {
       <mat-option class="tp-input-autocomplete-multiselect__option" [value]="option">

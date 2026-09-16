@@ -80,6 +80,49 @@ describe('InputAutocompleteSingleselect', () => {
     expect(onSearch).toHaveBeenCalledWith('');
   });
 
+  it('should show a clear button for a value and clear it on click', async () => {
+    const onSearch = vi.fn();
+    component.onSearch.subscribe(onSearch);
+    fixture.componentRef.setInput('options', ['Platform API', 'Platform UI']);
+    component.value.set('Platform API');
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    const trigger = (
+      component as unknown as {
+        suggestionsTrigger: () => {
+          autocomplete: {
+            options: {
+              first: { selected: boolean; select: (emitEvent?: boolean) => void };
+            };
+          };
+        };
+      }
+    ).suggestionsTrigger();
+    const selectedOption = trigger.autocomplete.options.first;
+    selectedOption.select(false);
+    expect(selectedOption.selected).toBe(true);
+
+    const clearButton = fixture.nativeElement.querySelector(
+      '.tp-input-autocomplete-singleselect__clear',
+    ) as HTMLButtonElement;
+
+    expect(clearButton).toBeTruthy();
+    expect(clearButton.querySelector('.tp-icon')?.textContent?.trim()).toBe('close');
+
+    clearButton.click();
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    expect(component.value()).toBeNull();
+    expect(selectedOption.selected).toBe(false);
+    expect(component.touched()).toBe(true);
+    expect(onSearch).toHaveBeenCalledWith('');
+    expect(
+      fixture.nativeElement.querySelector('.tp-input-autocomplete-singleselect__clear'),
+    ).toBeNull();
+  });
+
   it('should show the required error after an empty input is touched', async () => {
     fixture.componentRef.setInput('required', true);
     fixture.detectChanges();
