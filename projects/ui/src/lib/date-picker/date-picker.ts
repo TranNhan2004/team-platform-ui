@@ -7,6 +7,7 @@ import {
   inject,
   input,
   model,
+  output,
   viewChild,
 } from '@angular/core';
 import { FormValueControl } from '@angular/forms/signals';
@@ -45,6 +46,7 @@ class TpDateAdapter extends NativeDateAdapter {
 })
 export class TpDatePicker implements FormValueControl<Date | null> {
   value = model<Date | null>(null);
+  onOpened = output<void>();
 
   minDate = input<Date>(createTpDefaultMinDate());
   maxDate = input<Date>(createTpDefaultMaxDate());
@@ -66,6 +68,7 @@ export class TpDatePicker implements FormValueControl<Date | null> {
   open(): void {
     if (!this.disabled()) {
       this.picker().open();
+      this.onOpened.emit();
     }
   }
 

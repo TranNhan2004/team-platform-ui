@@ -84,6 +84,12 @@
 
   .tp-icon {
     --tp-icon-size: 14px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--tp-icon-size);
+    height: var(--tp-icon-size);
+    line-height: 1;
   }
 }
 
@@ -179,10 +185,18 @@
     justify-content: center;
   }
 
+  .tp-input-multiselect__trailing-action .tp-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--tp-icon-size);
+    height: var(--tp-icon-size);
+    line-height: 1;
+  }
+
   // Blink renders the Material Symbols glyph one pixel high within its centered line box.
   // Offset only the painted icon so the suffix button and its hit area remain unchanged.
   @media screen and (-webkit-min-device-pixel-ratio: 0) {
-    .tp-input-multiselect__chip-remove .tp-icon,
     .tp-input-multiselect__trailing-action .tp-icon {
       transform: translateY(1px);
     }

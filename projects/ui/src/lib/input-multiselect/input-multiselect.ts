@@ -69,6 +69,7 @@ export class TpInputMultiselect implements FormValueControl<TpSelectOption[]> {
   options = input<readonly TpMultiselectOption[]>([]);
   displayWith = input<TpSelectOptionDisplayFn | null>(null);
   useSelectAll = input(true);
+  selectAllLabel = input('Select all');
   loading = input(false);
   loadingMessage = input('Loading');
   noResultsMessage = input('No matching results');
@@ -132,8 +133,8 @@ export class TpInputMultiselect implements FormValueControl<TpSelectOption[]> {
     this.uniqueOptions().some((option) => this.isSelected(option)),
   );
 
-  protected readonly selectAllLabel = computed(() =>
-    this.allSelected() ? 'Unselect all' : 'Select all',
+  protected readonly selectAllOptionLabel = computed(() =>
+    this.allSelected() ? 'Unselect all' : this.selectAllLabel(),
   );
 
   protected readonly contentFontSize = computed(() => CONTENT_SIZE_MAP[this.contentSize()]);

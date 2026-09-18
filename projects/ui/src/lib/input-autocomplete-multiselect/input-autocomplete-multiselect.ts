@@ -70,6 +70,7 @@ export class TpInputAutocompleteMultiselect implements FormValueControl<TpSelect
   options = input<readonly TpAutocompleteMultiselectOption[]>([]);
   displayWith = input<TpSelectOptionDisplayFn | null>(null);
   useSelectAll = input(true);
+  selectAllLabel = input('Select all');
   onSearch = output<string>();
   loading = input(false);
   loadingMessage = input('Loading');
@@ -127,8 +128,8 @@ export class TpInputAutocompleteMultiselect implements FormValueControl<TpSelect
   protected readonly someOptionsSelected = computed(() =>
     this.uniqueOptions().some((option) => this.isSelected(option)),
   );
-  protected readonly selectAllLabel = computed(() =>
-    this.allOptionsSelected() ? 'Unselect all' : 'Select all',
+  protected readonly selectAllOptionLabel = computed(() =>
+    this.allOptionsSelected() ? 'Unselect all' : this.selectAllLabel(),
   );
   protected readonly contentFontSize = computed(() => CONTENT_SIZE_MAP[this.contentSize()]);
   protected readonly floatLabel = computed<'always' | 'auto'>(() =>

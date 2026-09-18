@@ -30,6 +30,25 @@ describe('InputMultiselect', () => {
     expect(component.noResultsMessage()).toBe('No projects found');
   });
 
+  it('should allow overriding the select-all label', async () => {
+    fixture.componentRef.setInput('options', ['Platform API', 'Platform UI']);
+    fixture.componentRef.setInput('selectAllLabel', 'Select all projects');
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    const optionsTrigger = (
+      component as unknown as { optionsTrigger: () => { openPanel: () => void } }
+    ).optionsTrigger();
+    optionsTrigger.openPanel();
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    const label = document.querySelector(
+      '.tp-input-multiselect__select-all .tp-input-multiselect__option-label',
+    ) as HTMLElement;
+    expect(label.textContent?.trim()).toBe('Select all projects');
+  });
+
   it('should show the select-all option by default and allow hiding it', async () => {
     fixture.componentRef.setInput('options', ['Platform API', 'Platform UI']);
     fixture.detectChanges();
