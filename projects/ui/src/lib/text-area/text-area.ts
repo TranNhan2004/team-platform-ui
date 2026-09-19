@@ -1,4 +1,11 @@
-import { ChangeDetectionStrategy, Component, computed, input, model, numberAttribute } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  input,
+  model,
+  numberAttribute,
+} from '@angular/core';
 import { FormValueControl } from '@angular/forms/signals';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -7,6 +14,9 @@ import {
   TpValidationErrors,
   validationErrorMessage,
 } from '../utils/form-validation';
+import { TpComponentColor } from '../utils/component-color';
+
+export type TpTextAreaColor = TpComponentColor;
 
 @Component({
   selector: 'tp-text-area',
@@ -21,6 +31,7 @@ export class TpTextArea implements FormValueControl<string> {
   errors = input<TpValidationErrors>([]);
   invalid = input(false);
 
+  color = input<TpTextAreaColor>('blue');
   title = input('');
   placeholder = input('');
   required = input(false);
@@ -38,6 +49,7 @@ export class TpTextArea implements FormValueControl<string> {
   protected readonly hasCharacterLimit = computed(() => this.maxLength() !== undefined);
 
   protected readonly characterCount = computed(() => this.value().length);
+  protected readonly focusColor = computed(() => `var(--tp-color-${this.color()}-600)`);
 
   protected readonly isEmpty = computed(() => this.value().trim() === '');
 
@@ -52,8 +64,8 @@ export class TpTextArea implements FormValueControl<string> {
       (this.touched() && this.hasRequiredError()),
   );
 
-  protected readonly displayedError = computed(() =>
-    this.error() ?? validationErrorMessage(this.errors(), this.requiredMessage()),
+  protected readonly displayedError = computed(
+    () => this.error() ?? validationErrorMessage(this.errors(), this.requiredMessage()),
   );
 
   protected updateValue(event: Event): void {

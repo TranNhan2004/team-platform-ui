@@ -1,0 +1,18 @@
+<section class="component-section" aria-labelledby="slide-toggles-title">
+  <div class="component-section__heading">
+    <h2 id="slide-toggles-title">Slide toggle</h2>
+    <code>&lt;tp-slide-toggle&gt;</code>
+  </div>
+  <div class="example-row">
+    @for (color of colors; track color) {
+      <tp-slide-toggle [color]="color" [checked]="true" [ariaLabel]="color + ' toggle'">
+        {{ color }}
+      </tp-slide-toggle>
+    }
+  </div>
+  <div class="example-row">
+    <tp-slide-toggle ariaLabel="Notifications">Notifications</tp-slide-toggle>
+    <tp-slide-toggle labelPosition="before" ariaLabel="Dark mode">Dark mode</tp-slide-toggle>
+    <tp-slide-toggle [disabled]="true" ariaLabel="Disabled setting">Disabled</tp-slide-toggle>
+  </div>
+</section>

@@ -1,0 +1,9 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+.tp-progress-bar {
+  --tp-progress-bar-color: var(--tp-color-blue-500);
+  --mat-progress-bar-active-indicator-color: var(--tp-progress-bar-color);
+}

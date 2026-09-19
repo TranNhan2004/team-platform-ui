@@ -8,22 +8,33 @@
       title="Project"
       placeholder="Choose a project"
       [options]="projectOptions"
+      [displayWith]="displayProject"
       [(value)]="selectedProject"
       hint="Choose one existing project"
     ></tp-input-singleselect>
-    <tp-input-singleselect title="Loading projects" [loading]="true"></tp-input-singleselect>
+    <tp-input-singleselect
+      title="Loading projects"
+      [loading]="true"
+      loadingMessage="Fetching projects..."
+    ></tp-input-singleselect>
     <tp-input-singleselect
       title="Required project"
       [options]="projectOptions"
+      [displayWith]="displayProject"
       [required]="true"
     ></tp-input-singleselect>
     <tp-input-singleselect
       title="Required project 2"
       [options]="projectOptions"
+      [displayWith]="displayProject"
       [required]="true"
+    ></tp-input-singleselect>
+    <tp-input-singleselect
+      title="Empty projects"
+      noResultsMessage="No projects are available"
     ></tp-input-singleselect>
   </div>
   <p>
-    Selected project: <strong>{{ selectedProject() || 'None' }}</strong>
+    Selected project: <strong>{{ selectedProjectText() }}</strong>
   </p>
 </section>

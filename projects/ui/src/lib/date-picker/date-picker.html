@@ -18,12 +18,12 @@
   [attr.aria-label]="ariaLabel()"
   (click)="open()"
 >
-  <span class="tp-icon material-symbols-outlined" aria-hidden="true">calendar_today</span>
+  <span class="tp-icon material-symbols-outlined"> event </span>
 </button>
 
 <mat-datepicker
   #picker
   startView="month"
-  panelClass="tp-date-picker-calendar"
+  [panelClass]="calendarPanelClass()"
   [startAt]="startAt()"
 ></mat-datepicker>

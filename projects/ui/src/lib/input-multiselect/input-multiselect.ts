@@ -26,13 +26,20 @@ import { TpCheckbox } from '../checkbox/checkbox';
 import { TpSpinner } from '../spinner/spinner';
 import { truncateText } from '../utils/text-wrapping';
 import {
+  getSelectOptionText,
+  TpSelectOption,
+  TpSelectOptionDisplayFn,
+} from '../utils/select-option';
+import {
   createValidationErrorId,
   TpValidationErrors,
   validationErrorMessage,
 } from '../utils/form-validation';
+import { TpComponentColor } from '../utils/component-color';
 
-export type TpMultiselectOption = string;
+export type TpMultiselectOption = TpSelectOption;
 export type TpInputMultiselectContentSize = 'sm' | 'md' | 'lg';
+export type TpInputMultiselectColor = TpComponentColor;
 
 const CONTENT_SIZE_MAP: Record<TpInputMultiselectContentSize, string> = {
   sm: 'var(--tp-text-sm)',
@@ -55,14 +62,19 @@ const CONTENT_SIZE_MAP: Record<TpInputMultiselectContentSize, string> = {
   styleUrl: './input-multiselect.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TpInputMultiselect implements FormValueControl<string[]> {
-  value = model<string[]>([]);
+export class TpInputMultiselect implements FormValueControl<TpSelectOption[]> {
+  value = model<TpSelectOption[]>([]);
   touched = model(false);
   errors = input<TpValidationErrors>([]);
   invalid = input(false);
 
   options = input<readonly TpMultiselectOption[]>([]);
+  displayWith = input<TpSelectOptionDisplayFn | null>(null);
+  useSelectAll = input(true);
+  selectAllLabel = input('Select all');
   loading = input(false);
+  loadingMessage = input('Loading');
+  noResultsMessage = input('No matching results');
   title = input('');
   placeholder = input('');
   required = input(false);
@@ -78,6 +90,7 @@ export class TpInputMultiselect implements FormValueControl<string[]> {
   minHeight = input('var(--tp-control-height-md)');
   maxHeight = input('none');
   contentSize = input<TpInputMultiselectContentSize>('md');
+  color = input<TpInputMultiselectColor>('blue');
   maxChipContentLength = input<number | undefined>(undefined);
   maxChips = input<number | undefined>(undefined);
 
@@ -123,11 +136,16 @@ export class TpInputMultiselect implements FormValueControl<string[]> {
     this.uniqueOptions().some((option) => this.isSelected(option)),
   );
 
-  protected readonly selectAllLabel = computed(() =>
-    this.allSelected() ? 'Unselect all' : 'Select all',
+  protected readonly selectAllOptionLabel = computed(() =>
+    this.allSelected() ? 'Unselect all' : this.selectAllLabel(),
   );
 
   protected readonly contentFontSize = computed(() => CONTENT_SIZE_MAP[this.contentSize()]);
+  protected readonly focusColor = computed(() => `var(--tp-color-${this.color()}-600)`);
+  protected readonly selectedChipTextColor = computed(() => `var(--tp-color-${this.color()}-900)`);
+  protected readonly selectedChipBackgroundColor = computed(
+    () => `var(--tp-color-${this.color()}-100)`,
+  );
 
   protected readonly floatLabel = computed<'always' | 'auto'>(() =>
     this.title() || this.selectedValues().length ? 'always' : 'auto',
@@ -146,9 +164,19 @@ export class TpInputMultiselect implements FormValueControl<string[]> {
       (this.touched() && this.hasRequiredError()),
   );
 
-  protected readonly displayedError = computed(() =>
-    this.error() ?? validationErrorMessage(this.errors(), this.requiredMessage()),
+  protected readonly displayedError = computed(
+    () => this.error() ?? validationErrorMessage(this.errors(), this.requiredMessage()),
   );
+
+  protected readonly selectedValuesText = computed(() =>
+    this.selectedValues()
+      .map((value) => this.optionText(value))
+      .join(', '),
+  );
+
+  protected optionText(option: TpSelectOption | null): string {
+    return getSelectOptionText(option, this.displayWith());
+  }
 
   protected selectOption(event: MatAutocompleteSelectedEvent): void {
     const option = event.option.value as TpMultiselectOption;
@@ -226,8 +254,8 @@ export class TpInputMultiselect implements FormValueControl<string[]> {
     return this.selectedValues().includes(option);
   }
 
-  protected chipText(value: string): string {
-    return truncateText(value, this.maxChipContentLength());
+  protected chipText(value: TpSelectOption): string {
+    return truncateText(this.optionText(value), this.maxChipContentLength());
   }
 
   private toggleOption(option: TpMultiselectOption): void {

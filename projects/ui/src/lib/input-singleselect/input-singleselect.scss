@@ -7,9 +7,10 @@
   --tp-input-singleselect-height: var(--tp-control-height-md);
   --tp-input-singleselect-max-height: var(--tp-control-height-lg);
   --tp-input-singleselect-content-size: var(--tp-text-md);
-  --mat-form-field-outlined-focus-outline-color: var(--tp-color-focus);
-  --mat-form-field-outlined-focus-label-text-color: var(--tp-color-focus);
-  --mat-form-field-outlined-caret-color: var(--tp-color-focus);
+  --tp-input-singleselect-focus-color: var(--tp-color-blue-600);
+  --mat-form-field-outlined-focus-outline-color: var(--tp-input-singleselect-focus-color);
+  --mat-form-field-outlined-focus-label-text-color: var(--tp-input-singleselect-focus-color);
+  --mat-form-field-outlined-caret-color: var(--tp-input-singleselect-focus-color);
   --mat-form-field-outlined-focus-outline-width: 3px;
   --mat-form-field-outlined-container-shape: var(--tp-radius-xs);
   --mat-form-field-outlined-outline-color: var(--tp-color-border-strong);
@@ -50,10 +51,7 @@
   .mat-mdc-text-field-wrapper.mdc-text-field--outlined,
   .mat-mdc-form-field-flex,
   .mat-mdc-form-field-infix {
-    height: min(
-      var(--tp-input-singleselect-height),
-      var(--tp-input-singleselect-max-height)
-    );
+    height: min(var(--tp-input-singleselect-height), var(--tp-input-singleselect-max-height));
     max-height: var(--tp-input-singleselect-max-height);
   }
 
@@ -89,6 +87,15 @@
     align-items: center;
     justify-content: center;
   }
+
+  // Blink renders the Material Symbols glyph one pixel high within its centered line box.
+  // Offset only the painted icon so the suffix button and its hit area remain unchanged.
+  @media screen and (-webkit-min-device-pixel-ratio: 0) {
+    .tp-input-singleselect__clear .tp-icon,
+    .mat-mdc-select-arrow-wrapper {
+      transform: translateY(1px);
+    }
+  }
 }
 
 :host ::ng-deep .tp-input-singleselect--has-value .mat-mdc-select-arrow {
@@ -107,6 +114,10 @@
 }
 
 ::ng-deep .tp-input-singleselect__panel {
+  // Keep the selected option appearance consistent with autocomplete selects.
+  --mat-option-selected-state-layer-color: var(--mat-sys-secondary-container);
+  --mat-option-selected-state-label-text-color: var(--mat-sys-on-secondary-container);
+
   .tp-input-singleselect__feedback-content {
     display: inline-flex;
     align-items: center;
@@ -117,6 +128,9 @@
 }
 
 :host ::ng-deep .tp-input-singleselect--invalid {
+  --mat-form-field-outlined-focus-outline-color: var(--tp-color-red-600);
+  --mat-form-field-outlined-focus-label-text-color: var(--tp-color-red-600);
+  --mat-form-field-outlined-caret-color: var(--tp-color-red-600);
   --mat-form-field-outlined-focus-outline-width: 2px;
 
   .mat-mdc-notch-piece {

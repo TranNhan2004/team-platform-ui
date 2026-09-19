@@ -7,9 +7,16 @@
   --tp-input-autocomplete-multiselect-min-height: var(--tp-control-height-md);
   --tp-input-autocomplete-multiselect-max-height: none;
   --tp-input-autocomplete-multiselect-content-size: var(--tp-text-md);
-  --mat-form-field-outlined-focus-outline-color: var(--tp-color-focus);
-  --mat-form-field-outlined-focus-label-text-color: var(--tp-color-focus);
-  --mat-form-field-outlined-caret-color: var(--tp-color-focus);
+  --tp-input-autocomplete-multiselect-focus-color: var(--tp-color-blue-600);
+  --tp-input-autocomplete-multiselect-chip-text-color: var(--tp-color-blue-900);
+  --tp-input-autocomplete-multiselect-chip-background-color: var(--tp-color-blue-100);
+  --mat-form-field-outlined-focus-outline-color: var(
+    --tp-input-autocomplete-multiselect-focus-color
+  );
+  --mat-form-field-outlined-focus-label-text-color: var(
+    --tp-input-autocomplete-multiselect-focus-color
+  );
+  --mat-form-field-outlined-caret-color: var(--tp-input-autocomplete-multiselect-focus-color);
   --mat-form-field-outlined-focus-outline-width: 3px;
   --mat-form-field-outlined-container-shape: var(--tp-radius-xs);
   --mat-form-field-outlined-outline-color: var(--tp-color-border-strong);
@@ -48,8 +55,8 @@
   gap: var(--tp-space-1);
   padding: 2px 4px 2px var(--tp-space-2);
   border-radius: var(--tp-radius-full);
-  color: var(--tp-color-blue-900);
-  background: var(--tp-color-blue-100);
+  color: var(--tp-input-autocomplete-multiselect-chip-text-color);
+  background: var(--tp-input-autocomplete-multiselect-chip-background-color);
   font-size: var(--tp-text-sm);
   line-height: 20px;
 }
@@ -84,6 +91,12 @@
 
   .tp-icon {
     --tp-icon-size: 14px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--tp-icon-size);
+    height: var(--tp-icon-size);
+    line-height: 1;
   }
 }
 
@@ -157,6 +170,23 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
+  }
+
+  .tp-input-autocomplete-multiselect__trailing-action .tp-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--tp-icon-size);
+    height: var(--tp-icon-size);
+    line-height: 1;
+  }
+
+  // Blink renders the Material Symbols glyph one pixel high within its centered line box.
+  // Offset only the painted icon so the suffix button and its hit area remain unchanged.
+  @media screen and (-webkit-min-device-pixel-ratio: 0) {
+    .tp-input-autocomplete-multiselect__trailing-action .tp-icon {
+      transform: translateY(1px);
+    }
   }
 
   &:not(.tp-input-autocomplete-multiselect--has-values) {
@@ -238,6 +268,9 @@
 }
 
 :host ::ng-deep .tp-input-autocomplete-multiselect--invalid {
+  --mat-form-field-outlined-focus-outline-color: var(--tp-color-red-600);
+  --mat-form-field-outlined-focus-label-text-color: var(--tp-color-red-600);
+  --mat-form-field-outlined-caret-color: var(--tp-color-red-600);
   --mat-form-field-outlined-focus-outline-width: 2px;
 
   .mat-mdc-notch-piece {
