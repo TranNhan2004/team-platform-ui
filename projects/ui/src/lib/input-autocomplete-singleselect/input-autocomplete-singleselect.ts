@@ -31,10 +31,12 @@ import {
   TpValidationErrors,
   validationErrorMessage,
 } from '../utils/form-validation';
+import { TpComponentColor } from '../utils/component-color';
 
 export type TpAutocompleteSingleselectOption = TpSelectOption;
 
 export type TpInputAutocompleteSingleselectContentSize = 'sm' | 'md' | 'lg';
+export type TpInputAutocompleteSingleselectColor = TpComponentColor;
 
 const CONTENT_SIZE_MAP: Record<TpInputAutocompleteSingleselectContentSize, string> = {
   sm: 'var(--tp-text-sm)',
@@ -55,6 +57,7 @@ export class TpInputAutocompleteSingleselect implements FormValueControl<TpSelec
   errors = input<TpValidationErrors>([]);
   invalid = input(false);
 
+  color = input<TpInputAutocompleteSingleselectColor>('blue');
   options = input<readonly TpAutocompleteSingleselectOption[]>([]);
   displayWith = input<TpSelectOptionDisplayFn | null>(null);
   onSearch = output<string>();
@@ -90,6 +93,7 @@ export class TpInputAutocompleteSingleselect implements FormValueControl<TpSelec
   }
 
   protected readonly contentFontSize = computed(() => CONTENT_SIZE_MAP[this.contentSize()]);
+  protected readonly focusColor = computed(() => `var(--tp-color-${this.color()}-600)`);
 
   protected readonly isEmpty = computed(() => this.optionText(this.value()).trim() === '');
 

@@ -17,9 +17,12 @@ import { MatButtonModule } from '@angular/material/button';
 import { DateAdapter, NativeDateAdapter, provideNativeDateAdapter } from '@angular/material/core';
 import { MatDatepicker, MatDatepickerModule } from '@angular/material/datepicker';
 import { MatInputModule } from '@angular/material/input';
+import { TpComponentColor } from '../utils/component-color';
 
 export const TP_DEFAULT_MIN_DATE = new Date(1900, 0, 1);
 export const TP_DEFAULT_MAX_DATE = new Date(2100, 0, 1);
+
+export type TpDatePickerColor = TpComponentColor;
 
 export function createTpDefaultMinDate(): Date {
   return new Date(1900, 0, 1);
@@ -48,6 +51,7 @@ export class TpDatePicker implements FormValueControl<Date | null> {
   value = model<Date | null>(null);
   onOpened = output<void>();
 
+  color = input<TpDatePickerColor>('blue');
   minDate = input<Date>(createTpDefaultMinDate());
   maxDate = input<Date>(createTpDefaultMaxDate());
   disabled = input(false);
@@ -57,6 +61,10 @@ export class TpDatePicker implements FormValueControl<Date | null> {
   private readonly scrollDispatcher = inject(ScrollDispatcher);
   private readonly destroyRef = inject(DestroyRef);
   protected readonly startAt = computed(() => this.value() ?? new Date());
+  protected readonly calendarPanelClass = computed(() => [
+    'tp-date-picker-calendar',
+    `tp-date-picker-calendar--${this.color()}`,
+  ]);
 
   constructor() {
     this.scrollDispatcher

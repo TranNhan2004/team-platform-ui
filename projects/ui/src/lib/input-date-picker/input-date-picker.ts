@@ -17,6 +17,7 @@ import {
   createTpDefaultMaxDate,
   createTpDefaultMinDate,
   TpDatePicker,
+  TpDatePickerColor,
 } from '../date-picker/date-picker';
 import {
   createValidationErrorId,
@@ -32,6 +33,7 @@ export type TpDateFormat =
   | 'dd-MM-yy'
   | 'MM-dd-yy'
   | 'dd-MMM-yy';
+export type TpInputDatePickerColor = TpDatePickerColor;
 
 const MONTH_NAMES = [
   'Jan',
@@ -64,6 +66,7 @@ export class TpInputDatePicker implements FormValueControl<Date | null> {
   errors = input<TpValidationErrors>([]);
   invalid = input(false);
 
+  color = input<TpInputDatePickerColor>('blue');
   title = input('');
   placeholder = input('Select date');
   dateFormat = input<TpDateFormat>('dd-MM-yyyy');
@@ -82,6 +85,7 @@ export class TpInputDatePicker implements FormValueControl<Date | null> {
   maxHeight = input('var(--tp-control-height-lg)');
 
   protected readonly errorId = createValidationErrorId('tp-input-date-picker-error');
+  protected readonly focusColor = computed(() => `var(--tp-color-${this.color()}-600)`);
   protected readonly hasRequiredError = computed(() => this.required() && !this.value());
   protected readonly showError = computed(
     () =>
@@ -131,9 +135,14 @@ export class TpInputDatePicker implements FormValueControl<Date | null> {
   });
 
   protected selectDate(date: Date | null, input?: HTMLInputElement): void {
+    const shouldFocusInput = this.value() === null && date !== null;
+
     this.value.set(date);
     this.touched.set(true);
-    afterNextRender(() => input?.focus(), { injector: this.injector });
+
+    if (shouldFocusInput) {
+      afterNextRender(() => input?.focus(), { injector: this.injector });
+    }
   }
 
   protected clearOnKeydown(event: KeyboardEvent): void {
@@ -150,10 +159,20 @@ export class TpInputDatePicker implements FormValueControl<Date | null> {
 
   protected focusDateInput(event: PointerEvent, input: HTMLInputElement): void {
     event.preventDefault();
-    input.focus();
+    event.stopPropagation();
+
+    if (this.value() !== null) {
+      input.focus();
+    }
+  }
+
+  protected stopCalendarTriggerClick(event: MouseEvent): void {
+    event.stopPropagation();
   }
 
   protected refocusDateInputAfterCalendarOpen(input: HTMLInputElement): void {
+    if (this.value() === null) return;
+
     afterNextRender(
       () => {
         // Material focuses the active calendar cell in a later task.

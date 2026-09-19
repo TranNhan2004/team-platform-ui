@@ -9,6 +9,7 @@
   [style.max-width]="maxWidth()"
   [style.--tp-input-date-picker-height]="height()"
   [style.--tp-input-date-picker-max-height]="maxHeight()"
+  [style.--tp-input-date-picker-focus-color]="focusColor()"
 >
   @if (title()) {
     <mat-label>
@@ -36,10 +37,12 @@
   <tp-date-picker
     matIconSuffix
     [value]="value()"
+    [color]="color()"
     [minDate]="minDate()"
     [maxDate]="maxDate()"
     [disabled]="disabled() || readonly()"
     (pointerdown)="focusDateInput($event, dateInput)"
+    (click)="stopCalendarTriggerClick($event)"
     (onOpened)="refocusDateInputAfterCalendarOpen(dateInput)"
     (valueChange)="selectDate($event, dateInput)"
   ></tp-date-picker>

@@ -21,6 +21,18 @@ describe('Input', () => {
     expect(component).toBeTruthy();
   });
 
+  it('should use its color for the focus ring', async () => {
+    fixture.componentRef.setInput('color', 'red');
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    const formField = fixture.nativeElement.querySelector('mat-form-field') as HTMLElement;
+
+    expect(formField.style.getPropertyValue('--tp-input-focus-color')).toBe(
+      'var(--tp-color-red-600)',
+    );
+  });
+
   it('should render the title as a floating Material label', async () => {
     fixture.componentRef.setInput('title', 'Project name');
     fixture.detectChanges();

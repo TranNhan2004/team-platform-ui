@@ -30,6 +30,25 @@ describe('TpInputAutocompleteMultiselect', () => {
     expect(component.noResultsMessage()).toBe('No projects found');
   });
 
+  it('should allow overriding selected chip colors', async () => {
+    fixture.componentRef.setInput('value', ['Platform API']);
+    fixture.componentRef.setInput('color', 'red');
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    const formField = fixture.nativeElement.querySelector('mat-form-field') as HTMLElement;
+
+    expect(
+      formField.style.getPropertyValue('--tp-input-autocomplete-multiselect-chip-text-color'),
+    ).toBe('var(--tp-color-red-900)');
+    expect(
+      formField.style.getPropertyValue('--tp-input-autocomplete-multiselect-chip-background-color'),
+    ).toBe('var(--tp-color-red-100)');
+    expect(
+      formField.style.getPropertyValue('--tp-input-autocomplete-multiselect-focus-color'),
+    ).toBe('var(--tp-color-red-600)');
+  });
+
   it('should allow overriding the select-all label', async () => {
     fixture.componentRef.setInput('options', ['Platform API', 'Platform UI']);
     fixture.componentRef.setInput('selectAllLabel', 'Select all projects');

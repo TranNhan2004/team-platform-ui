@@ -20,6 +20,18 @@ describe('InputSingleselect', () => {
     expect(component).toBeTruthy();
   });
 
+  it('should use its color for the focus ring', async () => {
+    fixture.componentRef.setInput('color', 'red');
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    const formField = fixture.nativeElement.querySelector('mat-form-field') as HTMLElement;
+
+    expect(formField.style.getPropertyValue('--tp-input-singleselect-focus-color')).toBe(
+      'var(--tp-color-red-600)',
+    );
+  });
+
   it('should allow overriding loading and no-results messages', () => {
     fixture.componentRef.setInput('loadingMessage', 'Fetching projects');
     fixture.componentRef.setInput('noResultsMessage', 'No projects found');

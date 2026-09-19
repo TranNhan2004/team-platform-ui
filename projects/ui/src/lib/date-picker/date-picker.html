@@ -24,6 +24,6 @@
 <mat-datepicker
   #picker
   startView="month"
-  panelClass="tp-date-picker-calendar"
+  [panelClass]="calendarPanelClass()"
   [startAt]="startAt()"
 ></mat-datepicker>

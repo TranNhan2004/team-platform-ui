@@ -7,10 +7,12 @@ import {
   TpValidationErrors,
   validationErrorMessage,
 } from '../utils/form-validation';
+import { TpComponentColor } from '../utils/component-color';
 
 export type TpInputVariant = 'text' | 'number';
 export type TpInputValue = string | number | null;
 export type TpInputContentSize = 'sm' | 'md' | 'lg';
+export type TpInputColor = TpComponentColor;
 
 const CONTENT_SIZE_MAP: Record<TpInputContentSize, string> = {
   sm: 'var(--tp-text-sm)',
@@ -31,6 +33,7 @@ export class TpInput implements FormValueControl<TpInputValue> {
   errors = input<TpValidationErrors>([]);
   invalid = input(false);
 
+  color = input<TpInputColor>('blue');
   variant = input<TpInputVariant>('text');
   title = input('');
   placeholder = input('');
@@ -56,6 +59,7 @@ export class TpInput implements FormValueControl<TpInputValue> {
   protected readonly inputValue = computed(() => this.value() ?? '');
 
   protected readonly contentFontSize = computed(() => CONTENT_SIZE_MAP[this.contentSize()]);
+  protected readonly focusColor = computed(() => `var(--tp-color-${this.color()}-600)`);
 
   protected readonly isEmpty = computed(() => {
     const value = this.value();
@@ -73,8 +77,8 @@ export class TpInput implements FormValueControl<TpInputValue> {
       (this.touched() && this.hasRequiredError()),
   );
 
-  protected readonly displayedError = computed(() =>
-    this.error() ?? validationErrorMessage(this.errors(), this.requiredMessage()),
+  protected readonly displayedError = computed(
+    () => this.error() ?? validationErrorMessage(this.errors(), this.requiredMessage()),
   );
 
   protected updateValue(event: Event): void {

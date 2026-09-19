@@ -25,6 +25,21 @@ describe('InputDatePicker', () => {
     expect(component).toBeTruthy();
   });
 
+  it('should use its color for both the focus ring and calendar', async () => {
+    fixture.componentRef.setInput('color', 'red');
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    const formField = fixture.nativeElement.querySelector('mat-form-field') as HTMLElement;
+    const datePicker = fixture.debugElement.query(By.directive(TpDatePicker))
+      .componentInstance as TpDatePicker;
+
+    expect(formField.style.getPropertyValue('--tp-input-date-picker-focus-color')).toBe(
+      'var(--tp-color-red-600)',
+    );
+    expect(datePicker.color()).toBe('red');
+  });
+
   it('should not show a required marker without a title', async () => {
     fixture.componentRef.setInput('title', '');
     fixture.componentRef.setInput('required', true);
@@ -99,7 +114,23 @@ describe('InputDatePicker', () => {
     expect(open).toHaveBeenCalledOnce();
   });
 
-  it('should focus the input when the calendar icon is pointer-pressed', () => {
+  it('should not propagate the calendar icon click to the input container', () => {
+    const formField = fixture.nativeElement.querySelector('mat-form-field') as HTMLElement;
+    const onContainerClick = vi.fn();
+    formField.addEventListener('click', onContainerClick);
+    const trigger = fixture.nativeElement.querySelector(
+      '.tp-date-picker__trigger',
+    ) as HTMLButtonElement;
+
+    trigger.click();
+
+    expect(onContainerClick).not.toHaveBeenCalled();
+  });
+
+  it('should focus the input when the calendar icon is pointer-pressed with a selected date', () => {
+    component.value.set(new Date(2030, 3, 12));
+    fixture.detectChanges();
+
     const input = fixture.nativeElement.querySelector(
       '.tp-input-date-picker__control',
     ) as HTMLInputElement;
@@ -114,7 +145,27 @@ describe('InputDatePicker', () => {
     expect(document.activeElement).toBe(input);
   });
 
-  it('should keep focus on the input after the calendar opens', async () => {
+  it('should not focus the input when the calendar icon opens an empty calendar', async () => {
+    const input = fixture.nativeElement.querySelector(
+      '.tp-input-date-picker__control',
+    ) as HTMLInputElement;
+    const trigger = fixture.nativeElement.querySelector(
+      '.tp-date-picker__trigger',
+    ) as HTMLButtonElement;
+
+    const event = new PointerEvent('pointerdown', { bubbles: true, cancelable: true });
+    trigger.dispatchEvent(event);
+    trigger.click();
+    await new Promise((resolve) => setTimeout(resolve, 50));
+
+    expect(event.defaultPrevented).toBe(true);
+    expect(document.activeElement).not.toBe(input);
+  });
+
+  it('should keep focus on the input after a populated calendar opens', async () => {
+    component.value.set(new Date(2030, 3, 12));
+    fixture.detectChanges();
+
     const input = fixture.nativeElement.querySelector(
       '.tp-input-date-picker__control',
     ) as HTMLInputElement;
@@ -129,19 +180,38 @@ describe('InputDatePicker', () => {
     expect(document.activeElement).toBe(input);
   });
 
-  it('should keep focus on the input when a date is selected', () => {
+  it('should focus the input when a date is selected from an empty picker', async () => {
     const input = fixture.nativeElement.querySelector(
       '.tp-input-date-picker__control',
     ) as HTMLInputElement;
     const datePicker = fixture.debugElement.query(By.directive(TpDatePicker))
       .componentInstance as TpDatePicker;
 
-    input.focus();
     datePicker.value.set(new Date(2030, 3, 12));
     fixture.detectChanges();
+    await fixture.whenStable();
 
     expect(input.value).toBe('12-04-2030');
     expect(document.activeElement).toBe(input);
+  });
+
+  it('should not focus the input when a date is selected from a populated picker', async () => {
+    component.value.set(new Date(2030, 3, 11));
+    fixture.detectChanges();
+
+    const input = fixture.nativeElement.querySelector(
+      '.tp-input-date-picker__control',
+    ) as HTMLInputElement;
+    const datePicker = fixture.debugElement.query(By.directive(TpDatePicker))
+      .componentInstance as TpDatePicker;
+    const focus = vi.spyOn(input, 'focus');
+
+    datePicker.value.set(new Date(2030, 3, 12));
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    expect(input.value).toBe('12-04-2030');
+    expect(focus).not.toHaveBeenCalled();
   });
 
   it('should close its calendar when the document is scrolled', async () => {

@@ -7,9 +7,12 @@
   --tp-input-multiselect-min-height: var(--tp-control-height-md);
   --tp-input-multiselect-max-height: none;
   --tp-input-multiselect-content-size: var(--tp-text-md);
-  --mat-form-field-outlined-focus-outline-color: var(--tp-color-focus);
-  --mat-form-field-outlined-focus-label-text-color: var(--tp-color-focus);
-  --mat-form-field-outlined-caret-color: var(--tp-color-focus);
+  --tp-input-multiselect-focus-color: var(--tp-color-blue-600);
+  --tp-input-multiselect-chip-text-color: var(--tp-color-blue-900);
+  --tp-input-multiselect-chip-background-color: var(--tp-color-blue-100);
+  --mat-form-field-outlined-focus-outline-color: var(--tp-input-multiselect-focus-color);
+  --mat-form-field-outlined-focus-label-text-color: var(--tp-input-multiselect-focus-color);
+  --mat-form-field-outlined-caret-color: var(--tp-input-multiselect-focus-color);
   --mat-form-field-outlined-focus-outline-width: 3px;
   --mat-form-field-outlined-container-shape: var(--tp-radius-xs);
   --mat-form-field-outlined-outline-color: var(--tp-color-border-strong);
@@ -48,8 +51,8 @@
   gap: var(--tp-space-1);
   padding: 2px 4px 2px var(--tp-space-2);
   border-radius: var(--tp-radius-full);
-  color: var(--tp-color-blue-900);
-  background: var(--tp-color-blue-100);
+  color: var(--tp-input-multiselect-chip-text-color);
+  background: var(--tp-input-multiselect-chip-background-color);
   font-size: var(--tp-text-sm);
   line-height: 20px;
 }
@@ -290,6 +293,9 @@
 }
 
 :host ::ng-deep .tp-input-multiselect--invalid {
+  --mat-form-field-outlined-focus-outline-color: var(--tp-color-red-600);
+  --mat-form-field-outlined-focus-label-text-color: var(--tp-color-red-600);
+  --mat-form-field-outlined-caret-color: var(--tp-color-red-600);
   --mat-form-field-outlined-focus-outline-width: 2px;
 
   .mat-mdc-notch-piece {

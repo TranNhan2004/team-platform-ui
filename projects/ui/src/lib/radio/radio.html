@@ -6,6 +6,7 @@
   [name]="name()"
   [value]="value()"
   [attr.aria-label]="ariaLabel() || null"
+  [ngStyle]="selectedColorStyle()"
   (change)="updateChecked($event)"
 >
   <ng-content></ng-content>

@@ -35,9 +35,11 @@ import {
   TpValidationErrors,
   validationErrorMessage,
 } from '../utils/form-validation';
+import { TpComponentColor } from '../utils/component-color';
 
 export type TpMultiselectOption = TpSelectOption;
 export type TpInputMultiselectContentSize = 'sm' | 'md' | 'lg';
+export type TpInputMultiselectColor = TpComponentColor;
 
 const CONTENT_SIZE_MAP: Record<TpInputMultiselectContentSize, string> = {
   sm: 'var(--tp-text-sm)',
@@ -88,6 +90,7 @@ export class TpInputMultiselect implements FormValueControl<TpSelectOption[]> {
   minHeight = input('var(--tp-control-height-md)');
   maxHeight = input('none');
   contentSize = input<TpInputMultiselectContentSize>('md');
+  color = input<TpInputMultiselectColor>('blue');
   maxChipContentLength = input<number | undefined>(undefined);
   maxChips = input<number | undefined>(undefined);
 
@@ -138,6 +141,11 @@ export class TpInputMultiselect implements FormValueControl<TpSelectOption[]> {
   );
 
   protected readonly contentFontSize = computed(() => CONTENT_SIZE_MAP[this.contentSize()]);
+  protected readonly focusColor = computed(() => `var(--tp-color-${this.color()}-600)`);
+  protected readonly selectedChipTextColor = computed(() => `var(--tp-color-${this.color()}-900)`);
+  protected readonly selectedChipBackgroundColor = computed(
+    () => `var(--tp-color-${this.color()}-100)`,
+  );
 
   protected readonly floatLabel = computed<'always' | 'auto'>(() =>
     this.title() || this.selectedValues().length ? 'always' : 'auto',

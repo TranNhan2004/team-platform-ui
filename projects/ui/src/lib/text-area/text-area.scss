@@ -3,9 +3,10 @@
 }
 
 .tp-text-area {
-  --mat-form-field-outlined-focus-outline-color: var(--tp-color-focus);
-  --mat-form-field-outlined-focus-label-text-color: var(--tp-color-focus);
-  --mat-form-field-outlined-caret-color: var(--tp-color-focus);
+  --tp-text-area-focus-color: var(--tp-color-blue-600);
+  --mat-form-field-outlined-focus-outline-color: var(--tp-text-area-focus-color);
+  --mat-form-field-outlined-focus-label-text-color: var(--tp-text-area-focus-color);
+  --mat-form-field-outlined-caret-color: var(--tp-text-area-focus-color);
   --mat-form-field-outlined-focus-outline-width: 3px;
   --mat-form-field-outlined-container-shape: var(--tp-radius-xs);
   --mat-form-field-outlined-outline-color: var(--tp-color-border-strong);
@@ -40,6 +41,9 @@
 }
 
 :host ::ng-deep .tp-text-area--invalid {
+  --mat-form-field-outlined-focus-outline-color: var(--tp-color-red-600);
+  --mat-form-field-outlined-focus-label-text-color: var(--tp-color-red-600);
+  --mat-form-field-outlined-caret-color: var(--tp-color-red-600);
   --mat-form-field-outlined-focus-outline-width: 2px;
 
   .mat-mdc-notch-piece {

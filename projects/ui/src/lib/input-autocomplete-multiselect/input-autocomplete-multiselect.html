@@ -12,6 +12,9 @@
   [style.--tp-input-autocomplete-multiselect-min-height]="minHeight()"
   [style.--tp-input-autocomplete-multiselect-max-height]="maxHeight()"
   [style.--tp-input-autocomplete-multiselect-content-size]="contentFontSize()"
+  [style.--tp-input-autocomplete-multiselect-focus-color]="focusColor()"
+  [style.--tp-input-autocomplete-multiselect-chip-text-color]="selectedChipTextColor()"
+  [style.--tp-input-autocomplete-multiselect-chip-background-color]="selectedChipBackgroundColor()"
 >
   @if (title()) {
     <mat-label>
@@ -139,7 +142,9 @@
             [tabIndex]="-1"
             aria-hidden="true"
           ></tp-checkbox>
-          <b class="tp-input-autocomplete-multiselect__option-label">{{ selectAllOptionLabel() }}</b>
+          <b class="tp-input-autocomplete-multiselect__option-label">{{
+            selectAllOptionLabel()
+          }}</b>
         </span>
       </mat-option>
       <mat-divider></mat-divider>
