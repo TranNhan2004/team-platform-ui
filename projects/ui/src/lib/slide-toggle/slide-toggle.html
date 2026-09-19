@@ -1,0 +1,19 @@
+<mat-slide-toggle
+  class="tp-slide-toggle"
+  [checked]="checked()"
+  [disabled]="disabled()"
+  [required]="required()"
+  [labelPosition]="labelPosition()"
+  [name]="name()"
+  [aria-label]="ariaLabel()"
+  [aria-labelledby]="ariaLabelledby()"
+  [aria-describedby]="ariaDescribedby()"
+  [tabIndex]="tabIndex()"
+  [disableRipple]="disableRipple()"
+  [hideIcon]="hideIcon()"
+  [disabledInteractive]="disabledInteractive()"
+  [ngStyle]="slideToggleStyle()"
+  (change)="updateChecked($event)"
+>
+  <ng-content></ng-content>
+</mat-slide-toggle>

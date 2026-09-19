@@ -17,6 +17,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSelectChange, MatSelectModule } from '@angular/material/select';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { TpProgressBar } from '../progress-bar/progress-bar';
+import type { TpProgressBarColor } from '../progress-bar/progress-bar';
 import { truncateText } from '../utils/text-wrapping';
 
 export type TpTableCellValue = string | number | boolean | Date | null | undefined;
@@ -86,6 +88,7 @@ export interface TpTablePaginationConfig {
   pageSizeOptions?: readonly number[];
   pageSizeTitle?: string;
   goToPageTitle?: string;
+  totalRowsTitle?: string;
   /** Disables the previous-page button while data is pending. */
   prevPageButtonDisabled?: boolean;
   /** Disables the next-page button while data is pending. */
@@ -101,6 +104,8 @@ export interface TpTableReloadConfig {
 
 export interface TpTableConfig<T extends object = Record<string, unknown>> {
   columns: readonly TpTableColumn<T>[];
+  /** Color of the indeterminate progress bar shown while the table is loading. */
+  loadingColor?: TpProgressBarColor;
   rowHeight?: string | number;
   maxWidth?: string;
   maxHeight?: string | number;
@@ -188,6 +193,7 @@ export class TpTableEmptyContent<T extends object = Record<string, unknown>> {
     MatMenuModule,
     MatSelectModule,
     MatTooltipModule,
+    TpProgressBar,
   ],
   templateUrl: './table.html',
   styleUrl: './table.scss',
@@ -259,6 +265,9 @@ export class TpTable<T extends object = Record<string, unknown>> {
   protected readonly goToPageTitle = computed(
     () => this.config().pagination?.goToPageTitle ?? 'Go to:',
   );
+  protected readonly totalRowsTitle = computed(
+    () => this.config().pagination?.totalRowsTitle ?? 'of',
+  );
   protected readonly reloadEnabled = computed(() => this.config().reload?.enabled ?? false);
   protected readonly reloadTitle = computed(() => this.config().reload?.title ?? 'Reload');
   protected readonly reloadButtonDisabled = computed(
@@ -279,6 +288,19 @@ export class TpTable<T extends object = Record<string, unknown>> {
     () => this.config().rowTrackBy ?? ((_row: T, index: number) => index),
   );
   protected readonly loading = computed(() => this.state().loading?.enabled ?? false);
+  protected readonly loadingColor = computed(() => this.config().loadingColor ?? 'blue');
+  protected columnWidth(column: TpTableColumn<T>): string {
+    const width = column.width || '160px';
+    const minimum = column.minWidth || '0px';
+    const filterMinimum = this.filterEnabled() && this.filterContentFor(column) ? '240px' : '0px';
+    return `max(${width}, ${minimum}, ${filterMinimum})`;
+  }
+
+  protected readonly tableWidthCss = computed(() => {
+    const widths = this.columns().map((column) => this.columnWidth(column));
+    if (this.actionsEnabled()) widths.push('72px');
+    return widths.length ? `max(100%, calc(${widths.join(' + ')}))` : '100%';
+  });
   protected readonly actionsEnabled = computed(() => this.actionColumn().enabled ?? false);
   protected readonly actionTitle = computed(() => this.actionColumn().title ?? 'Action');
   protected readonly rowHeightCss = computed(() =>
@@ -287,6 +309,10 @@ export class TpTable<T extends object = Record<string, unknown>> {
   protected readonly maxHeightCss = computed(() =>
     this.toCssSize(this.config().maxHeight ?? 'none'),
   );
+  protected readonly scrollHeightCss = computed(() => {
+    const maxHeight = this.config().maxHeight;
+    return maxHeight === undefined || maxHeight === 'none' ? null : this.toCssSize(maxHeight);
+  });
   protected readonly actionMenuWidthCss = computed(() =>
     this.toCssSize(this.actionColumn().menuWidth ?? 'auto'),
   );
@@ -416,7 +442,10 @@ export class TpTable<T extends object = Record<string, unknown>> {
     return value === null || value === undefined ? '' : String(value);
   }
 
-  protected cellPresentation(row: T, column: TpTableColumn<T>): {
+  protected cellPresentation(
+    row: T,
+    column: TpTableColumn<T>,
+  ): {
     fullText: string;
     displayText: string;
   } {
@@ -488,9 +517,7 @@ export class TpTable<T extends object = Record<string, unknown>> {
   }
 
   private cellValue(row: T, column: TpTableColumn<T>): TpTableCellValue {
-    return column.value
-      ? column.value(row)
-      : (row as Record<string, TpTableCellValue>)[column.key];
+    return column.value ? column.value(row) : (row as Record<string, TpTableCellValue>)[column.key];
   }
 
   private compareValues(left: TpTableCellValue, right: TpTableCellValue): number {

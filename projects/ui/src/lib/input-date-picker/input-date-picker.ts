@@ -1,4 +1,15 @@
-import { ChangeDetectionStrategy, Component, computed, input, model } from '@angular/core';
+import { formatDate } from '@angular/common';
+import {
+  afterNextRender,
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  inject,
+  Injector,
+  input,
+  LOCALE_ID,
+  model,
+} from '@angular/core';
 import { FormValueControl } from '@angular/forms/signals';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -6,6 +17,7 @@ import {
   createTpDefaultMaxDate,
   createTpDefaultMinDate,
   TpDatePicker,
+  TpDatePickerColor,
 } from '../date-picker/date-picker';
 import {
   createValidationErrorId,
@@ -13,7 +25,15 @@ import {
   validationErrorMessage,
 } from '../utils/form-validation';
 
-export type TpDateFormat = 'DD-MM-YYYY' | 'DD-MMM-YYYY' | 'MM-DD-YYYY' | 'YYYY-MM-DD';
+export type TpDateFormat =
+  | 'dd-MM-yyyy'
+  | 'MM-dd-yyyy'
+  | 'yyyy-MM-dd'
+  | 'dd-MMM-yyyy'
+  | 'dd-MM-yy'
+  | 'MM-dd-yy'
+  | 'dd-MMM-yy';
+export type TpInputDatePickerColor = TpDatePickerColor;
 
 const MONTH_NAMES = [
   'Jan',
@@ -38,14 +58,19 @@ const MONTH_NAMES = [
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TpInputDatePicker implements FormValueControl<Date | null> {
+  private readonly injector = inject(Injector);
+  private readonly locale = inject(LOCALE_ID);
+
   value = model<Date | null>(null);
   touched = model(false);
   errors = input<TpValidationErrors>([]);
   invalid = input(false);
 
+  color = input<TpInputDatePickerColor>('blue');
   title = input('');
   placeholder = input('Select date');
-  dateFormat = input<TpDateFormat>('DD-MM-YYYY');
+  dateFormat = input<TpDateFormat>('dd-MM-yyyy');
+  useSlashSeparator = input(false);
   minDate = input<Date>(createTpDefaultMinDate());
   maxDate = input<Date>(createTpDefaultMaxDate());
   disabled = input(false);
@@ -60,6 +85,7 @@ export class TpInputDatePicker implements FormValueControl<Date | null> {
   maxHeight = input('var(--tp-control-height-lg)');
 
   protected readonly errorId = createValidationErrorId('tp-input-date-picker-error');
+  protected readonly focusColor = computed(() => `var(--tp-color-${this.color()}-600)`);
   protected readonly hasRequiredError = computed(() => this.required() && !this.value());
   protected readonly showError = computed(
     () =>
@@ -68,8 +94,8 @@ export class TpInputDatePicker implements FormValueControl<Date | null> {
       this.errors().length > 0 ||
       (this.touched() && this.hasRequiredError()),
   );
-  protected readonly displayedError = computed(() =>
-    this.error() ?? validationErrorMessage(this.errors(), this.requiredMessage()),
+  protected readonly displayedError = computed(
+    () => this.error() ?? validationErrorMessage(this.errors(), this.requiredMessage()),
   );
 
   protected readonly formattedValue = computed(() => {
@@ -81,20 +107,42 @@ export class TpInputDatePicker implements FormValueControl<Date | null> {
     const year = date.getFullYear();
 
     switch (this.dateFormat()) {
-      case 'DD-MMM-YYYY':
-        return `${day}-${MONTH_NAMES[date.getMonth()]}-${year}`;
-      case 'MM-DD-YYYY':
-        return `${month}-${day}-${year}`;
-      case 'YYYY-MM-DD':
-        return `${year}-${month}-${day}`;
+      case 'dd-MMM-yyyy':
+        return this.useSlashSeparator()
+          ? `${day}/${MONTH_NAMES[date.getMonth()]}/${year}`
+          : `${day}-${MONTH_NAMES[date.getMonth()]}-${year}`;
+      case 'MM-dd-yyyy':
+        return this.useSlashSeparator() ? `${month}/${day}/${year}` : `${month}-${day}-${year}`;
+      case 'yyyy-MM-dd':
+        return this.useSlashSeparator() ? `${year}/${month}/${day}` : `${year}-${month}-${day}`;
+      case 'dd-MM-yyyy':
+        return this.useSlashSeparator() ? `${day}/${month}/${year}` : `${day}-${month}-${year}`;
+      case 'MM-dd-yy':
+        return this.useSlashSeparator()
+          ? `${month}/${day}/${year.toString().slice(-2)}`
+          : `${month}-${day}-${year.toString().slice(-2)}`;
+      case 'dd-MMM-yy':
+        return this.useSlashSeparator()
+          ? `${day}/${MONTH_NAMES[date.getMonth()]}/${year.toString().slice(-2)}`
+          : `${day}-${MONTH_NAMES[date.getMonth()]}-${year.toString().slice(-2)}`;
+      case 'dd-MM-yy':
+        return this.useSlashSeparator()
+          ? `${day}/${month}/${year.toString().slice(-2)}`
+          : `${day}-${month}-${year.toString().slice(-2)}`;
       default:
-        return `${day}-${month}-${year}`;
+        return formatDate(date, this.dateFormat(), this.locale);
     }
   });
 
-  protected selectDate(date: Date | null): void {
+  protected selectDate(date: Date | null, input?: HTMLInputElement): void {
+    const shouldFocusInput = this.value() === null && date !== null;
+
     this.value.set(date);
     this.touched.set(true);
+
+    if (shouldFocusInput) {
+      afterNextRender(() => input?.focus(), { injector: this.injector });
+    }
   }
 
   protected clearOnKeydown(event: KeyboardEvent): void {
@@ -107,5 +155,34 @@ export class TpInputDatePicker implements FormValueControl<Date | null> {
 
   protected markAsTouched(): void {
     this.touched.set(true);
+  }
+
+  protected focusDateInput(event: PointerEvent, input: HTMLInputElement): void {
+    event.preventDefault();
+    event.stopPropagation();
+
+    if (this.value() !== null) {
+      input.focus();
+    }
+  }
+
+  protected stopCalendarTriggerClick(event: MouseEvent): void {
+    event.stopPropagation();
+  }
+
+  protected refocusDateInputAfterCalendarOpen(input: HTMLInputElement): void {
+    if (this.value() === null) return;
+
+    afterNextRender(
+      () => {
+        // Material focuses the active calendar cell in a later task.
+        setTimeout(() => {
+          setTimeout(() => {
+            input.focus();
+          });
+        });
+      },
+      { injector: this.injector },
+    );
   }
 }

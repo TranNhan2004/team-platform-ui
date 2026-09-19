@@ -8,6 +8,7 @@
   [value]="nativeValue()"
   [attr.aria-label]="ariaLabel() || null"
   [tabIndex]="tabIndex()"
+  [ngStyle]="selectedColorStyle()"
   (change)="updateChecked($event)"
 >
   <ng-content></ng-content>

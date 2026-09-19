@@ -9,6 +9,7 @@
   [style.max-width]="maxWidth()"
   [style.--tp-input-date-picker-height]="height()"
   [style.--tp-input-date-picker-max-height]="maxHeight()"
+  [style.--tp-input-date-picker-focus-color]="focusColor()"
 >
   @if (title()) {
     <mat-label>
@@ -19,6 +20,7 @@
     </mat-label>
   }
   <input
+    #dateInput
     matInput
     class="tp-input-date-picker__control"
     [value]="formattedValue()"
@@ -29,18 +31,20 @@
     [attr.name]="name() || null"
     [attr.aria-invalid]="showError()"
     [attr.aria-describedby]="showError() ? errorId : null"
-    (click)="calendar.open()"
     (blur)="markAsTouched()"
     (keydown)="clearOnKeydown($event)"
   />
   <tp-date-picker
-    #calendar
     matIconSuffix
     [value]="value()"
+    [color]="color()"
     [minDate]="minDate()"
     [maxDate]="maxDate()"
     [disabled]="disabled() || readonly()"
-    (valueChange)="selectDate($event)"
+    (pointerdown)="focusDateInput($event, dateInput)"
+    (click)="stopCalendarTriggerClick($event)"
+    (onOpened)="refocusDateInputAfterCalendarOpen(dateInput)"
+    (valueChange)="selectDate($event, dateInput)"
   ></tp-date-picker>
 </mat-form-field>
 

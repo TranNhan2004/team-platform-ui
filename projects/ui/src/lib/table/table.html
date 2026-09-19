@@ -16,8 +16,34 @@
 </mat-menu>
 
 <div class="tp-table__container" [style.max-width]="maxWidth()" [attr.aria-busy]="loading()">
-  <div class="tp-table__scroll-container" cdkScrollable [style.max-height]="maxHeightCss()">
-    <table class="tp-table__table">
+  @if (loading()) {
+    <tp-progress-bar
+      class="tp-table__loading-progress"
+      mode="indeterminate"
+      [color]="loadingColor()"
+      ariaLabel="Loading table"
+    ></tp-progress-bar>
+  }
+
+  <div
+    class="tp-table__scroll-container"
+    cdkScrollable
+    [style.max-height]="maxHeightCss()"
+    [style.height]="scrollHeightCss()"
+  >
+    <table
+      class="tp-table__table"
+      [class.tp-table__table--with-filter]="filterEnabled()"
+      [style.width]="tableWidthCss()"
+    >
+      <colgroup>
+        @for (column of columns(); track column.key) {
+          <col [style.width]="columnWidth(column)" />
+        }
+        @if (actionsEnabled()) {
+          <col style="width: 72px" />
+        }
+      </colgroup>
       <thead>
         <tr>
           @for (column of columns(); track column.key) {
@@ -77,10 +103,9 @@
           </tr>
         }
 
-        @for (row of displayedRows(); track trackRow(row, $index); let first = $first) {
+        @for (row of displayedRows(); track trackRow(row, $index)) {
           <tr
             [class.tp-table__row--clickable]="rowsClickable()"
-            [class.tp-table__row--loading]="loading() && first"
             [attr.tabindex]="rowsClickable() ? 0 : null"
             (click)="activateRow(row)"
             (keydown)="activateRowFromKeyboard(row, $event)"
@@ -92,6 +117,7 @@
                   class="tp-table__cell-value"
                   [matTooltip]="cell.fullText"
                   [matTooltipDisabled]="!cell.fullText"
+                  [matTooltipPositionAtOrigin]="true"
                   >{{ cell.displayText }}</span
                 >
               </td>
@@ -114,11 +140,7 @@
             }
           </tr>
         } @empty {
-          @if (loading()) {
-            <tr class="tp-table__loading-row">
-              <td [attr.colspan]="columnSpan()"></td>
-            </tr>
-          } @else {
+          @if (!loading()) {
             <tr class="tp-table__empty-row">
               <td [attr.colspan]="columnSpan()">
                 @if (emptyContent(); as emptyContent) {
@@ -157,8 +179,9 @@
 
       @if (paginationEnabled()) {
         <div class="tp-table__pagination" aria-label="Table pagination">
-          <span class="tp-table__row-range">{{ rowRange().from }} - {{ rowRange().to }}</span>
-
+          <span class="tp-table__row-range">
+            {{ rowRange().from }} - {{ rowRange().to }} {{ totalRowsTitle() }} {{ totalRowCount() }}
+          </span>
           <nav class="tp-table__page-navigation" aria-label="Page navigation">
             <button
               mat-icon-button

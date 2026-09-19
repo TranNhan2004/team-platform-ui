@@ -1,0 +1,27 @@
+<section class="component-section" aria-labelledby="progress-bars-title">
+  <div class="component-section__heading">
+    <h2 id="progress-bars-title">Progress bar</h2>
+    <code>&lt;tp-progress-bar&gt;</code>
+  </div>
+  <div class="example-stack">
+    @for (color of colors; track color) {
+      <tp-progress-bar
+        [color]="color"
+        [value]="65"
+        [ariaLabel]="color + ' progress'"
+      ></tp-progress-bar>
+    }
+  </div>
+  <div class="example-stack">
+    <h3>Modes</h3>
+    <tp-progress-bar [value]="45" ariaLabel="Determinate progress"></tp-progress-bar>
+    <tp-progress-bar mode="indeterminate" ariaLabel="Loading"></tp-progress-bar>
+    <tp-progress-bar
+      mode="buffer"
+      [value]="35"
+      [bufferValue]="70"
+      ariaLabel="Buffered progress"
+    ></tp-progress-bar>
+    <tp-progress-bar mode="query" ariaLabel="Searching"></tp-progress-bar>
+  </div>
+</section>

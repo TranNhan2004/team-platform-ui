@@ -57,6 +57,26 @@ describe('DatePicker', () => {
     expect(picker.startAt).toEqual(selected);
   });
 
+  it('should use blue calendar states by default', () => {
+    const picker = fixture.debugElement
+      .query(By.directive(MatDatepicker))
+      .injector.get(MatDatepicker<Date>);
+
+    expect(picker.panelClass).toEqual(['tp-date-picker-calendar', 'tp-date-picker-calendar--blue']);
+  });
+
+  it('should allow overriding the calendar state color', async () => {
+    fixture.componentRef.setInput('color', 'red');
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    const picker = fixture.debugElement
+      .query(By.directive(MatDatepicker))
+      .injector.get(MatDatepicker<Date>);
+
+    expect(picker.panelClass).toEqual(['tp-date-picker-calendar', 'tp-date-picker-calendar--red']);
+  });
+
   it('should close the calendar when the document is scrolled', async () => {
     const picker = fixture.debugElement
       .query(By.directive(MatDatepicker))

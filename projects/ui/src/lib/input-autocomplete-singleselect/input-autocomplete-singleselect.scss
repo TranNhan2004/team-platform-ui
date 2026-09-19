@@ -7,9 +7,14 @@
   --tp-input-autocomplete-singleselect-height: var(--tp-control-height-md);
   --tp-input-autocomplete-singleselect-max-height: var(--tp-control-height-lg);
   --tp-input-autocomplete-singleselect-content-size: var(--tp-text-md);
-  --mat-form-field-outlined-focus-outline-color: var(--tp-color-focus);
-  --mat-form-field-outlined-focus-label-text-color: var(--tp-color-focus);
-  --mat-form-field-outlined-caret-color: var(--tp-color-focus);
+  --tp-input-autocomplete-singleselect-focus-color: var(--tp-color-blue-600);
+  --mat-form-field-outlined-focus-outline-color: var(
+    --tp-input-autocomplete-singleselect-focus-color
+  );
+  --mat-form-field-outlined-focus-label-text-color: var(
+    --tp-input-autocomplete-singleselect-focus-color
+  );
+  --mat-form-field-outlined-caret-color: var(--tp-input-autocomplete-singleselect-focus-color);
   --mat-form-field-outlined-focus-outline-width: 3px;
   --mat-form-field-outlined-container-shape: var(--tp-radius-xs);
   --mat-form-field-outlined-outline-color: var(--tp-color-border-strong);
@@ -40,6 +45,15 @@
   cursor: not-allowed;
 }
 
+.tp-input-autocomplete-singleselect__clear {
+  --tp-icon-size: 18px;
+  --mat-icon-button-icon-color: var(--tp-color-text-secondary);
+  --mat-icon-button-state-layer-color: var(--tp-color-text-secondary);
+  --mat-icon-button-state-layer-size: 32px;
+  --mat-icon-button-icon-size: 18px;
+  margin-right: var(--tp-space-1);
+}
+
 :host ::ng-deep .tp-input-autocomplete-singleselect {
   .mat-mdc-text-field-wrapper.mdc-text-field--outlined,
   .mat-mdc-form-field-flex,
@@ -61,6 +75,26 @@
     min-height: 0;
     padding-top: 0;
     padding-bottom: 0;
+  }
+
+  .mat-mdc-form-field-icon-suffix {
+    align-self: stretch;
+    display: flex;
+    align-items: center;
+  }
+
+  .tp-input-autocomplete-singleselect__clear {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  // Blink renders the Material Symbols glyph one pixel high within its centered line box.
+  // Offset only the painted icon so the suffix button and its hit area remain unchanged.
+  @media screen and (-webkit-min-device-pixel-ratio: 0) {
+    .tp-input-autocomplete-singleselect__clear .tp-icon {
+      transform: translateY(1px);
+    }
   }
 
   &.mat-form-field-disabled,
@@ -91,6 +125,9 @@
 }
 
 :host ::ng-deep .tp-input-autocomplete-singleselect--invalid {
+  --mat-form-field-outlined-focus-outline-color: var(--tp-color-red-600);
+  --mat-form-field-outlined-focus-label-text-color: var(--tp-color-red-600);
+  --mat-form-field-outlined-caret-color: var(--tp-color-red-600);
   --mat-form-field-outlined-focus-outline-width: 2px;
 
   .mat-mdc-notch-piece {
